@@ -18,6 +18,4 @@
 
 ### UI
 
-Веб приложение
-
-* TypeScript, React.Js
+* C#, Avalonia

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedPixel.Ui", "RedPixel.Ui\RedPixel.Ui.csproj", "{5E88AF22-B6D0-4F80-B80F-3BB147880D45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedPixel.Core", "RedPixel.Core\RedPixel.Core.csproj", "{AABB6FC4-D983-4397-B31C-D9BFEE178683}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E88AF22-B6D0-4F80-B80F-3BB147880D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E88AF22-B6D0-4F80-B80F-3BB147880D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E88AF22-B6D0-4F80-B80F-3BB147880D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E88AF22-B6D0-4F80-B80F-3BB147880D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

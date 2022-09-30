@@ -50,7 +50,8 @@ namespace RedPixel.Ui.ViewModels
             {
                 var filePath = result.First();
                 using var fileStream = File.OpenRead(filePath);
-                Image = ImageParserFactory.CreateParser(fileStream).Parse(fileStream);
+                var format = ImageFormat.Parse(fileStream);
+                Image = ImageParserFactory.CreateParser(format).Parse(fileStream);
             }
 
             return Unit.Default;

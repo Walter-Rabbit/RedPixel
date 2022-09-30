@@ -6,7 +6,7 @@ namespace RedPixel.Core;
 
 public class ImageFormat
 {
-    private Func<Stream, bool> _matchFunc;
+    private readonly Func<Stream, bool> _matchFunc;
     public string Value { get; }
     public string[] Alternatives { get; }
 
@@ -28,9 +28,9 @@ public class ImageFormat
     }
 
     public static ImageFormat Pnm => new ImageFormat(
-        ".pnm",
+        "pnm",
         HeaderMatchFuncFactory.Create(new byte[]{80, 53}, new byte[]{80, 54}),
-        ".pgm", ".ppm");
+        "pgm", "ppm");
 
     public static ImageFormat Parse(string fileExtension)
     {

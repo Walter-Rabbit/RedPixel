@@ -8,9 +8,9 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
+using RedPixel.Core.ImageParsers;
 using RedPixel.Ui.Views;
 using Image = System.Drawing.Image;
-using Path = Avalonia.Controls.Shapes.Path;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -32,11 +32,12 @@ namespace RedPixel.Ui.ViewModels
         private async Task<Unit> OpenImageAsync()
         {
             var dialog = new OpenFileDialog();
-            dialog.Filters.Add(new FileDialogFilter
+            dialog.Filters.AddRange(ImageFormat.AllFormats.Value.Select(x => new FileDialogFilter()
             {
-                Name = "Images",
-                Extensions = ImageFormat.AllFormats.Value.Select(x => new string(x.Value.Skip(1).ToArray())).ToList()
-            });
+                Name = $"Image",
+                Extensions = new [] {x.Value}.Concat(x.Alternatives).ToList()
+            }));
+
             dialog.Filters.Add(new FileDialogFilter()
             {
                 Name = "All",
@@ -46,13 +47,11 @@ namespace RedPixel.Ui.ViewModels
             dialog.AllowMultiple = false;
             var result = await dialog.ShowAsync(_view);
 
-            if (result is not null)
-            {
-                var filePath = result.First();
-                using var fileStream = File.OpenRead(filePath);
-                var format = ImageFormat.Parse(fileStream);
-                Image = ImageParserFactory.CreateParser(format).Parse(fileStream);
-            }
+            if (result is null) return Unit.Default;
+            var filePath = result.First();
+            await using var fileStream = File.OpenRead(filePath);
+            var format = ImageFormat.Parse(fileStream);
+            Image = ImageParserFactory.CreateParser(format).Parse(fileStream);
 
             return Unit.Default;
         }
@@ -68,18 +67,15 @@ namespace RedPixel.Ui.ViewModels
 
             var result = await dialog.ShowAsync(_view);
 
-            if (result is not null)
-            {
-                var filePath = result;
-                var extension = System.IO.Path.GetExtension(filePath);
+            if (result is null) return Unit.Default;
+            var extension = Path.GetExtension(result).Replace(".", "");
 
-                if (extension is null)
-                    throw new ArgumentException("File path has no extension");
+            if (extension is null)
+                throw new ArgumentException("File path has no extension");
 
-                var format = ImageFormat.Parse(extension);
-                using var fileStream = File.OpenWrite(filePath);
-                ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream);
-            }
+            var format = ImageFormat.Parse(extension);
+            await using var fileStream = File.OpenWrite(result);
+            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream);
 
             return Unit.Default;
         }

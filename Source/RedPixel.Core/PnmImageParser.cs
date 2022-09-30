@@ -7,6 +7,18 @@ namespace RedPixel.Core;
 
 public class PnmImageParser : IImageParser
 {
+    public ImageFormat[] ImageFormats => new[] { ImageFormat.Pnm };
+
+    public bool CanParse(Stream content)
+    {
+        var formatHeader = new byte[2];
+        content.Read(formatHeader);
+        content.Seek(0, SeekOrigin.Begin);
+        var format = new string(formatHeader.Select(x => (char)x).ToArray());
+
+        return format is "P5" or "P6";
+    }
+
     public Image Parse(Stream content)
     {
         var formatHeader = new byte[2];

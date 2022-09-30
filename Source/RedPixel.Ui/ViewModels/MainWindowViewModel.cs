@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -31,10 +32,15 @@ namespace RedPixel.Ui.ViewModels
         private async Task<Unit> OpenImageAsync()
         {
             var dialog = new OpenFileDialog();
-            dialog.Filters.Add(new FileDialogFilter()
+            dialog.Filters.Add(new FileDialogFilter
             {
                 Name = "Images",
                 Extensions = ImageFormat.AllFormats.Value.Select(x => new string(x.Value.Skip(1).ToArray())).ToList()
+            });
+            dialog.Filters.Add(new FileDialogFilter()
+            {
+                Name = "All",
+                Extensions = new List<string>(){"*"}
             });
 
             dialog.AllowMultiple = false;
@@ -43,14 +49,8 @@ namespace RedPixel.Ui.ViewModels
             if (result is not null)
             {
                 var filePath = result.First();
-                var extension = System.IO.Path.GetExtension(filePath);
-
-                if (extension is null)
-                    throw new ArgumentException("File path has no extension");
-
-                var format = ImageFormat.Parse(extension);
                 using var fileStream = File.OpenRead(filePath);
-                Image = ImageParserFactory.Create(format).Parse(fileStream);
+                Image = ImageParserFactory.CreateParser(fileStream).Parse(fileStream);
             }
 
             return Unit.Default;
@@ -77,7 +77,7 @@ namespace RedPixel.Ui.ViewModels
 
                 var format = ImageFormat.Parse(extension);
                 using var fileStream = File.OpenWrite(filePath);
-                ImageParserFactory.Create(format).SerializeToStream(Image, fileStream);
+                ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream);
             }
 
             return Unit.Default;

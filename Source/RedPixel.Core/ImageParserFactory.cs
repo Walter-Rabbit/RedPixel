@@ -1,13 +1,36 @@
-﻿namespace RedPixel.Core;
+﻿using System.Drawing;
 
-public class ImageParserFactory
+namespace RedPixel.Core;
+
+public static class ImageParserFactory
 {
-    public static IImageParser Create(ImageFormat format)
+    private static readonly List<IImageParser> Parsers;
+
+    static ImageParserFactory()
     {
-        return format.Value switch
+        Parsers = new List<IImageParser>()
         {
-            ".pnm" => new PnmImageParser(),
-            _ => throw new ArgumentOutOfRangeException(nameof(format))
+            new PnmImageParser()
         };
+    }
+
+    public static IImageParser CreateParser(Stream content)
+    {
+        var parser = Parsers.FirstOrDefault(p => p.CanParse(content));
+
+        if (parser is null)
+            throw new Exception("Unsupported image format");
+
+        return parser;
+    }
+
+    public static IImageParser CreateParser(ImageFormat format)
+    {
+        var parser = Parsers.FirstOrDefault(p => p.ImageFormats.Contains(format));
+
+        if (parser is null)
+            throw new Exception("Unsupported image format");
+
+        return parser;
     }
 }

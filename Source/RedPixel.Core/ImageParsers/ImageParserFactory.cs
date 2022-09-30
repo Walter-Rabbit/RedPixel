@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace RedPixel.Core;
+﻿namespace RedPixel.Core.ImageParsers;
 
 public static class ImageParserFactory
 {

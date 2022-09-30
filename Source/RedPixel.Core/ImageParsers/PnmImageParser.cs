@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing;
 using System.Text;
 
-namespace RedPixel.Core;
+namespace RedPixel.Core.ImageParsers;
 
 public class PnmImageParser : IImageParser
 {

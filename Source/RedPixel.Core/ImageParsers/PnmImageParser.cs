@@ -37,6 +37,7 @@ public class PnmImageParser : IImageParser
 
         //TODO: hack?
         var bytesForColor = maxColorValue > 255 ? 2 : 1;
+
         var bitmap = new Bitmap(width, height);
         for (int y = 0; y < height; y++)
         {
@@ -117,7 +118,7 @@ public class PnmImageParser : IImageParser
         return Color.FromArgb(red, green, blue);
     }
 
-    public int ParseColorValue(byte[] colorBytes)
+    private int ParseColorValue(byte[] colorBytes)
     {
         return colorBytes.Length switch
         {
@@ -130,25 +131,26 @@ public class PnmImageParser : IImageParser
 
     public void SerializeToStream(Image image, Stream stream)
     {
-        var isColored = image.Palette.Entries.Any(x => x.R != x.G || x.G != x.B || x.B != x.R);
-
-        var format = isColored ? "P6" : "P5";
-        using var writer = new StreamWriter(stream);
-        writer.WriteLine(format);
-        writer.WriteLine("# Created by RedPixel");
-        writer.WriteLine($"{image.Width} {image.Height}");
-
-        //TODO : hack
-        writer.WriteLine("255");
-        writer.Flush();
 
         var bitmap = new Bitmap(image);
+
+        var isGrayScale = IsGrayScale(bitmap);
+
+        var format = isGrayScale ? "P5\n" : "P6\n";
+        stream.Write(Encoding.ASCII.GetBytes(format));
+        stream.Write( Encoding.ASCII.GetBytes("# Created by RedPixel\n"));
+
+        stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
+
+        //TODO : hack
+        stream.Write(Encoding.ASCII.GetBytes("255\n"));
+
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
             {
                 var color = bitmap.GetPixel(x, y);
-                if (isColored)
+                if (!isGrayScale)
                 {
                     stream.WriteByte(color.R);
                     stream.WriteByte(color.G);
@@ -160,5 +162,21 @@ public class PnmImageParser : IImageParser
                 }
             }
         }
+    }
+
+    // TODO : hack
+    private bool IsGrayScale(Bitmap image)
+    {
+        for (int y = 0; y < image.Height; y++)
+        {
+            for (int x = 0; x < image.Width; x++)
+            {
+                var color = image.GetPixel(x, y);
+                if (color.R != color.G || color.R != color.B)
+                    return false;
+            }
+        }
+
+        return true;
     }
 }

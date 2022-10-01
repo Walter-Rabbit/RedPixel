@@ -51,6 +51,7 @@ namespace RedPixel.Ui.ViewModels
             var filePath = result.First();
             await using var fileStream = File.OpenRead(filePath);
             var format = ImageFormat.Parse(fileStream);
+
             Image = ImageParserFactory.CreateParser(format).Parse(fileStream);
 
             return Unit.Default;
@@ -62,7 +63,7 @@ namespace RedPixel.Ui.ViewModels
             dialog.Filters.Add(new FileDialogFilter()
             {
                 Name = "Images",
-                Extensions = ImageFormat.AllFormats.Value.Select(x => new string(x.Value.Skip(1).ToArray())).ToList()
+                Extensions = ImageFormat.AllFormats.Value.Select(x => x.Value).ToList()
             });
 
             var result = await dialog.ShowAsync(_view);
@@ -78,6 +79,7 @@ namespace RedPixel.Ui.ViewModels
             ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream);
 
             return Unit.Default;
+
         }
     }
 }

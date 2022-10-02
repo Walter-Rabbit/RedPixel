@@ -172,7 +172,7 @@ public class PnmImageParser : IImageParser
             for (int x = 0; x < image.Width; x++)
             {
                 var color = image.GetPixel(x, y);
-                if (color.R != color.G || color.R != color.B)
+                if (color.R != color.G || color.R != color.B || color.B != color.G)
                     return false;
             }
         }

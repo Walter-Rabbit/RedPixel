@@ -34,9 +34,8 @@ public class PnmImageParser : IImageParser
 
         var maxColorValue = ReadNumber(content);
         _ = content.ReadByte();
-
-        //TODO: hack?
-        var bytesForColor = maxColorValue > 255 ? 2 : 1;
+        
+        var bytesForColor = (int)Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new Bitmap(width, height);
         for (int y = 0; y < height; y++)

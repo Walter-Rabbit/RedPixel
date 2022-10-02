@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RedPixel.Ui.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="RedPixel.Ui.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="RedPixel.Ui">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Resources>
+        <utility:PnmBitmapValueConverter x:Key="variableImage"/>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="Menu">
+            <Setter Property="Background" Value="#F3F3F3"/>
+        </Style>
+        <Style Selector="Panel.main">
+            <Setter Property="Background" Value="#FAFAFA"/>
+        </Style>
+    </Window.Styles>
+
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Command="{Binding OpenImageAsync}"/>
+                <Separator/>
+                <MenuItem Header="Save" Command="{Binding SaveImageAsync}"/>
+            </MenuItem>
+        </Menu>
+        <Panel Classes="main">
+            <Image
+                Margin="30"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Source="{Binding Image, Converter={StaticResource variableImage}}"
+                Stretch="Uniform"
+                ></Image>
+        </Panel>
+    </DockPanel>
+
+</Window>

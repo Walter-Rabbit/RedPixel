@@ -11,7 +11,7 @@ public class PnmImageParser : IImageParser
     {
         var formatHeader = new byte[2];
         content.Read(formatHeader);
-        var format = new string(formatHeader.Select(x => (char)x).ToArray());
+        var format = new string(formatHeader.Select(x => (char) x).ToArray());
 
         if (format != "P5" && format != "P6")
             throw new NotSupportedException($"Unsupported image format - {format}");
@@ -35,8 +35,7 @@ public class PnmImageParser : IImageParser
         var maxColorValue = ReadNumber(content);
         _ = content.ReadByte();
 
-        //TODO: hack?
-        var bytesForColor = maxColorValue > 255 ? 2 : 1;
+        var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new Bitmap(width, height);
         for (int y = 0; y < height; y++)
@@ -91,7 +90,7 @@ public class PnmImageParser : IImageParser
             if (b is < '0' or > '9')
                 break;
 
-            number.Append((char)b);
+            number.Append((char) b);
         }
 
         content.Seek(-1, SeekOrigin.Current);
@@ -131,18 +130,16 @@ public class PnmImageParser : IImageParser
 
     public void SerializeToStream(Image image, Stream stream)
     {
-
         var bitmap = new Bitmap(image);
 
         var isGrayScale = IsGrayScale(bitmap);
 
         var format = isGrayScale ? "P5\n" : "P6\n";
         stream.Write(Encoding.ASCII.GetBytes(format));
-        stream.Write( Encoding.ASCII.GetBytes("# Created by RedPixel\n"));
+        stream.Write(Encoding.ASCII.GetBytes("# Created by RedPixel\n"));
 
         stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
 
-        //TODO : hack
         stream.Write(Encoding.ASCII.GetBytes("255\n"));
 
         for (int y = 0; y < image.Height; y++)
@@ -164,7 +161,6 @@ public class PnmImageParser : IImageParser
         }
     }
 
-    // TODO : hack
     private bool IsGrayScale(Bitmap image)
     {
         for (int y = 0; y < image.Height; y++)

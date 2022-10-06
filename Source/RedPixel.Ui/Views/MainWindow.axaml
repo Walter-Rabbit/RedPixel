@@ -37,8 +37,7 @@
         <Panel Classes="main">
             <ScrollViewer>
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                            MaxZoomX="20" MaxZoomY="20"
-                            MinZoomY="0.05" MinZoomX="0.05">
+                            MaxZoomX="20" MaxZoomY="20">
                     <Image
                         Margin="30"
                         VerticalAlignment="Center"

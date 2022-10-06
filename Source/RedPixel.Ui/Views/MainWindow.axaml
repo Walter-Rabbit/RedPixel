@@ -10,39 +10,44 @@
         Title="RedPixel.Ui">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
     <Window.Resources>
-        <utility:PnmBitmapValueConverter x:Key="variableImage"/>
+        <utility:PnmBitmapValueConverter x:Key="variableImage" />
     </Window.Resources>
 
     <Window.Styles>
         <Style Selector="Menu">
-            <Setter Property="Background" Value="#F3F3F3"/>
+            <Setter Property="Background" Value="#F3F3F3" />
         </Style>
         <Style Selector="Panel.main">
-            <Setter Property="Background" Value="#FAFAFA"/>
+            <Setter Property="Background" Value="#FAFAFA" />
         </Style>
     </Window.Styles>
-
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Open" Command="{Binding OpenImageAsync}"/>
-                <Separator/>
-                <MenuItem Header="Save" Command="{Binding SaveImageAsync}"/>
+                <MenuItem Header="Open" Command="{Binding OpenImageAsync}" />
+                <Separator />
+                <MenuItem Header="Save" Command="{Binding SaveImageAsync}" />
             </MenuItem>
         </Menu>
         <Panel Classes="main">
-            <Image
-                Margin="30"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Source="{Binding Image, Converter={StaticResource variableImage}}"
-                Stretch="Uniform"
-                ></Image>
+            <ScrollViewer>
+                <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
+                            MaxZoomX="20" MaxZoomY="20">
+                    <Image
+                        Margin="30"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Source="{Binding Image, Converter={StaticResource variableImage}}"
+                        Stretch="Uniform">
+                    </Image>
+                    
+                </ZoomBorder>
+            </ScrollViewer>
         </Panel>
     </DockPanel>
 

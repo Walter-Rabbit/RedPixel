@@ -6,7 +6,7 @@ public interface IImageParser
 {
     ImageFormat[] ImageFormats { get; }
 
-    Image Parse(Stream content);
+    Bitmap.Bitmap Parse(Stream content);
 
-    void SerializeToStream(Image image, Stream stream);
+    void SerializeToStream(Bitmap.Bitmap image, Stream stream);
 }

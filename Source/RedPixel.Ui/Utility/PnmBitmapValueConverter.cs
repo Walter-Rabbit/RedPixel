@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
+using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Ui.Utility;
 
@@ -13,7 +14,7 @@ public class PnmBitmapValueConverter : IValueConverter
         return value switch
         {
             null => null,
-            Image image when targetType.IsAssignableFrom(typeof(Bitmap)) => image.ConvertToAvaloniaBitmap(),
+            RedPixelBitmap bitmap when targetType.IsAssignableFrom(typeof(Bitmap)) => bitmap.ConvertToAvaloniaBitmap(),
             _ => throw new NotSupportedException()
         };
     }

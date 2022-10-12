@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
@@ -24,7 +22,7 @@ namespace RedPixel.Ui.ViewModels
         private ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         private ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
 
-        [Reactive] private Core.Bitmap.Bitmap Image { get; set; }
+        [Reactive] private Bitmap Image { get; set; }
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;

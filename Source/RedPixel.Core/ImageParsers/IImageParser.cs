@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace RedPixel.Core.ImageParsers;
+﻿namespace RedPixel.Core.ImageParsers;
 
 public interface IImageParser
 {

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 using RedPixel.Core.Tools;
 
 namespace RedPixel.Core;
@@ -31,6 +30,11 @@ public class ImageFormat
         "pnm",
         HeaderMatchFuncFactory.Create(new byte[]{80, 53}, new byte[]{80, 54}),
         "pgm", "ppm");
+
+    public static ImageFormat Bmp => new ImageFormat(
+        "bmp",
+        HeaderMatchFuncFactory.Create(new byte[]{66, 77}),
+        "dib", "rle");
 
     public static ImageFormat Parse(string fileExtension)
     {

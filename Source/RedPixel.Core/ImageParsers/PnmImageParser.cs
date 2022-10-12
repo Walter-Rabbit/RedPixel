@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Text;
+using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
 
@@ -37,7 +38,7 @@ public class PnmImageParser : IImageParser
 
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
-        var bitmap = new Bitmap.Bitmap(width, height);
+        var bitmap = new RedPixelBitmap(width, height);
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -128,9 +129,9 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(Bitmap.Bitmap image, Stream stream)
+    public void SerializeToStream(RedPixelBitmap image, Stream stream)
     {
-        var bitmap = new Bitmap.Bitmap(image);
+        var bitmap = new RedPixelBitmap(image);
 
         var isGrayScale = IsGrayScale(bitmap);
 

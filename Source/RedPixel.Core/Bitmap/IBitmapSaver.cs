@@ -1,4 +1,6 @@
-﻿namespace RedPixel.Core.Bitmap;
+﻿using RedPixel.Core.Colors;
+
+namespace RedPixel.Core.Bitmap;
 
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
 

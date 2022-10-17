@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using RedPixel.Core.Colors;
+using Color = RedPixel.Core.Colors.Color;
 
 namespace RedPixel.Core.Bitmap;
 
@@ -29,7 +31,7 @@ public class Bitmap
             }
         }
     }
-    
+
     public void SetPixel(int x, int y, Color clr)
     {
         ValidateCoordinate(x, y);
@@ -43,14 +45,14 @@ public class Bitmap
         {
             for (int x = 0; x < Width; x++)
             {
-                img.SetPixel(x, y, GetPixel(x, y));
+                img.SetPixel(x, y, GetPixel(x, y).ToSystemColor());
             }
         }
 
         return img;
     }
 
-    public Color GetPixel(int x, int y) 
+    public Color GetPixel(int x, int y)
     {
         ValidateCoordinate(x, y);
         return _matrix[y, x];
@@ -62,5 +64,20 @@ public class Bitmap
         {
             throw new IndexOutOfRangeException();
         }
+    }
+
+    public Bitmap SelectColorComponents(ColorComponents component)
+    {
+        var newBitmap = new Bitmap(Width, Height);
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                var clr = GetPixel(x, y).SelectComponents(component);
+                newBitmap.SetPixel(x, y, clr);
+            }
+        }
+
+        return newBitmap;
     }
 }

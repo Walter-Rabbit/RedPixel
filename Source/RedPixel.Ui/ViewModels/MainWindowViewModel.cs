@@ -9,25 +9,36 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
 using RedPixel.Core.Bitmap;
+using RedPixel.Core.Colors;
 using RedPixel.Core.ImageParsers;
+using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views;
-using Image = System.Drawing.Image;
 
 namespace RedPixel.Ui.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly MainWindow _view;
+        [Reactive] private Bitmap Image { get; set; }
 
         private ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         private ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
+        private ReactiveCommand<Unit, Unit> ChangeColorLayers { get; }
 
-        [Reactive] private Bitmap Image { get; set; }
+        [Reactive] private bool[] EnabledComponents { get; set; }
+        [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
+        [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
+
         public MainWindowViewModel(MainWindow view)
         {
+            this.WhenAnyValue(
+                x => x.Image,
+                x => x.ColorComponents).Subscribe(x => Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents));
             _view = view;
+            EnabledComponents = new bool[3] { true, true, true };
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
+            ChangeColorLayers = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -77,10 +88,19 @@ namespace RedPixel.Ui.ViewModels
 
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
-            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream);
+            ImageParserFactory.CreateParser(format).SerializeToStream(Image.SelectColorComponents(ColorComponents), fileStream);
 
             return Unit.Default;
 
+        }
+
+        private async Task<Unit> ChangeColorLayersAsync()
+        {
+            ColorComponents = (EnabledComponents[0] ? ColorComponents.First : ColorComponents.None)
+                            | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)
+                            | (EnabledComponents[2] ? ColorComponents.Third : ColorComponents.None);
+
+            return Unit.Default;
         }
     }
 }

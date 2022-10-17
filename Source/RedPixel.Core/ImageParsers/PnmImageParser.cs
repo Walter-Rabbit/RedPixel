@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
+using RedPixel.Core.Colors;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
@@ -105,7 +105,7 @@ public class PnmImageParser : IImageParser
         {
             content.Read(colorBytes);
             var color = ParseColorValue(colorBytes);
-            return Color.FromArgb(color, color, color);
+            return new RgbColor(color, color, color);
         }
 
         content.Read(colorBytes);
@@ -115,7 +115,8 @@ public class PnmImageParser : IImageParser
         content.Read(colorBytes);
         var blue = ParseColorValue(colorBytes);
 
-        return Color.FromArgb(red, green, blue);
+        // TODO: Fix
+        return new RgbColor(red, green, blue);
     }
 
     private int ParseColorValue(byte[] colorBytes)
@@ -150,13 +151,13 @@ public class PnmImageParser : IImageParser
                 var color = bitmap.GetPixel(x, y);
                 if (!isGrayScale)
                 {
-                    stream.WriteByte(color.R);
-                    stream.WriteByte(color.G);
-                    stream.WriteByte(color.B);
+                    stream.WriteByte(color.FirstComponent);
+                    stream.WriteByte(color.SecondComponent);
+                    stream.WriteByte(color.ThirdComponent);
                 }
                 else
                 {
-                    stream.WriteByte(color.R);
+                    stream.WriteByte(color.FirstComponent);
                 }
             }
         }
@@ -169,7 +170,7 @@ public class PnmImageParser : IImageParser
             for (int x = 0; x < image.Width; x++)
             {
                 var color = image.GetPixel(x, y);
-                if (color.R != color.G || color.R != color.B || color.B != color.G)
+                if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent || color.SecondComponent != color.ThirdComponent)
                     return false;
             }
         }

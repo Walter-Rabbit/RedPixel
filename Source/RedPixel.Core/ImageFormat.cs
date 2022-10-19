@@ -26,12 +26,12 @@ public class ImageFormat
         return _matchFunc(content);
     }
 
-    public static ImageFormat Pnm => new ImageFormat(
+    public static readonly ImageFormat Pnm = new ImageFormat(
         "pnm",
         HeaderMatchFuncFactory.Create(new byte[]{80, 53}, new byte[]{80, 54}),
         "pgm", "ppm");
 
-    public static ImageFormat Bmp => new ImageFormat(
+    public static readonly ImageFormat Bmp = new ImageFormat(
         "bmp",
         HeaderMatchFuncFactory.Create(new byte[]{66, 77}),
         "dib", "rle");
@@ -60,8 +60,8 @@ public class ImageFormat
 
     public static Lazy<IEnumerable<ImageFormat>> AllFormats => new (
             () => typeof(ImageFormat)
-            .GetProperties(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => f.PropertyType == typeof(ImageFormat))
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(ImageFormat))
             .Select(f => (ImageFormat)f.GetValue(null))
     );
 

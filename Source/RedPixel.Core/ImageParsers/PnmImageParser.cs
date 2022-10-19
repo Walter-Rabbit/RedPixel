@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using RedPixel.Core.Colors;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
@@ -10,6 +11,8 @@ public class PnmImageParser : IImageParser
 
     public Bitmap.Bitmap Parse(Stream content)
     {
+        var sw = new Stopwatch();
+        sw.Start();
         var formatHeader = new byte[2];
         content.Read(formatHeader);
         var format = new string(formatHeader.Select(x => (char) x).ToArray());
@@ -39,6 +42,7 @@ public class PnmImageParser : IImageParser
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
+        File.AppendAllText("time-log.txt", $"Headers read {sw.ElapsedMilliseconds} ms{Environment.NewLine}");
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -47,6 +51,9 @@ public class PnmImageParser : IImageParser
                 bitmap.SetPixel(x, y, color);
             }
         }
+
+        sw.Stop();
+        File.AppendAllText("time-log.txt", $"Image reading took {sw.ElapsedMilliseconds} ms{Environment.NewLine}");
 
         return bitmap;
     }
@@ -98,28 +105,27 @@ public class PnmImageParser : IImageParser
         return int.Parse(number.ToString());
     }
 
-    private Color ReadColor(Stream content, string format, int bytesForColor)
+    private RgbColor ReadColor(Stream content, string format, int bytesForColor)
     {
-        var colorBytes = new byte[bytesForColor];
         if (format == "P5")
         {
-            content.Read(colorBytes);
-            var color = ParseColorValue(colorBytes);
+            Span<byte> sColorBytes = stackalloc byte[bytesForColor];
+            content.Read(sColorBytes);
+            var color = ParseColorValue(sColorBytes);
             return new RgbColor(color, color, color);
         }
 
+        Span<byte> colorBytes = stackalloc byte[bytesForColor*3];
         content.Read(colorBytes);
-        var red = ParseColorValue(colorBytes);
-        content.Read(colorBytes);
-        var green = ParseColorValue(colorBytes);
-        content.Read(colorBytes);
-        var blue = ParseColorValue(colorBytes);
+        var red = ParseColorValue(colorBytes.Slice(0, bytesForColor));
+        var green = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor*2));
+        var blue = ParseColorValue(colorBytes.Slice(bytesForColor*2));
 
         // TODO: Fix
         return new RgbColor(red, green, blue);
     }
 
-    private int ParseColorValue(byte[] colorBytes)
+    private int ParseColorValue(Span<byte> colorBytes)
     {
         return colorBytes.Length switch
         {

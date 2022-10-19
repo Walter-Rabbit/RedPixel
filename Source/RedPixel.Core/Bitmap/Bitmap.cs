@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using RedPixel.Core.Colors;
 using Color = RedPixel.Core.Colors.Color;
 
@@ -6,14 +7,14 @@ namespace RedPixel.Core.Bitmap;
 
 public class Bitmap
 {
-    private readonly Color[,] _matrix;
+    private readonly RgbColor[,] _matrix;
 
     public int Width => _matrix.Length == 0 ? 0 : _matrix.GetLength(1);
     public int Height => _matrix.GetLength(0);
 
     public Bitmap(int width, int height)
     {
-        _matrix = new Color[height, width];
+        _matrix = new RgbColor[height, width];
     }
 
     public Bitmap(Image image)
@@ -32,52 +33,32 @@ public class Bitmap
         }
     }
 
-    public void SetPixel(int x, int y, Color clr)
+    public void SetPixel(int x, int y, RgbColor clr)
     {
-        ValidateCoordinate(x, y);
         _matrix[y, x] = clr;
     }
 
-    public Image GetSystemBitmap()
+    public RgbColor GetPixel(int x, int y)
     {
-        System.Drawing.Bitmap img = new System.Drawing.Bitmap(Width, Height);
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                img.SetPixel(x, y, GetPixel(x, y).ToSystemColor());
-            }
-        }
-
-        return img;
-    }
-
-    public Color GetPixel(int x, int y)
-    {
-        ValidateCoordinate(x, y);
         return _matrix[y, x];
-    }
-
-    private void ValidateCoordinate(int x, int y)
-    {
-        if (y >= Height || x >= Width)
-        {
-            throw new IndexOutOfRangeException();
-        }
     }
 
     public Bitmap SelectColorComponents(ColorComponents component)
     {
-        var newBitmap = new Bitmap(Width, Height);
+        var sw = new Stopwatch();
+        sw.Start();
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                var clr = GetPixel(x, y).SelectComponents(component);
-                newBitmap.SetPixel(x, y, clr);
+                _matrix[y, x].SelectComponents(component);
             }
         }
 
-        return newBitmap;
+        sw.Stop();
+
+        File.AppendAllText("time-log.txt", $"Change components to {component} {sw.ElapsedMilliseconds}ms\r\n");
+
+        return this;
     }
 }

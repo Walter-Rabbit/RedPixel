@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -61,10 +62,17 @@ namespace RedPixel.Ui.ViewModels
 
             if (result is null) return Unit.Default;
             var filePath = result.First();
+            var sw = new Stopwatch();
+            sw.Start();
             await using var fileStream = File.OpenRead(filePath);
             var format = ImageFormat.Parse(fileStream);
 
-            Image = ImageParserFactory.CreateParser(format).Parse(fileStream);
+            var img = ImageParserFactory.CreateParser(format).Parse(fileStream);
+
+            sw.Stop();
+            await File.AppendAllTextAsync("time-log.txt", $"{filePath} - {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+
+            Image = img;
 
             return Unit.Default;
         }

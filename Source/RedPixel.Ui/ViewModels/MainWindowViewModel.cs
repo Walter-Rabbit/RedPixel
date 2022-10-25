@@ -29,14 +29,19 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] private bool[] EnabledComponents { get; set; }
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
+        [Reactive] private ColorSpace SelectedColorSpace { get; set; }
+        private IEnumerable<ColorSpace> ColorSpaces { get; set; } = ColorSpace.AllSpaces.Value;
 
         public MainWindowViewModel(MainWindow view)
         {
             this.WhenAnyValue(
                 x => x.Image,
                 x => x.ColorComponents).Subscribe(x => Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents));
+
+            this.WhenAnyValue(x => x.SelectedColorSpace).Subscribe(x => Image = Image?.ChangeColorSpace(x));
+
             _view = view;
-            EnabledComponents = new bool[3] { true, true, true };
+            EnabledComponents = new bool[] { true, true, true };
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
             ChangeColorLayers = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
@@ -62,17 +67,10 @@ namespace RedPixel.Ui.ViewModels
 
             if (result is null) return Unit.Default;
             var filePath = result.First();
-            var sw = new Stopwatch();
-            sw.Start();
             await using var fileStream = File.OpenRead(filePath);
             var format = ImageFormat.Parse(fileStream);
 
-            var img = ImageParserFactory.CreateParser(format).Parse(fileStream);
-
-            sw.Stop();
-            await File.AppendAllTextAsync("time-log.txt", $"{filePath} - {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-
-            Image = img;
+            Image = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
 
             return Unit.Default;
         }
@@ -96,7 +94,7 @@ namespace RedPixel.Ui.ViewModels
 
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
-            ImageParserFactory.CreateParser(format).SerializeToStream(Image.SelectColorComponents(ColorComponents), fileStream);
+            ImageParserFactory.CreateParser(format).SerializeToStream(Image.SelectColorComponents(ColorComponents), fileStream, SelectedColorSpace);
 
             return Unit.Default;
 

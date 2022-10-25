@@ -1,20 +1,18 @@
-﻿using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using RedPixel.Core.Colors;
-using Color = RedPixel.Core.Colors.Color;
 
 namespace RedPixel.Core.Bitmap;
 
 public class Bitmap
 {
-    private readonly RgbColor[,] _matrix;
+    private readonly IColor[,] _matrix;
 
     public int Width => _matrix.Length == 0 ? 0 : _matrix.GetLength(1);
     public int Height => _matrix.GetLength(0);
 
     public Bitmap(int width, int height)
     {
-        _matrix = new RgbColor[height, width];
+        _matrix = new IColor[height, width];
     }
 
     public Bitmap(Image image)
@@ -33,20 +31,18 @@ public class Bitmap
         }
     }
 
-    public void SetPixel(int x, int y, RgbColor clr)
+    public void SetPixel(int x, int y, IColor clr)
     {
         _matrix[y, x] = clr;
     }
 
-    public RgbColor GetPixel(int x, int y)
+    public IColor GetPixel(int x, int y)
     {
         return _matrix[y, x];
     }
 
     public Bitmap SelectColorComponents(ColorComponents component)
     {
-        var sw = new Stopwatch();
-        sw.Start();
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
@@ -55,9 +51,18 @@ public class Bitmap
             }
         }
 
-        sw.Stop();
+        return this;
+    }
 
-        File.AppendAllText("time-log.txt", $"Change components to {component} {sw.ElapsedMilliseconds}ms\r\n");
+    public Bitmap ChangeColorSpace(ColorSpace space)
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                _matrix[y, x] = space.Converter.Invoke(_matrix[y, x]);
+            }
+        }
 
         return this;
     }

@@ -51,7 +51,7 @@ public class ImageFormat
     {
         foreach (var format in AllFormats.Value)
         {
-            if (format._matchFunc(content))
+            if (format.IsMatch(content))
                 return format;
         }
 

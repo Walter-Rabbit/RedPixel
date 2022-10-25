@@ -9,10 +9,8 @@ public class PnmImageParser : IImageParser
 {
     public ImageFormat[] ImageFormats => new[] { ImageFormat.Pnm };
 
-    public Bitmap.Bitmap Parse(Stream content)
+    public Bitmap.Bitmap Parse(Stream content, ColorSpace space)
     {
-        var sw = new Stopwatch();
-        sw.Start();
         var formatHeader = new byte[2];
         content.Read(formatHeader);
         var format = new string(formatHeader.Select(x => (char) x).ToArray());
@@ -42,18 +40,14 @@ public class PnmImageParser : IImageParser
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
-        File.AppendAllText("time-log.txt", $"Headers read {sw.ElapsedMilliseconds} ms{Environment.NewLine}");
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                var color = ReadColor(content, format, bytesForColor);
+                var color = ReadColor(content, format, bytesForColor, space);
                 bitmap.SetPixel(x, y, color);
             }
         }
-
-        sw.Stop();
-        File.AppendAllText("time-log.txt", $"Image reading took {sw.ElapsedMilliseconds} ms{Environment.NewLine}");
 
         return bitmap;
     }
@@ -105,7 +99,7 @@ public class PnmImageParser : IImageParser
         return int.Parse(number.ToString());
     }
 
-    private RgbColor ReadColor(Stream content, string format, int bytesForColor)
+    private IColor ReadColor(Stream content, string format, int bytesForColor, ColorSpace colorSpace)
     {
         if (format == "P5")
         {
@@ -118,11 +112,10 @@ public class PnmImageParser : IImageParser
         Span<byte> colorBytes = stackalloc byte[bytesForColor*3];
         content.Read(colorBytes);
         var red = ParseColorValue(colorBytes.Slice(0, bytesForColor));
-        var green = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor*2));
+        var green = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
         var blue = ParseColorValue(colorBytes.Slice(bytesForColor*2));
 
-        // TODO: Fix
-        return new RgbColor(red, green, blue);
+        return colorSpace.Creator.Invoke(red, green, blue);
     }
 
     private int ParseColorValue(Span<byte> colorBytes)
@@ -136,7 +129,7 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream)
+    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace)
     {
         var bitmap = new RedPixelBitmap(image);
 
@@ -154,16 +147,16 @@ public class PnmImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var color = bitmap.GetPixel(x, y);
+                var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    stream.WriteByte(color.FirstComponent);
-                    stream.WriteByte(color.SecondComponent);
-                    stream.WriteByte(color.ThirdComponent);
+                    stream.WriteByte(color.FirstComponent.ByteValue);
+                    stream.WriteByte(color.SecondComponent.ByteValue);
+                    stream.WriteByte(color.ThirdComponent.ByteValue);
                 }
                 else
                 {
-                    stream.WriteByte(color.FirstComponent);
+                    stream.WriteByte(color.FirstComponent.ByteValue);
                 }
             }
         }

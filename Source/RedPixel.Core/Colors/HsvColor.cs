@@ -1,12 +1,12 @@
 namespace RedPixel.Core.Colors;
 
-public class HSVColor : IColor
+public class HsvColor : IColor
 {
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
 
-    public HSVColor(float hue, float saturation, float value)
+    public HsvColor(float hue, float saturation, float value)
     {
         FirstComponent = new ColorComponent(hue);
         SecondComponent = new ColorComponent(saturation);
@@ -19,10 +19,10 @@ public class HSVColor : IColor
         var saturation = SecondComponent.Visible ? SecondComponent.Value : 0;
         var value = ThirdComponent.Visible ? ThirdComponent.Value : 0;
 
-        var hi = (int)Math.Floor(hue / 60) % 6;
+        var hi = (int)Math.Round(hue / 60) % 6;
 
         var vmin = (100 - saturation) * value / 100;
-        var a = (value - vmin) * (hue % 60) / 60;
+        var a = (value - vmin) * ((float)Math.Round(hue) % 60) / 60;
         var vinc = vmin + a;
         var vdec = value - a;
 
@@ -59,7 +59,7 @@ public class HSVColor : IColor
 
         if (max == min)
         {
-            return new HSVColor(h, s, v);
+            return new HsvColor(h, s, v);
         }
 
         if (max == r)
@@ -80,6 +80,6 @@ public class HSVColor : IColor
             h += 360;
         }
 
-        return new HSVColor(h, s, v);
+        return new HsvColor(h, s, v);
     }
 }

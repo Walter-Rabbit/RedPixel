@@ -46,6 +46,8 @@ L \cdot (1 + S), \quad L < 0.5\\
 L + S - (L \cdot S), \quad L \ge 0.5
 \end{cases}$$
 
+$P = 2 \cdot L - Q$
+
 $H_k = \frac{H}{360}$
 
 $T_R = H_k + \frac{1}{3}$

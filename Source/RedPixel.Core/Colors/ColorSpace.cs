@@ -34,6 +34,12 @@ public class ColorSpace
         new[] { "H", "S", "V" },
         color => HsvColor.FromRgb(color.ToRgb()),
         (h, s, v) => new HsvColor(h, s, v));
+    
+    public static ColorSpace Hsl = new(
+        "HSL",
+        new[] { "H", "S", "L" },
+        color => HslColor.FromRgb(color.ToRgb()),
+        (h, s, l) => new HslColor(h, s, l));
 
     public static ColorSpace Cmy = new(
         "CMY",

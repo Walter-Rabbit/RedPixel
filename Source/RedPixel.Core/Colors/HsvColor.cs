@@ -45,6 +45,8 @@ public class HsvColor : IColor
 
     public static IColor FromRgb(RgbColor rgb)
     {
+        const float tolerance = 0.000001f;
+        
         var r = rgb.FirstComponent.Value;
         var g = rgb.SecondComponent.Value;
         var b = rgb.ThirdComponent.Value;
@@ -57,20 +59,20 @@ public class HsvColor : IColor
 
         var h = 0;
 
-        if (max == min)
+        if (Math.Abs(max - min) < tolerance)
         {
             return new HsvColor(h, s, v);
         }
 
-        if (max == r)
+        if (Math.Abs(max - r) < tolerance)
         {
             h = (int) ((g - b) / (max - min) * 60);
         }
-        else if (max == g)
+        else if (Math.Abs(max - g) < tolerance)
         {
             h = (int) ((b - r) / (max - min) * 60 + 120);
         }
-        else if (max == b)
+        else if (Math.Abs(max - b) < tolerance)
         {
             h = (int) ((r - g) / (max - min) * 60 + 240);
         }

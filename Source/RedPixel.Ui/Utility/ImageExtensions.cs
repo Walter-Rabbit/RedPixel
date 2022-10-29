@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using ImageFormat = RedPixel.Core.ImageFormat;

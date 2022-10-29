@@ -1,4 +1,4 @@
-namespace RedPixel.Core.Colors;
+namespace RedPixel.Core.Colors.ValueObjects;
 
 public class ColorComponent
 {

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Bitmap;
 

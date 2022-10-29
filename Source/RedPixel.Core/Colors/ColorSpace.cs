@@ -29,17 +29,23 @@ public class ColorSpace
         color => color.ToRgb(),
         (r, g, b) => new RgbColor(r, g, b));
 
+    public static ColorSpace Hsl = new(
+        "HSL",
+        new[] { "H", "S", "L" },
+        color => HslColor.FromRgb(color.ToRgb()),
+        (h, s, l) => new HslColor(h, s, l));
+    
     public static ColorSpace Hsv = new(
         "HSV",
         new[] { "H", "S", "V" },
         color => HsvColor.FromRgb(color.ToRgb()),
         (h, s, v) => new HsvColor(h, s, v));
     
-    public static ColorSpace Hsl = new(
-        "HSL",
-        new[] { "H", "S", "L" },
-        color => HslColor.FromRgb(color.ToRgb()),
-        (h, s, l) => new HslColor(h, s, l));
+    public static ColorSpace YCoCg = new(
+        "YCoCgColor",
+        new[] { "Y", "Co", "Cg" },
+        color => YCoCgColor.FromRgb(color.ToRgb()),
+        (y, cO, cG) => new YCoCgColor(y, cO, cG));
 
     public static ColorSpace Cmy = new(
         "CMY",

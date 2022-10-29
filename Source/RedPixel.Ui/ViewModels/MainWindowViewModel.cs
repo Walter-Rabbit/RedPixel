@@ -11,6 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
 using RedPixel.Core.Bitmap;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views;

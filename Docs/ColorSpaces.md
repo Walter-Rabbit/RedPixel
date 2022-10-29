@@ -192,6 +192,8 @@ Cg - Зелёная цветоразностная компонента
 
 ### **Конвертация из RGB в YCoCg**
 
+$i = \frac{i}{255}, \quad i = R, G, B$
+
 $Y = \frac{1}{4} R + \frac{1}{2} G + \frac{1}{4}B$
 
 $C_o = \frac{1}{2} R - \frac{1}{2}B$
@@ -205,6 +207,8 @@ $R = Y + C_o - C_g$
 $G = Y + C_g$
 
 $B = Y - C_o - C_g$
+
+$i = i \cdot 255, \quad i = R, G, B$
 
 ## **CMY**
 

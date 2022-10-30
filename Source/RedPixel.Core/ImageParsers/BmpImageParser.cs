@@ -40,10 +40,10 @@ public class BmpImageParser : IImageParser
             for (int x = 0; x < image.Width; x++)
             {
                 var pixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb());
-                // TODO: Думаю, что надо уметь отбражать все байты, а не "максимальный".
-                stream.WriteByte(pixel.ThirdComponent.BytesValue.Max());
-                stream.WriteByte(pixel.SecondComponent.BytesValue.Max());
-                stream.WriteByte(pixel.FirstComponent.BytesValue.Max());
+                // TODO: fix
+                stream.WriteByte(pixel.ThirdComponent.BytesValue[0]);
+                stream.WriteByte(pixel.SecondComponent.BytesValue[0]);
+                stream.WriteByte(pixel.FirstComponent.BytesValue[0]);
                 stream.WriteByte(1);
             }
         }

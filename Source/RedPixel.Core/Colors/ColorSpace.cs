@@ -9,13 +9,13 @@ public class ColorSpace
 
     public Func<IColor, IColor> Converter { get; }
 
-    public Func<float, float, float, IColor> Creator { get; }
+    public Func<float, float, float, int, IColor> Creator { get; }
 
     private ColorSpace(
         string name,
         string[] components,
         Func<IColor, IColor> converter,
-        Func<float, float, float, IColor> creator)
+        Func<float, float, float, int, IColor> creator)
     {
         Name = name;
         Components = components;
@@ -27,31 +27,31 @@ public class ColorSpace
         "RGB",
         new[] { "R", "G", "B" },
         color => color.ToRgb(),
-        (r, g, b) => new RgbColor(r, g, b, 1));
+        (r, g, b, bytesForColor) => new RgbColor(r, g, b, bytesForColor));
 
     public static ColorSpace Hsl = new(
         "HSL",
         new[] { "H", "S", "L" },
         color => HslColor.FromRgb(color.ToRgb()),
-        (h, s, l) => new HslColor(h, s, l, 1));
-    
+        (h, s, l, bytesForColor) => new HslColor(h, s, l, bytesForColor));
+
     public static ColorSpace Hsv = new(
         "HSV",
         new[] { "H", "S", "V" },
         color => HsvColor.FromRgb(color.ToRgb()),
-        (h, s, v) => new HsvColor(h, s, v, 1));
-    
+        (h, s, v, bytesForColor) => new HsvColor(h, s, v, bytesForColor));
+
     public static ColorSpace YCoCg = new(
         "YCoCg",
         new[] { "Y", "Co", "Cg" },
         color => YCoCgColor.FromRgb(color.ToRgb()),
-        (y, cO, cG) => new YCoCgColor(y, cO, cG, 2));
+        (y, cO, cG, bytesForColor) => new YCoCgColor(y, cO, cG, bytesForColor));
 
     public static ColorSpace Cmy = new(
         "CMY",
         new[] { "C", "M", "Y" },
         color => CmyColor.FromRgb(color.ToRgb()),
-        (c, m, y) => new CmyColor(c, m, y, 1));
+        (c, m, y, bytesForColor) => new CmyColor(c, m, y, bytesForColor));
 
 
     public static Lazy<IEnumerable<ColorSpace>> AllSpaces => new(

@@ -23,9 +23,9 @@ public class YCoCgColor : IColor
         var cOrange = SecondComponent.Visible ? SecondComponent.Value : 0;
         var cGreen = ThirdComponent.Visible ? ThirdComponent.Value : 0;
 
-        var y = luma / 100;
-        var cO = cOrange / 100;
-        var cG = cGreen / 100;
+        var y = luma / 510;
+        var cO = cOrange / 510;
+        var cG = cGreen / 510;
 
         var r = y + cO - cG;
         var g = y + cG;
@@ -44,6 +44,6 @@ public class YCoCgColor : IColor
         var cO = 1f / 2f * r - 1f / 2f * b;
         var cG = -1f / 4f * r + 1f / 2f * g - 1f / 4f * b;
 
-        return new YCoCgColor(y * 100, cO * 100, cG * 100, rgb.BytesForColor + 1);
+        return new YCoCgColor(y * 510, cO * 510, cG * 510, rgb.BytesForColor + 1);
     }
 }

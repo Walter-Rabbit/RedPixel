@@ -40,6 +40,7 @@ public class PnmImageParser : IImageParser
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
+        
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -111,11 +112,11 @@ public class PnmImageParser : IImageParser
 
         Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
         content.Read(colorBytes);
-        var red = ParseColorValue(colorBytes.Slice(0, bytesForColor));
-        var green = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
-        var blue = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
+        var firstComponent = ParseColorValue(colorBytes.Slice(0, bytesForColor));
+        var secondComponent = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
+        var thirdComponent = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
 
-        return colorSpace.Creator.Invoke(red, green, blue);
+        return colorSpace.Creator.Invoke(firstComponent, secondComponent, thirdComponent, bytesForColor);
     }
 
     private int ParseColorValue(Span<byte> colorBytes)

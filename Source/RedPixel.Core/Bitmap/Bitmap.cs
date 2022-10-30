@@ -10,6 +10,7 @@ public class Bitmap
 
     public int Width => _matrix.Length == 0 ? 0 : _matrix.GetLength(1);
     public int Height => _matrix.GetLength(0);
+    public int BytesForColor => _matrix[0, 0].BytesForColor;
 
     public Bitmap(int width, int height)
     {

@@ -1,4 +1,3 @@
-using System.Text;
 using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Colors;
@@ -7,6 +6,7 @@ public interface IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
+    public int BytesForColor { get; }
 
     void SelectComponents(ColorComponents components)
     {

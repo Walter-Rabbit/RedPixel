@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
@@ -106,14 +106,14 @@ public class PnmImageParser : IImageParser
             Span<byte> sColorBytes = stackalloc byte[bytesForColor];
             content.Read(sColorBytes);
             var color = ParseColorValue(sColorBytes);
-            return new RgbColor(color, color, color);
+            return new RgbColor(color, color, color, bytesForColor);
         }
 
-        Span<byte> colorBytes = stackalloc byte[bytesForColor*3];
+        Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
         content.Read(colorBytes);
         var red = ParseColorValue(colorBytes.Slice(0, bytesForColor));
         var green = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
-        var blue = ParseColorValue(colorBytes.Slice(bytesForColor*2));
+        var blue = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
 
         return colorSpace.Creator.Invoke(red, green, blue);
     }
@@ -141,7 +141,8 @@ public class PnmImageParser : IImageParser
 
         stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
 
-        stream.Write(Encoding.ASCII.GetBytes("255\n"));
+        var maxValue = 255 * image.BytesForColor;
+        stream.Write(Encoding.ASCII.GetBytes($"{maxValue}\n"));
 
         for (int y = 0; y < image.Height; y++)
         {
@@ -150,16 +151,40 @@ public class PnmImageParser : IImageParser
                 var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    stream.WriteByte(color.FirstComponent.ByteValue);
-                    stream.WriteByte(color.SecondComponent.ByteValue);
-                    stream.WriteByte(color.ThirdComponent.ByteValue);
+                    foreach (var b in GetValuableBytes(color.FirstComponent, color.BytesForColor))
+                    {
+                        stream.WriteByte(b);
+                    }
+                    foreach (var b in GetValuableBytes(color.SecondComponent, color.BytesForColor))
+                    {
+                        stream.WriteByte(b);
+                    }
+                    foreach (var b in GetValuableBytes(color.ThirdComponent, color.BytesForColor))
+                    {
+                        stream.WriteByte(b);
+                    }
                 }
                 else
                 {
-                    stream.WriteByte(color.FirstComponent.ByteValue);
+                    foreach (var b in GetValuableBytes(color.FirstComponent, color.BytesForColor))
+                    {
+                        stream.WriteByte(b);
+                    }
                 }
             }
         }
+    }
+
+    private byte[] GetValuableBytes(ColorComponent component, int bytesForColor)
+    {
+        var bytes = new List<byte>();
+
+        for (var i = 0; i < bytesForColor; i++)
+        {
+            bytes.Add(component.BytesValue[i]);
+        }
+
+        return bytes.ToArray();
     }
 
     private bool IsGrayScale(Bitmap.Bitmap image)
@@ -169,7 +194,8 @@ public class PnmImageParser : IImageParser
             for (int x = 0; x < image.Width; x++)
             {
                 var color = image.GetPixel(x, y);
-                if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent || color.SecondComponent != color.ThirdComponent)
+                if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent ||
+                    color.SecondComponent != color.ThirdComponent)
                     return false;
             }
         }

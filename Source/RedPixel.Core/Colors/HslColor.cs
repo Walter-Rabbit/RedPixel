@@ -7,9 +7,11 @@ public class HslColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
+    public int BytesForColor { get; }
 
-    public HslColor(float hue, float saturation, float lightness)
+    public HslColor(float hue, float saturation, float lightness, int bytesForColor)
     {
+        BytesForColor = bytesForColor;
         FirstComponent = new ColorComponent(hue);
         SecondComponent = new ColorComponent(saturation);
         ThirdComponent = new ColorComponent(lightness);
@@ -56,7 +58,7 @@ public class HslColor : IColor
             };
         }
 
-        return new RgbColor(rgb[0] *  255, rgb[1] * 255, rgb[2] * 255);
+        return new RgbColor(rgb[0] *  255, rgb[1] * 255, rgb[2] * 255, BytesForColor);
     }
 
     public static IColor FromRgb(RgbColor rgb)
@@ -77,7 +79,7 @@ public class HslColor : IColor
 
         if (Math.Abs(max - min) < tolerance)
         {
-            return new HslColor(h, s, l);
+            return new HslColor(h, s, l, rgb.BytesForColor);
         }
 
         if (Math.Abs(max - r) < tolerance && g >= b)
@@ -98,6 +100,6 @@ public class HslColor : IColor
             h += 360;
         }
 
-        return new HslColor(h, s, l);
+        return new HslColor(h, s, l, rgb.BytesForColor);
     }
 }

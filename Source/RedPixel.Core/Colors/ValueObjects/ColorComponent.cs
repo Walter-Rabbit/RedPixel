@@ -10,5 +10,5 @@ public class ColorComponent
     public float Value { get; }
     public bool Visible { get; set; } = true;
 
-    public byte ByteValue => Visible ? (byte)Value : (byte)0;
+    public byte[] BytesValue => Visible ? BitConverter.GetBytes((int) Value) : BitConverter.GetBytes(0);
 }

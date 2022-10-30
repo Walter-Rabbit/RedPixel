@@ -7,14 +7,16 @@ public class YCoCgColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
-    
-    public YCoCgColor(float luma, float cOrange, float cGreen)
+    public int BytesForColor { get; }
+
+    public YCoCgColor(float luma, float cOrange, float cGreen, int bytesForColor)
     {
+        BytesForColor = bytesForColor;
         FirstComponent = new ColorComponent(luma);
         SecondComponent = new ColorComponent(cOrange);
         ThirdComponent = new ColorComponent(cGreen);
     }
-    
+
     public RgbColor ToRgb()
     {
         var luma = FirstComponent.Visible ? FirstComponent.Value : 0;
@@ -29,7 +31,7 @@ public class YCoCgColor : IColor
         var g = y + cG;
         var b = y - cO - cG;
 
-        return new RgbColor(r * 255, g * 255, b * 255);
+        return new RgbColor(r * 255, g * 255, b * 255, BytesForColor - 1);
     }
 
     public static IColor FromRgb(RgbColor rgb)
@@ -42,6 +44,6 @@ public class YCoCgColor : IColor
         var cO = 1f / 2f * r - 1f / 2f * b;
         var cG = -1f / 4f * r + 1f / 2f * g - 1f / 4f * b;
 
-        return new YCoCgColor(y * 100, cO * 100, cG * 100);
+        return new YCoCgColor(y * 100, cO * 100, cG * 100, rgb.BytesForColor + 1);
     }
 }

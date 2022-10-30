@@ -7,9 +7,11 @@ public class CmyColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
+    public int BytesForColor { get; }
 
-    public CmyColor(float cyan, float magenta, float yellow)
+    public CmyColor(float cyan, float magenta, float yellow, int bytesForColor)
     {
+        BytesForColor = bytesForColor;
         FirstComponent = new ColorComponent(cyan);
         SecondComponent = new ColorComponent(magenta);
         ThirdComponent = new ColorComponent(yellow);
@@ -26,7 +28,7 @@ public class CmyColor : IColor
         var g = 255 - m;
         var b = 255 - y;
 
-        return new RgbColor(r, g, b);
+        return new RgbColor(r, g, b, BytesForColor);
     }
 
     public static IColor FromRgb(RgbColor rgb)
@@ -39,6 +41,6 @@ public class CmyColor : IColor
         var m = 255 - g;
         var y = 255 - b;
 
-        return new CmyColor(c, m, y);
+        return new CmyColor(c, m, y, rgb.BytesForColor);
     }
 }

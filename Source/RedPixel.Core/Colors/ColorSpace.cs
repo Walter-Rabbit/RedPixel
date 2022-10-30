@@ -27,31 +27,31 @@ public class ColorSpace
         "RGB",
         new[] { "R", "G", "B" },
         color => color.ToRgb(),
-        (r, g, b) => new RgbColor(r, g, b));
+        (r, g, b) => new RgbColor(r, g, b, 1));
 
     public static ColorSpace Hsl = new(
         "HSL",
         new[] { "H", "S", "L" },
         color => HslColor.FromRgb(color.ToRgb()),
-        (h, s, l) => new HslColor(h, s, l));
+        (h, s, l) => new HslColor(h, s, l, 1));
     
     public static ColorSpace Hsv = new(
         "HSV",
         new[] { "H", "S", "V" },
         color => HsvColor.FromRgb(color.ToRgb()),
-        (h, s, v) => new HsvColor(h, s, v));
+        (h, s, v) => new HsvColor(h, s, v, 1));
     
     public static ColorSpace YCoCg = new(
-        "YCoCgColor",
+        "YCoCg",
         new[] { "Y", "Co", "Cg" },
         color => YCoCgColor.FromRgb(color.ToRgb()),
-        (y, cO, cG) => new YCoCgColor(y, cO, cG));
+        (y, cO, cG) => new YCoCgColor(y, cO, cG, 2));
 
     public static ColorSpace Cmy = new(
         "CMY",
         new[] { "C", "M", "Y" },
         color => CmyColor.FromRgb(color.ToRgb()),
-        (c, m, y) => new CmyColor(c, m, y));
+        (c, m, y) => new CmyColor(c, m, y, 1));
 
 
     public static Lazy<IEnumerable<ColorSpace>> AllSpaces => new(

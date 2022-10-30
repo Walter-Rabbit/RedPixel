@@ -7,12 +7,14 @@ public class HsvColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
+    public int BytesForColor { get; private set; }
 
-    public HsvColor(float hue, float saturation, float value)
+    public HsvColor(float hue, float saturation, float value, int bytesForColor)
     {
         FirstComponent = new ColorComponent(hue);
         SecondComponent = new ColorComponent(saturation);
         ThirdComponent = new ColorComponent(value);
+        BytesForColor = bytesForColor;
     }
 
     public RgbColor ToRgb()
@@ -35,12 +37,12 @@ public class HsvColor : IColor
 
         return hi switch
         {
-            0 => new RgbColor(value, vinc, vmin),
-            1 => new RgbColor(vdec, value, vmin),
-            2 => new RgbColor(vmin, value, vinc),
-            3 => new RgbColor(vmin, vdec, value),
-            4 => new RgbColor(vinc, vmin, value),
-            5 => new RgbColor(value, vmin, vdec),
+            0 => new RgbColor(value, vinc, vmin, BytesForColor),
+            1 => new RgbColor(vdec, value, vmin, BytesForColor),
+            2 => new RgbColor(vmin, value, vinc, BytesForColor),
+            3 => new RgbColor(vmin, vdec, value, BytesForColor),
+            4 => new RgbColor(vinc, vmin, value, BytesForColor),
+            5 => new RgbColor(value, vmin, vdec, BytesForColor),
             _ => throw new ArgumentOutOfRangeException(nameof(hue))
         };
     }
@@ -63,7 +65,7 @@ public class HsvColor : IColor
 
         if (Math.Abs(max - min) < tolerance)
         {
-            return new HsvColor(h, s, v);
+            return new HsvColor(h, s, v, rgb.BytesForColor);
         }
 
         if (Math.Abs(max - r) < tolerance)
@@ -84,6 +86,6 @@ public class HsvColor : IColor
             h += 360;
         }
 
-        return new HsvColor(h, s, v);
+        return new HsvColor(h, s, v, rgb.BytesForColor);
     }
 }

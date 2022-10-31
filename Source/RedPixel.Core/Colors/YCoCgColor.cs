@@ -20,8 +20,8 @@ public class YCoCgColor : IColor
     public RgbColor ToRgb()
     {
         var luma = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var cOrange = SecondComponent.Visible ? SecondComponent.Value : 0;
-        var cGreen = ThirdComponent.Visible ? ThirdComponent.Value : 0;
+        var cOrange = SecondComponent.Visible ? SecondComponent.Value : -255;
+        var cGreen = ThirdComponent.Visible ? ThirdComponent.Value : -255;
 
         var y = luma / 510;
         var cO = cOrange / 510;

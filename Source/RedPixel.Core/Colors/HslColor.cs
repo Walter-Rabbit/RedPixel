@@ -7,21 +7,19 @@ public class HslColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
-    public int BytesForColor { get; }
 
-    public HslColor(float hue, float saturation, float lightness, int bytesForColor)
+    public HslColor(ColorComponent hue, ColorComponent saturation, ColorComponent lightness)
     {
-        BytesForColor = bytesForColor;
-        FirstComponent = new ColorComponent(hue);
-        SecondComponent = new ColorComponent(saturation);
-        ThirdComponent = new ColorComponent(lightness);
+        FirstComponent = hue;
+        SecondComponent = saturation;
+        ThirdComponent = lightness;
     }
 
-    public RgbColor ToRgb()
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var hue = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var saturation = SecondComponent.Visible ? SecondComponent.Value : 0;
-        var lightness = ThirdComponent.Visible ? ThirdComponent.Value : 0;
+        var hue = (components & ColorComponents.First) != 0 ? FirstComponent.Value : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent.Value : 0;
+        var lightness = (components & ColorComponents.Third) != 0 ? ThirdComponent.Value : 0;
 
         var h = hue / 360;
         var s = saturation / 100;
@@ -58,7 +56,23 @@ public class HslColor : IColor
             };
         }
 
-        return new RgbColor(rgb[0] *  255, rgb[1] * 255, rgb[2] * 255, BytesForColor);
+        var r = FirstComponent with
+        {
+            Value = rgb[0] * 255,
+            ByteSize = FirstComponent.ByteSize - 1
+        };
+        var g = SecondComponent with
+        {
+            Value = rgb[1] * 255,
+            ByteSize = SecondComponent.ByteSize - 1
+        };
+        var b = ThirdComponent with
+        {
+            Value = rgb[2] * 255,
+            ByteSize = ThirdComponent.ByteSize - 1
+        };
+
+        return new RgbColor(r, g, b);
     }
 
     public static IColor FromRgb(RgbColor rgb)
@@ -77,9 +91,27 @@ public class HslColor : IColor
 
         var h = 0;
 
+        var saturation = rgb.SecondComponent with
+        {
+            Value = s,
+            ByteSize = rgb.SecondComponent.ByteSize + 1
+        };
+
+        var lightness = rgb.ThirdComponent with
+        {
+            Value = l,
+            ByteSize = rgb.ThirdComponent.ByteSize + 1
+        };
+
         if (Math.Abs(max - min) < tolerance)
         {
-            return new HslColor(h, s, l, rgb.BytesForColor);
+            var hue = rgb.FirstComponent with
+            {
+                Value = h,
+                ByteSize = rgb.FirstComponent.ByteSize + 1
+            };
+
+            return new HslColor(hue, saturation, lightness);
         }
 
         if (Math.Abs(max - r) < tolerance && g >= b)
@@ -100,6 +132,14 @@ public class HslColor : IColor
             h += 360;
         }
 
-        return new HslColor(h, s, l, rgb.BytesForColor);
+        {
+            var hue = rgb.FirstComponent with
+            {
+                Value = h,
+                ByteSize = rgb.FirstComponent.ByteSize + 1
+            };
+
+            return new HslColor(hue, saturation, lightness);
+        }
     }
 }

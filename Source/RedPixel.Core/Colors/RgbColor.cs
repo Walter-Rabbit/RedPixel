@@ -9,27 +9,27 @@ public class RgbColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
-    public int BytesForColor { get; }
 
-    public RgbColor(float r, float g, float b, int bytesForColor)
+    public RgbColor(ColorComponent r, ColorComponent g, ColorComponent b)
     {
-        FirstComponent = new ColorComponent(r);
-        SecondComponent = new ColorComponent(g);
-        ThirdComponent = new ColorComponent(b);
-        BytesForColor = bytesForColor;
+        FirstComponent = r;
+        SecondComponent = g;
+        ThirdComponent = b;
     }
 
-    public RgbColor ToRgb()
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        return this;
-    }
+        if (components == ColorComponents.All)
+            return this;
 
-    public SystemColor ToSystemColor()
-    {
-        return SystemColor.FromArgb(
-            BitConverter.ToInt32(FirstComponent.BytesValue),
-            BitConverter.ToInt32(SecondComponent.BytesValue),
-            BitConverter.ToInt32(ThirdComponent.BytesValue));
+        var r = (components & ColorComponents.First) != 0 ? FirstComponent.Value : 0;
+        var g = (components & ColorComponents.Second) != 0 ? SecondComponent.Value : 0;
+        var b = (components & ColorComponents.Third) != 0 ? ThirdComponent.Value : 0;
+
+        return new RgbColor(
+            new ColorComponent(r, FirstComponent.ByteSize),
+            new ColorComponent(g, SecondComponent.ByteSize),
+            new ColorComponent(b, ThirdComponent.ByteSize));
     }
 
     public static IColor FromRgb(RgbColor rgb)

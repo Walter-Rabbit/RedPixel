@@ -7,40 +7,49 @@ public class CmyColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
-    public int BytesForColor { get; }
 
-    public CmyColor(float cyan, float magenta, float yellow, int bytesForColor)
+    public CmyColor(ColorComponent cyan, ColorComponent magenta, ColorComponent yellow)
     {
-        BytesForColor = bytesForColor;
-        FirstComponent = new ColorComponent(cyan);
-        SecondComponent = new ColorComponent(magenta);
-        ThirdComponent = new ColorComponent(yellow);
+        FirstComponent = cyan;
+        SecondComponent = magenta;
+        ThirdComponent = yellow;
     }
-    
-    public RgbColor ToRgb()
+
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var c = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var m = SecondComponent.Visible ? SecondComponent.Value : 0;
-        var y = ThirdComponent.Visible ? ThirdComponent.Value : 0;
+        var r = FirstComponent with
+        {
+            Value = (components & ColorComponents.First) != 0 ? 255 - FirstComponent.Value : 0
+        };
 
+        var g = SecondComponent with
+        {
+            Value = (components & ColorComponents.Second) != 0 ? 255 - SecondComponent.Value : 0
+        };
 
-        var r = 255 - c;
-        var g = 255 - m;
-        var b = 255 - y;
+        var b = ThirdComponent with
+        {
+            Value = (components & ColorComponents.Third) != 0 ? 255 - ThirdComponent.Value : 0
+        };
 
-        return new RgbColor(r, g, b, BytesForColor);
+        return new RgbColor(r, g, b);
     }
 
     public static IColor FromRgb(RgbColor rgb)
     {
-        var r = rgb.FirstComponent.Value;
-        var g = rgb.SecondComponent.Value;
-        var b = rgb.ThirdComponent.Value;
+        var c = rgb.FirstComponent with
+        {
+            Value = 255 - rgb.FirstComponent.Value
+        };
+        var m = rgb.SecondComponent with
+        {
+            Value = 255 - rgb.SecondComponent.Value
+        };
+        var y = rgb.ThirdComponent with
+        {
+            Value = 255 - rgb.ThirdComponent.Value
+        };
 
-        var c = 255 - r;
-        var m = 255 - g;
-        var y = 255 - b;
-
-        return new CmyColor(c, m, y, rgb.BytesForColor);
+        return new CmyColor(c, m, y);
     }
 }

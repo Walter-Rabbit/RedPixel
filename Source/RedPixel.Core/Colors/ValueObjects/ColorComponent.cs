@@ -1,14 +1,17 @@
 namespace RedPixel.Core.Colors.ValueObjects;
 
-public class ColorComponent
+public record ColorComponent(float Value, int ByteSize)
 {
-    public ColorComponent(float value)
-    {
-        Value = value;
+    public byte[] BytesValue  {
+        get
+        {
+            return ByteSize switch
+            {
+                1 => new byte[] { (byte)Value },
+                2 => BitConverter.GetBytes((short)Value),
+                4 => BitConverter.GetBytes((int)Value),
+                _ => throw new ArgumentOutOfRangeException(nameof(ByteSize), ByteSize, null)
+            };
+        }
     }
-
-    public float Value { get; }
-    public bool Visible { get; set; } = true;
-
-    public byte[] BytesValue => Visible ? BitConverter.GetBytes((int) Value) : BitConverter.GetBytes(0);
 }

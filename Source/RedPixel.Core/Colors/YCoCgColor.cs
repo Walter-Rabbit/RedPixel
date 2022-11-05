@@ -7,43 +7,49 @@ public class YCoCgColor : IColor
     public ColorComponent FirstComponent { get; }
     public ColorComponent SecondComponent { get; }
     public ColorComponent ThirdComponent { get; }
-    public int BytesForColor { get; }
 
-    public YCoCgColor(float luma, float cOrange, float cGreen, int bytesForColor)
+    public YCoCgColor(ColorComponent luma, ColorComponent cOrange, ColorComponent cGreen)
     {
-        BytesForColor = bytesForColor;
-        FirstComponent = new ColorComponent(luma);
-        SecondComponent = new ColorComponent(cOrange);
-        ThirdComponent = new ColorComponent(cGreen);
+        FirstComponent = luma;
+        SecondComponent = cOrange;
+        ThirdComponent = cGreen;
     }
 
-    public RgbColor ToRgb()
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var luma = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var cOrange = SecondComponent.Visible ? SecondComponent.Value : -255;
-        var cGreen = ThirdComponent.Visible ? ThirdComponent.Value : -255;
+        var luma = (components & ColorComponents.First) != 0 ? FirstComponent.Value : 0;
+        var cOrange = (components & ColorComponents.Second) != 0 ? SecondComponent.Value : 0;
+        var cGreen = (components & ColorComponents.Third) != 0 ? ThirdComponent.Value : 0;
 
-        var y = luma / 510;
-        var cO = cOrange / 510;
-        var cG = cGreen / 510;
+        var y = luma;
+        var cO = cOrange - 255;
+        var cG = cGreen - 255;
 
-        var r = y + cO - cG;
-        var g = y + cG;
-        var b = y - cO - cG;
+        var r = (y + cO - cG)/2;
+        var g = (y + cG)/2;
+        var b = (y - cO - cG)/2;
 
-        return new RgbColor(r * 255, g * 255, b * 255, BytesForColor - 1);
+        var red = new ColorComponent(r, FirstComponent.ByteSize-1);
+        var green = new ColorComponent(g, SecondComponent.ByteSize-1);
+        var blue = new ColorComponent(b, ThirdComponent.ByteSize-1);
+
+        return new RgbColor(red, green, blue);
     }
 
     public static IColor FromRgb(RgbColor rgb)
     {
-        var r = rgb.FirstComponent.Value / 255;
-        var g = rgb.SecondComponent.Value / 255;
-        var b = rgb.ThirdComponent.Value / 255;
+        var r = rgb.FirstComponent.Value * 2;
+        var g = rgb.SecondComponent.Value * 2;
+        var b = rgb.ThirdComponent.Value * 2;
 
-        var y = 1f / 4f * r + 1f / 2f * g + 1f / 4f * b;
-        var cO = 1f / 2f * r - 1f / 2f * b;
-        var cG = -1f / 4f * r + 1f / 2f * g - 1f / 4f * b;
+        var y = (b + 2*g + r)/4;
+        var cG = (-b + 2*g - r)/4 + 255;
+        var cO = (-b + r) / 2 + 255;
 
-        return new YCoCgColor(y * 510, cO * 510, cG * 510, rgb.BytesForColor + 1);
+        var luma = new ColorComponent(Value: y, ByteSize: rgb.FirstComponent.ByteSize + 1);
+        var cOrange = new ColorComponent(Value: cO, ByteSize: rgb.SecondComponent.ByteSize + 1);
+        var cGreen = new ColorComponent(Value: cG, ByteSize: rgb.ThirdComponent.ByteSize + 1);
+
+        return new YCoCgColor(luma, cOrange, cGreen);
     }
 }

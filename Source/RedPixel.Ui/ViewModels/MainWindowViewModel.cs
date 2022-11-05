@@ -39,7 +39,11 @@ namespace RedPixel.Ui.ViewModels
                 x => x.Image,
                 x => x.ColorComponents).Subscribe(x => Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents));
 
-            this.WhenAnyValue(x => x.SelectedColorSpace).Subscribe(x => Image = Image?.ChangeColorSpace(x));
+            this.WhenAnyValue(x => x.SelectedColorSpace).Subscribe(x =>
+            {
+                Image?.ChangeColorSpace(x);
+                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+            });
 
             _view = view;
             EnabledComponents = new bool[] { true, true, true };
@@ -95,7 +99,7 @@ namespace RedPixel.Ui.ViewModels
 
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
-            ImageParserFactory.CreateParser(format).SerializeToStream(Image.SelectColorComponents(ColorComponents), fileStream, SelectedColorSpace);
+            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
 
             return Unit.Default;
 

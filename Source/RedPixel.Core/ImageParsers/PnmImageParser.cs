@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Tools;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
@@ -107,16 +108,16 @@ public class PnmImageParser : IImageParser
             Span<byte> sColorBytes = stackalloc byte[bytesForColor];
             content.Read(sColorBytes);
             var color = ParseColorValue(sColorBytes);
-            return colorSpace.Creator.Invoke(new ColorComponent(color, bytesForColor), new ColorComponent(color, bytesForColor), new ColorComponent(color, bytesForColor));
+            return colorSpace.Creator.Invoke(color, color, color, bytesForColor);
         }
 
         Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
         content.Read(colorBytes);
-        var firstComponent = new ColorComponent(ParseColorValue(colorBytes.Slice(0, bytesForColor)), bytesForColor);
-        var secondComponent = new ColorComponent(ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor)), bytesForColor);
-        var thirdComponent = new ColorComponent(ParseColorValue(colorBytes.Slice(bytesForColor * 2)), bytesForColor);
+        var firstComponent = ParseColorValue(colorBytes.Slice(0, bytesForColor));
+        var secondComponent = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
+        var thirdComponent = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
 
-        return colorSpace.Creator.Invoke(firstComponent, secondComponent, thirdComponent);
+        return colorSpace.Creator.Invoke(firstComponent, secondComponent, thirdComponent, bytesForColor);
     }
 
     private int ParseColorValue(Span<byte> colorBytes)
@@ -152,27 +153,27 @@ public class PnmImageParser : IImageParser
                 var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.BytesValue : new byte[color.FirstComponent.ByteSize]);
-                    stream.Write((components & ColorComponents.First) != 0 ? color.SecondComponent.BytesValue : new byte[color.SecondComponent.ByteSize]);
-                    stream.Write((components & ColorComponents.First) != 0 ? color.ThirdComponent.BytesValue : new byte[color.ThirdComponent.ByteSize]);
+                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0 ? color.SecondComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0 ? color.ThirdComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
                 }
                 else
                 {
                     byte[] value;
                     if ((components & ColorComponents.First) != 0)
                     {
-                        value = color.FirstComponent.BytesValue;
+                        value = color.FirstComponent.ToBytes(color.BytesForColor);
                     } else if ((components & ColorComponents.Second) != 0)
                     {
-                        value = color.SecondComponent.BytesValue;
+                        value = color.SecondComponent.ToBytes(color.BytesForColor);
                     }
                     else if ((components & ColorComponents.Third) != 0)
                     {
-                        value = color.ThirdComponent.BytesValue;
+                        value = color.ThirdComponent.ToBytes(color.BytesForColor);
                     }
                     else
                     {
-                        value = new byte[color.FirstComponent.ByteSize];
+                        value = new byte[color.BytesForColor];
                     }
                     stream.Write(value);
                 }

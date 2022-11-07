@@ -4,22 +4,24 @@ namespace RedPixel.Core.Colors;
 
 public class HsvColor : IColor
 {
-    public ColorComponent FirstComponent { get; }
-    public ColorComponent SecondComponent { get; }
-    public ColorComponent ThirdComponent { get; }
+    public float FirstComponent { get; }
+    public float SecondComponent { get; }
+    public float ThirdComponent { get; }
+    public int BytesForColor { get; }
 
-    public HsvColor(ColorComponent hue, ColorComponent saturation, ColorComponent value)
+    public HsvColor(float hue, float saturation, float value, int bytesForColor)
     {
         FirstComponent = hue;
         SecondComponent = saturation;
         ThirdComponent = value;
+        BytesForColor = bytesForColor;
     }
 
     public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var hue = (components & ColorComponents.First) != 0 ? FirstComponent.Value : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent.Value : 0;
-        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent.Value : 0;
+        var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 0;
+        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 0;
 
         var hi = (int)Math.Round(hue / 60) % 6;
 
@@ -33,19 +35,14 @@ public class HsvColor : IColor
         vmin *= 2.55f;
         vdec *= 2.55f;
 
-        var val = new ColorComponent(value, FirstComponent.ByteSize - 1);
-        var vin = new ColorComponent(vinc, FirstComponent.ByteSize - 1);
-        var vde = new ColorComponent(vdec, FirstComponent.ByteSize - 1);
-        var vmi = new ColorComponent(vmin, FirstComponent.ByteSize - 1);
-
         var rgb = hi switch
         {
-            0 => new RgbColor( val, vin, vmi),
-            1 => new RgbColor(vde, val, vmi),
-            2 => new RgbColor(vmi, val, vin),
-            3 => new RgbColor(vmi, vde, val),
-            4 => new RgbColor(vin, vmi, val),
-            5 => new RgbColor(val, vmi, vde),
+            0 => new RgbColor( value, vinc, vmin, BytesForColor-1),
+            1 => new RgbColor(vdec, value, vmin, BytesForColor-1),
+            2 => new RgbColor(vmin, value, vinc, BytesForColor-1),
+            3 => new RgbColor(vmin, vdec, value, BytesForColor-1),
+            4 => new RgbColor(vinc, vmin, value, BytesForColor-1),
+            5 => new RgbColor(value, vmin, vdec, BytesForColor-1),
             _ => throw new ArgumentOutOfRangeException(nameof(hue))
         };
 
@@ -56,9 +53,9 @@ public class HsvColor : IColor
     {
         const float tolerance = 0.000001f;
 
-        var r = rgb.FirstComponent.Value;
-        var g = rgb.SecondComponent.Value;
-        var b = rgb.ThirdComponent.Value;
+        var r = rgb.FirstComponent;
+        var g = rgb.SecondComponent;
+        var b = rgb.ThirdComponent;
 
         var max = Math.Max(r, Math.Max(g, b));
         var min = Math.Min(r, Math.Min(g, b));
@@ -66,16 +63,11 @@ public class HsvColor : IColor
         var v = max / 2.55f;
         var s = max == 0 ? 0 : (max - min) / max * 100;
 
-        var saturation = new ColorComponent(s, rgb.SecondComponent.ByteSize + 1);
-
-        var value = new ColorComponent(v, rgb.ThirdComponent.ByteSize + 1);
-
         var h = 0;
 
         if (Math.Abs(max - min) < tolerance)
         {
-            var hue = new ColorComponent(h, rgb.FirstComponent.ByteSize + 1);
-            return new HsvColor(hue, saturation, value);
+            return new HsvColor(h, s, v, rgb.BytesForColor + 1);
         }
 
         if (Math.Abs(max - r) < tolerance)
@@ -97,8 +89,7 @@ public class HsvColor : IColor
         }
 
         {
-            var hue = new ColorComponent(h, rgb.FirstComponent.ByteSize + 1);
-            return new HsvColor(hue, saturation, value);
+            return new HsvColor(h, s, v, rgb.BytesForColor + 1);
         }
     }
 }

@@ -3,10 +3,10 @@ using RedPixel.Core.Colors.ValueObjects;
 namespace RedPixel.Core.Colors;
 public interface IColor
 {
-    public ColorComponent FirstComponent { get; }
-    public ColorComponent SecondComponent { get; }
-    public ColorComponent ThirdComponent { get; }
-    public int BytesForColor => FirstComponent.ByteSize;
+    public float FirstComponent { get; }
+    public float SecondComponent { get; }
+    public float ThirdComponent { get; }
+    public int BytesForColor { get; }
 
     RgbColor ToRgb(ColorComponents components = ColorComponents.All);
 

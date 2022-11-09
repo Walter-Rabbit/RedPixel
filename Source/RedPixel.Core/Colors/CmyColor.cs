@@ -4,42 +4,35 @@ namespace RedPixel.Core.Colors;
 
 public class CmyColor : IColor
 {
-    public ColorComponent FirstComponent { get; }
-    public ColorComponent SecondComponent { get; }
-    public ColorComponent ThirdComponent { get; }
+    public float FirstComponent { get; }
+    public float SecondComponent { get; }
+    public float ThirdComponent { get; }
     public int BytesForColor { get; }
 
     public CmyColor(float cyan, float magenta, float yellow, int bytesForColor)
     {
+        FirstComponent = cyan;
+        SecondComponent = magenta;
+        ThirdComponent = yellow;
         BytesForColor = bytesForColor;
-        FirstComponent = new ColorComponent(cyan);
-        SecondComponent = new ColorComponent(magenta);
-        ThirdComponent = new ColorComponent(yellow);
     }
-    
-    public RgbColor ToRgb()
+
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var c = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var m = SecondComponent.Visible ? SecondComponent.Value : 0;
-        var y = ThirdComponent.Visible ? ThirdComponent.Value : 0;
+        var r = (components & ColorComponents.First) != 0 ? 255 - FirstComponent : 0;
 
+        var g = (components & ColorComponents.Second) != 0 ? 255 - SecondComponent : 0;
 
-        var r = 255 - c;
-        var g = 255 - m;
-        var b = 255 - y;
+        var b = (components & ColorComponents.Third) != 0 ? 255 - ThirdComponent : 0;
 
         return new RgbColor(r, g, b, BytesForColor);
     }
 
     public static IColor FromRgb(RgbColor rgb)
     {
-        var r = rgb.FirstComponent.Value;
-        var g = rgb.SecondComponent.Value;
-        var b = rgb.ThirdComponent.Value;
-
-        var c = 255 - r;
-        var m = 255 - g;
-        var y = 255 - b;
+        var c = 255 - rgb.FirstComponent;
+        var m = 255 - rgb.SecondComponent;
+        var y = 255 - rgb.ThirdComponent;
 
         return new CmyColor(c, m, y, rgb.BytesForColor);
     }

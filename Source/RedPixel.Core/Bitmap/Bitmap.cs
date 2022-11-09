@@ -43,19 +43,6 @@ public class Bitmap
         return _matrix[y, x];
     }
 
-    public Bitmap SelectColorComponents(ColorComponents component)
-    {
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                _matrix[y, x].SelectComponents(component);
-            }
-        }
-
-        return this;
-    }
-
     public Bitmap ChangeColorSpace(ColorSpace space)
     {
         for (int y = 0; y < Height; y++)

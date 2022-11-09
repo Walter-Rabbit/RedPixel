@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Tools;
 
 namespace RedPixel.Core.ImageParsers;
 
@@ -13,7 +15,7 @@ public class BmpImageParser : IImageParser
         throw new NotImplementedException();
     }
 
-    public void SerializeToStream(Bitmap.Bitmap image, Stream stream, ColorSpace colorSpace)
+    public void SerializeToStream(Bitmap.Bitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
     {
         stream.Write(Encoding.ASCII.GetBytes("BM"));
 
@@ -39,11 +41,11 @@ public class BmpImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var pixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb());
+                var pixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb(components));
                 // TODO: fix
-                stream.WriteByte(pixel.ThirdComponent.BytesValue[0]);
-                stream.WriteByte(pixel.SecondComponent.BytesValue[0]);
-                stream.WriteByte(pixel.FirstComponent.BytesValue[0]);
+                stream.WriteByte(pixel.ThirdComponent.ToBytes(pixel.BytesForColor)[0]);
+                stream.WriteByte(pixel.SecondComponent.ToBytes(pixel.BytesForColor)[0]);
+                stream.WriteByte(pixel.FirstComponent.ToBytes(pixel.BytesForColor)[0]);
                 stream.WriteByte(1);
             }
         }

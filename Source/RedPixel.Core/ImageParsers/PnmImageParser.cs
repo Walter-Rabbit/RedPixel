@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Tools;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
@@ -40,7 +41,7 @@ public class PnmImageParser : IImageParser
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
-        
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -107,7 +108,7 @@ public class PnmImageParser : IImageParser
             Span<byte> sColorBytes = stackalloc byte[bytesForColor];
             content.Read(sColorBytes);
             var color = ParseColorValue(sColorBytes);
-            return new RgbColor(color, color, color, bytesForColor);
+            return colorSpace.Creator.Invoke(color, color, color, bytesForColor);
         }
 
         Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
@@ -130,11 +131,11 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace)
+    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
     {
         var bitmap = new RedPixelBitmap(image);
 
-        var isGrayScale = IsGrayScale(bitmap);
+        var isGrayScale = IsGrayScale(bitmap, components);
 
         var format = isGrayScale ? "P5\n" : "P6\n";
         stream.Write(Encoding.ASCII.GetBytes(format));
@@ -152,44 +153,39 @@ public class PnmImageParser : IImageParser
                 var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    foreach (var b in GetValuableBytes(color.FirstComponent, color.BytesForColor))
-                    {
-                        stream.WriteByte(b);
-                    }
-                    foreach (var b in GetValuableBytes(color.SecondComponent, color.BytesForColor))
-                    {
-                        stream.WriteByte(b);
-                    }
-                    foreach (var b in GetValuableBytes(color.ThirdComponent, color.BytesForColor))
-                    {
-                        stream.WriteByte(b);
-                    }
+                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0 ? color.SecondComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0 ? color.ThirdComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
                 }
                 else
                 {
-                    foreach (var b in GetValuableBytes(color.FirstComponent, color.BytesForColor))
+                    byte[] value;
+                    if ((components & ColorComponents.First) != 0)
                     {
-                        stream.WriteByte(b);
+                        value = color.FirstComponent.ToBytes(color.BytesForColor);
+                    } else if ((components & ColorComponents.Second) != 0)
+                    {
+                        value = color.SecondComponent.ToBytes(color.BytesForColor);
                     }
+                    else if ((components & ColorComponents.Third) != 0)
+                    {
+                        value = color.ThirdComponent.ToBytes(color.BytesForColor);
+                    }
+                    else
+                    {
+                        value = new byte[color.BytesForColor];
+                    }
+                    stream.Write(value);
                 }
             }
         }
     }
 
-    private byte[] GetValuableBytes(ColorComponent component, int bytesForColor)
+    private bool IsGrayScale(Bitmap.Bitmap image, ColorComponents components)
     {
-        var bytes = new List<byte>();
+        if ((int)components == 1 || (int)components == 2 || (int)components == 4)
+            return true;
 
-        for (var i = 0; i < bytesForColor; i++)
-        {
-            bytes.Add(component.BytesValue[i]);
-        }
-
-        return bytes.ToArray();
-    }
-
-    private bool IsGrayScale(Bitmap.Bitmap image)
-    {
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)

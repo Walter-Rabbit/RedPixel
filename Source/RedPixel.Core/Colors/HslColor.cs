@@ -4,24 +4,24 @@ namespace RedPixel.Core.Colors;
 
 public class HslColor : IColor
 {
-    public ColorComponent FirstComponent { get; }
-    public ColorComponent SecondComponent { get; }
-    public ColorComponent ThirdComponent { get; }
+    public float FirstComponent { get; }
+    public float SecondComponent { get; }
+    public float ThirdComponent { get; }
     public int BytesForColor { get; }
 
     public HslColor(float hue, float saturation, float lightness, int bytesForColor)
     {
+        FirstComponent = hue;
+        SecondComponent = saturation;
+        ThirdComponent = lightness;
         BytesForColor = bytesForColor;
-        FirstComponent = new ColorComponent(hue);
-        SecondComponent = new ColorComponent(saturation);
-        ThirdComponent = new ColorComponent(lightness);
     }
 
-    public RgbColor ToRgb()
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
-        var hue = FirstComponent.Visible ? FirstComponent.Value : 0;
-        var saturation = SecondComponent.Visible ? SecondComponent.Value : 0;
-        var lightness = ThirdComponent.Visible ? ThirdComponent.Value : 0;
+        var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 0;
+        var lightness = (components & ColorComponents.Third) != 0 ? ThirdComponent : 0;
 
         var h = hue / 360;
         var s = saturation / 100;
@@ -58,16 +58,20 @@ public class HslColor : IColor
             };
         }
 
-        return new RgbColor(rgb[0] *  255, rgb[1] * 255, rgb[2] * 255, BytesForColor);
+        var r = rgb[0] * 255;
+        var g = rgb[1] * 255;
+        var b = rgb[2] * 255;
+
+        return new RgbColor(r, g, b, (int)(BytesForColor - 1));
     }
 
     public static IColor FromRgb(RgbColor rgb)
     {
         const float tolerance = 0.000001f;
 
-        var r = rgb.FirstComponent.Value / 255;
-        var g = rgb.SecondComponent.Value / 255;
-        var b = rgb.ThirdComponent.Value / 255;
+        var r = rgb.FirstComponent / 255;
+        var g = rgb.SecondComponent / 255;
+        var b = rgb.ThirdComponent / 255;
 
         var max = Math.Max(r, Math.Max(g, b));
         var min = Math.Min(r, Math.Min(g, b));
@@ -79,7 +83,7 @@ public class HslColor : IColor
 
         if (Math.Abs(max - min) < tolerance)
         {
-            return new HslColor(h, s, l, rgb.BytesForColor);
+            return new HslColor(h, s, l, (int)(rgb.BytesForColor + 1));
         }
 
         if (Math.Abs(max - r) < tolerance && g >= b)
@@ -100,6 +104,8 @@ public class HslColor : IColor
             h += 360;
         }
 
-        return new HslColor(h, s, l, rgb.BytesForColor);
+        {
+            return new HslColor(h, s, l, (int)(rgb.BytesForColor + 1));
+        }
     }
 }

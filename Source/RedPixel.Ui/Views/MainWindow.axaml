@@ -14,15 +14,18 @@
     </Design.DataContext>
 
     <Window.Resources>
-        <utility:PnmBitmapValueConverter x:Key="variableImage" />
+        <utility:PnmBitmapValueConverter x:Key="ImageConverter" />
     </Window.Resources>
 
     <Window.Styles>
         <Style Selector="Menu">
-            <Setter Property="Background" Value="#F3F3F3" />
+            <Setter Property="Background" Value="#3c3f41" />
         </Style>
-        <Style Selector="Panel.main">
-            <Setter Property="Background" Value="#FAFAFA" />
+        <Style Selector="Grid.main">
+            <Setter Property="Background" Value="#1e1f22" />
+        </Style>
+        <Style Selector="Grid.tools">
+            <Setter Property="Background" Value="#2b2d30" />
         </Style>
     </Window.Styles>
 
@@ -34,21 +37,39 @@
                 <MenuItem Header="Save" Command="{Binding SaveImageAsync}" />
             </MenuItem>
         </Menu>
-        <Panel Classes="main">
-            <ScrollViewer>
+        <Grid ColumnDefinitions="7*,1*" Classes="main">
+            <ScrollViewer Grid.Column="0">
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                            MaxZoomX="20" MaxZoomY="20">
+                            MinZoomX="0.05" MinZoomY="0.05">
                     <Image
                         Margin="30"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Source="{Binding Image, Converter={StaticResource variableImage}}"
+                        Source="{Binding Bitmap}"
                         Stretch="Uniform">
                     </Image>
-                    
+
                 </ZoomBorder>
             </ScrollViewer>
-        </Panel>
-    </DockPanel>
 
+            <Grid Classes="tools" Grid.Column="1" RowDefinitions="75,50,50,50,*">
+                <ComboBox SelectedItem="{Binding SelectedColorSpace}" Items="{Binding ColorSpaces}" SelectedIndex="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[0]}" HorizontalAlignment="Center" Grid.Row="1">
+                    <TextBlock Text="{Binding SelectedColorSpace.Components[0]}"/>
+                </CheckBox>
+                <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[1]}" HorizontalAlignment="Center" Grid.Row="2">
+                    <TextBlock Text="{Binding SelectedColorSpace.Components[1]}"/>
+                </CheckBox>
+                <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[2]}" HorizontalAlignment="Center" Grid.Row="3">
+                    <TextBlock Text="{Binding SelectedColorSpace.Components[2]}"/>
+                </CheckBox>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

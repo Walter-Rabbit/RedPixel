@@ -1,26 +1,23 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Diagnostics;
 using System.IO;
-using RedPixel.Core.Bitmap;
+using Avalonia;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.ImageParsers;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
+using ImageFormat = RedPixel.Core.ImageFormat;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Ui.Utility;
 
 public static class ImageExtensions
 {
-    public static Bitmap ConvertToAvaloniaBitmap(this Image image)
+    public static Bitmap ConvertToAvaloniaBitmap(this RedPixelBitmap bitmap, ColorComponents components = ColorComponents.All)
     {
         using var ms = new MemoryStream();
-        image.Save(ms, ImageFormat.Png);
-        ms.Position = 0;
-        return new Bitmap(ms);
-    }
-
-    public static Bitmap ConvertToAvaloniaBitmap(this RedPixelBitmap bitmap)
-    {
-        using var ms = new MemoryStream();
-        BitmapSaverFactory.CreateSaver(ImageFormat.Bmp).Save(bitmap, ms);
+        ImageParserFactory.CreateParser(ImageFormat.Bmp).SerializeToStream(bitmap, ms, ColorSpace.Rgb, components);
         ms.Position = 0;
         return new Bitmap(ms);
     }

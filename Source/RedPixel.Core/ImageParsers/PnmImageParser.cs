@@ -1,5 +1,7 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
+using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Tools;
 using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
@@ -8,7 +10,7 @@ public class PnmImageParser : IImageParser
 {
     public ImageFormat[] ImageFormats => new[] { ImageFormat.Pnm };
 
-    public Bitmap.Bitmap Parse(Stream content)
+    public Bitmap.Bitmap Parse(Stream content, ColorSpace space)
     {
         var formatHeader = new byte[2];
         content.Read(formatHeader);
@@ -39,11 +41,12 @@ public class PnmImageParser : IImageParser
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                var color = ReadColor(content, format, bytesForColor);
+                var color = ReadColor(content, format, bytesForColor, space);
                 bitmap.SetPixel(x, y, color);
             }
         }
@@ -98,27 +101,26 @@ public class PnmImageParser : IImageParser
         return int.Parse(number.ToString());
     }
 
-    private Color ReadColor(Stream content, string format, int bytesForColor)
+    private IColor ReadColor(Stream content, string format, int bytesForColor, ColorSpace colorSpace)
     {
-        var colorBytes = new byte[bytesForColor];
         if (format == "P5")
         {
-            content.Read(colorBytes);
-            var color = ParseColorValue(colorBytes);
-            return Color.FromArgb(color, color, color);
+            Span<byte> sColorBytes = stackalloc byte[bytesForColor];
+            content.Read(sColorBytes);
+            var color = ParseColorValue(sColorBytes);
+            return colorSpace.Creator.Invoke(color, color, color, bytesForColor);
         }
 
+        Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
         content.Read(colorBytes);
-        var red = ParseColorValue(colorBytes);
-        content.Read(colorBytes);
-        var green = ParseColorValue(colorBytes);
-        content.Read(colorBytes);
-        var blue = ParseColorValue(colorBytes);
+        var firstComponent = ParseColorValue(colorBytes.Slice(0, bytesForColor));
+        var secondComponent = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
+        var thirdComponent = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
 
-        return Color.FromArgb(red, green, blue);
+        return colorSpace.Creator.Invoke(firstComponent, secondComponent, thirdComponent, bytesForColor);
     }
 
-    private int ParseColorValue(byte[] colorBytes)
+    private int ParseColorValue(Span<byte> colorBytes)
     {
         return colorBytes.Length switch
         {
@@ -129,11 +131,11 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream)
+    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
     {
         var bitmap = new RedPixelBitmap(image);
 
-        var isGrayScale = IsGrayScale(bitmap);
+        var isGrayScale = IsGrayScale(bitmap, components);
 
         var format = isGrayScale ? "P5\n" : "P6\n";
         stream.Write(Encoding.ASCII.GetBytes(format));
@@ -141,35 +143,56 @@ public class PnmImageParser : IImageParser
 
         stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
 
-        stream.Write(Encoding.ASCII.GetBytes("255\n"));
+        var maxValue = 255 * image.BytesForColor;
+        stream.Write(Encoding.ASCII.GetBytes($"{maxValue}\n"));
 
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var color = bitmap.GetPixel(x, y);
+                var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    stream.WriteByte(color.R);
-                    stream.WriteByte(color.G);
-                    stream.WriteByte(color.B);
+                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0 ? color.SecondComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0 ? color.ThirdComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
                 }
                 else
                 {
-                    stream.WriteByte(color.R);
+                    byte[] value;
+                    if ((components & ColorComponents.First) != 0)
+                    {
+                        value = color.FirstComponent.ToBytes(color.BytesForColor);
+                    } else if ((components & ColorComponents.Second) != 0)
+                    {
+                        value = color.SecondComponent.ToBytes(color.BytesForColor);
+                    }
+                    else if ((components & ColorComponents.Third) != 0)
+                    {
+                        value = color.ThirdComponent.ToBytes(color.BytesForColor);
+                    }
+                    else
+                    {
+                        value = new byte[color.BytesForColor];
+                    }
+                    stream.Write(value);
                 }
             }
         }
     }
 
-    private bool IsGrayScale(Bitmap.Bitmap image)
+    private bool IsGrayScale(Bitmap.Bitmap image, ColorComponents components)
     {
+        if ((int)components == 1 || (int)components == 2 || (int)components == 4)
+            return true;
+
         for (int y = 0; y < image.Height; y++)
         {
             for (int x = 0; x < image.Width; x++)
             {
                 var color = image.GetPixel(x, y);
-                if (color.R != color.G || color.R != color.B || color.B != color.G)
+                if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent ||
+                    color.SecondComponent != color.ThirdComponent)
                     return false;
             }
         }

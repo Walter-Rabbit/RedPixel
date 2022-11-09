@@ -9,5 +9,9 @@ public interface IImageParser
 
     Bitmap.Bitmap Parse(Stream content, ColorSpace colorSpace);
 
-    void SerializeToStream(Bitmap.Bitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components);
+    void SerializeToStream(
+        Bitmap.Bitmap image,
+        Stream stream,
+        ColorSpace colorSpace,
+        ColorComponents components);
 }

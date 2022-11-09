@@ -1,4 +1,5 @@
 using System.Reflection;
+using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Colors;
 
@@ -9,13 +10,13 @@ public class ColorSpace
 
     public Func<IColor, IColor> Converter { get; }
 
-    public Func<float, float, float, IColor> Creator { get; }
+    public Func<float, float, float, int, IColor> Creator { get; }
 
     private ColorSpace(
         string name,
         string[] components,
         Func<IColor, IColor> converter,
-        Func<float, float, float, IColor> creator)
+        Func<float, float, float, int, IColor> creator)
     {
         Name = name;
         Components = components;
@@ -27,25 +28,31 @@ public class ColorSpace
         "RGB",
         new[] { "R", "G", "B" },
         color => color.ToRgb(),
-        (r, g, b) => new RgbColor(r, g, b));
+        (r, g, b, bfc) => new RgbColor(r, g, b, bfc));
+
+    public static ColorSpace Hsl = new(
+        "HSL",
+        new[] { "H", "S", "L" },
+        color => color is HslColor ? color : HslColor.FromRgb(color.ToRgb()),
+        (h, s, l, bfc) => new HslColor(h, s, l, bfc));
 
     public static ColorSpace Hsv = new(
         "HSV",
         new[] { "H", "S", "V" },
         color => HsvColor.FromRgb(color.ToRgb()),
-        (h, s, v) => new HsvColor(h, s, v));
-    
-    public static ColorSpace Hsl = new(
-        "HSL",
-        new[] { "H", "S", "L" },
-        color => HslColor.FromRgb(color.ToRgb()),
-        (h, s, l) => new HslColor(h, s, l));
+        (h, s, v, bfc) => new HsvColor(h, s, v, bfc));
+
+    public static ColorSpace YCoCg = new(
+        "YCoCg",
+        new[] { "Y", "Co", "Cg" },
+        color => YCoCgColor.FromRgb(color.ToRgb()),
+        (y, cO, cG, bfc) => new YCoCgColor(y, cO, cG, bfc));
 
     public static ColorSpace Cmy = new(
         "CMY",
         new[] { "C", "M", "Y" },
         color => CmyColor.FromRgb(color.ToRgb()),
-        (c, m, y) => new CmyColor(c, m, y));
+        (c, m, y, bfc) => new CmyColor(c, m, y, bfc));
 
 
     public static Lazy<IEnumerable<ColorSpace>> AllSpaces => new(

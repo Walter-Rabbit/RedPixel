@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using ImageFormat = RedPixel.Core.ImageFormat;
@@ -16,8 +17,7 @@ public static class ImageExtensions
     public static Bitmap ConvertToAvaloniaBitmap(this RedPixelBitmap bitmap, ColorComponents components = ColorComponents.All)
     {
         using var ms = new MemoryStream();
-        bitmap.SelectColorComponents(components);
-        ImageParserFactory.CreateParser(ImageFormat.Bmp).SerializeToStream(bitmap, ms, ColorSpace.Rgb);
+        ImageParserFactory.CreateParser(ImageFormat.Bmp).SerializeToStream(bitmap, ms, ColorSpace.Rgb, components);
         ms.Position = 0;
         return new Bitmap(ms);
     }

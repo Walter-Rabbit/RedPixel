@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedPixel.Ui", "RedPixel.Ui\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedPixel.Core", "RedPixel.Core\RedPixel.Core.csproj", "{AABB6FC4-D983-4397-B31C-D9BFEE178683}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedPixel.Benchmark", "RedPixel.Benchmark\RedPixel.Benchmark.csproj", "{EBF59E17-54D7-4C99-B85A-7E9031EA1D51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AABB6FC4-D983-4397-B31C-D9BFEE178683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF59E17-54D7-4C99-B85A-7E9031EA1D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF59E17-54D7-4C99-B85A-7E9031EA1D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF59E17-54D7-4C99-B85A-7E9031EA1D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF59E17-54D7-4C99-B85A-7E9031EA1D51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

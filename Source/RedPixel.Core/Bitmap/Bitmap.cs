@@ -1,17 +1,20 @@
 ﻿using System.Drawing;
+using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Bitmap;
 
 public class Bitmap
 {
-    private readonly Color[,] _matrix;
+    private readonly IColor[,] _matrix;
 
     public int Width => _matrix.Length == 0 ? 0 : _matrix.GetLength(1);
     public int Height => _matrix.GetLength(0);
+    public int BytesForColor => _matrix[0, 0].BytesForColor;
 
     public Bitmap(int width, int height)
     {
-        _matrix = new Color[height, width];
+        _matrix = new IColor[height, width];
     }
 
     public Bitmap(Image image)
@@ -29,38 +32,27 @@ public class Bitmap
             }
         }
     }
-    
-    public void SetPixel(int x, int y, Color clr)
+
+    public void SetPixel(int x, int y, IColor clr)
     {
-        ValidateCoordinate(x, y);
         _matrix[y, x] = clr;
     }
 
-    public Image GetSystemBitmap()
+    public IColor GetPixel(int x, int y)
     {
-        System.Drawing.Bitmap img = new System.Drawing.Bitmap(Width, Height);
+        return _matrix[y, x];
+    }
+
+    public Bitmap ChangeColorSpace(ColorSpace space)
+    {
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                img.SetPixel(x, y, GetPixel(x, y));
+                _matrix[y, x] = space.Converter.Invoke(_matrix[y, x]);
             }
         }
 
-        return img;
-    }
-
-    public Color GetPixel(int x, int y) 
-    {
-        ValidateCoordinate(x, y);
-        return _matrix[y, x];
-    }
-
-    private void ValidateCoordinate(int x, int y)
-    {
-        if (y >= Height || x >= Width)
-        {
-            throw new IndexOutOfRangeException();
-        }
+        return this;
     }
 }

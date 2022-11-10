@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
@@ -36,6 +37,8 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] private ColorSpace SelectedColorSpace { get; set; }
         [Reactive] private string GammaValueString { get; set; }
         [Reactive] private float GammaValue { get; set; } = 0;
+        [Reactive] private string ConvertGammaMessage { get; set; } = "Convert gamma";
+
         private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
         private IEnumerable<ColorSpace> ColorSpaces { get; set; } = ColorSpace.AllSpaces.Value;
 
@@ -80,6 +83,11 @@ namespace RedPixel.Ui.ViewModels
             ChangeColorLayersCommand = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
         }
 
+        public void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
+        {
+            ConvertGammaMessage = $"Convert gamma to {e.NewValue}";
+        }
+        
         private Unit AssignGamma()
         {
             try
@@ -91,10 +99,10 @@ namespace RedPixel.Ui.ViewModels
             {
                 File.AppendAllText("log.txt", $"{e.Message}");
             }
-            
+
             return Unit.Default;
         }
-        
+
         private Unit ConvertToGamma()
         {
             try
@@ -106,7 +114,7 @@ namespace RedPixel.Ui.ViewModels
             {
                 File.AppendAllText("log.txt", $"{e.Message}");
             }
-            
+
             return Unit.Default;
         }
 

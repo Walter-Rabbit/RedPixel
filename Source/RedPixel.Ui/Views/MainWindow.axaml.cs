@@ -1,4 +1,6 @@
+using System.IO;
 using Avalonia.Controls;
+using Avalonia.Input;
 using RedPixel.Ui.ViewModels;
 
 namespace RedPixel.Ui.Views
@@ -9,6 +11,11 @@ namespace RedPixel.Ui.Views
         {
             DataContext = new MainWindowViewModel(this);
             InitializeComponent();
+        }
+
+        private void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
+        {
+            (DataContext as MainWindowViewModel)?.NumericUpDown_OnValueChanged(sender, e);
         }
     }
 }

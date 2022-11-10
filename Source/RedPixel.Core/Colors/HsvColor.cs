@@ -4,9 +4,9 @@ namespace RedPixel.Core.Colors;
 
 public class HsvColor : IColor
 {
-    public float FirstComponent { get; }
-    public float SecondComponent { get; }
-    public float ThirdComponent { get; }
+    public float FirstComponent { get; set; }
+    public float SecondComponent { get; set; }
+    public float ThirdComponent { get; set; }
     public int BytesForColor { get; }
 
     public HsvColor(float hue, float saturation, float value, int bytesForColor)

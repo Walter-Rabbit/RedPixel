@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -9,12 +10,12 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
-using RedPixel.Core.Bitmap;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views;
+using Bitmap = RedPixel.Core.Bitmap.Bitmap;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -25,45 +26,88 @@ namespace RedPixel.Ui.ViewModels
 
         private ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         private ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
-        private ReactiveCommand<Unit, Unit> ChangeColorLayers { get; }
+        private ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
+        private ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
+        private ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
 
         [Reactive] private bool[] EnabledComponents { get; set; }
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
         [Reactive] private ColorSpace SelectedColorSpace { get; set; }
+        [Reactive] private string GammaValueString { get; set; }
+        [Reactive] private float GammaValue { get; set; } = 0;
+        private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
         private IEnumerable<ColorSpace> ColorSpaces { get; set; } = ColorSpace.AllSpaces.Value;
 
         public MainWindowViewModel(MainWindow view)
         {
             this.WhenAnyValue(
-                x => x.Image,
-                x => x.ColorComponents).Subscribe(x =>
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                Bitmap = Image?.ConvertToAvaloniaBitmap(2, ColorComponents);
-                sw.Stop();
-                File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            });
+                    x => x.Image,
+                    x => x.ColorComponents)
+                .Subscribe(x =>
+                {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+                    sw.Stop();
+                    File.AppendAllText(
+                        "log.txt",
+                        $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                });
 
-            this.WhenAnyValue(x => x.SelectedColorSpace).Subscribe(x =>
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                Image?.ChangeColorSpace(x);
-                File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                sw.Reset();
-                sw.Start();
-                Bitmap = Image?.ConvertToAvaloniaBitmap(2, ColorComponents);
-                File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                sw.Stop();
-            });
+            this.WhenAnyValue(x => x.SelectedColorSpace)
+                .Subscribe(x =>
+                {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    Image?.ChangeColorSpace(x);
+                    File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                    sw.Reset();
+                    sw.Start();
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+                    File.AppendAllText(
+                        "log.txt",
+                        $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                    sw.Stop();
+                });
 
             _view = view;
             EnabledComponents = new bool[] { true, true, true };
+            AssignGammaCommand = ReactiveCommand.Create(AssignGamma);
+            ConvertToGammaCommand = ReactiveCommand.Create(ConvertToGamma);
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
-            ChangeColorLayers = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
+            ChangeColorLayersCommand = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
+        }
+
+        private Unit AssignGamma()
+        {
+            try
+            {
+                GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
+                Bitmap = Image?.AssignGamma(GammaValue).ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+            }
+            catch (Exception e)
+            {
+                File.AppendAllText("log.txt", $"{e.Message}");
+            }
+            
+            return Unit.Default;
+        }
+        
+        private Unit ConvertToGamma()
+        {
+            try
+            {
+                GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
+                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap();
+            }
+            catch (Exception e)
+            {
+                File.AppendAllText("log.txt", $"{e.Message}");
+            }
+            
+            return Unit.Default;
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -72,13 +116,13 @@ namespace RedPixel.Ui.ViewModels
             dialog.Filters.AddRange(ImageFormat.AllFormats.Value.Select(x => new FileDialogFilter()
             {
                 Name = $"Image",
-                Extensions = new [] {x.Value}.Concat(x.Alternatives).ToList()
+                Extensions = new[] { x.Value }.Concat(x.Alternatives).ToList()
             }));
 
             dialog.Filters.Add(new FileDialogFilter()
             {
                 Name = "All",
-                Extensions = new List<string>(){"*"}
+                Extensions = new List<string>() { "*" }
             });
 
             dialog.AllowMultiple = false;
@@ -117,17 +161,17 @@ namespace RedPixel.Ui.ViewModels
 
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
-            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
+            ImageParserFactory.CreateParser(format)
+                .SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
 
             return Unit.Default;
-
         }
 
         private async Task<Unit> ChangeColorLayersAsync()
         {
             ColorComponents = (EnabledComponents[0] ? ColorComponents.First : ColorComponents.None)
-                            | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)
-                            | (EnabledComponents[2] ? ColorComponents.Third : ColorComponents.None);
+                              | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)
+                              | (EnabledComponents[2] ? ColorComponents.Third : ColorComponents.None);
 
             return Unit.Default;
         }

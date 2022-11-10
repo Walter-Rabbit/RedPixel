@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Bitmap;
@@ -11,6 +12,7 @@ public class Bitmap
     public int Width => _matrix.Length == 0 ? 0 : _matrix.GetLength(1);
     public int Height => _matrix.GetLength(0);
     public int BytesForColor => _matrix[0, 0].BytesForColor;
+    public float GammaValue { get; set; } = 0;
 
     public Bitmap(int width, int height)
     {
@@ -19,7 +21,8 @@ public class Bitmap
 
     public Bitmap(Image image)
         : this(image.Width, image.Height)
-    { }
+    {
+    }
 
     public Bitmap(Bitmap image)
         : this(image.Width, image.Height)
@@ -45,13 +48,43 @@ public class Bitmap
 
     public Bitmap ChangeColorSpace(ColorSpace space)
     {
-        for (int y = 0; y < Height; y++)
+        for (var y = 0; y < Height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (var x = 0; x < Width; x++)
             {
                 _matrix[y, x] = space.Converter.Invoke(_matrix[y, x]);
             }
         }
+
+        return this;
+    }
+
+    public Bitmap AssignGamma(float gammaValue)
+    {
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                _matrix[y, x].AssignGamma(GammaValue, gammaValue);
+            }
+        }
+
+        GammaValue = gammaValue;
+
+        return this;
+    }
+    
+    public Bitmap ConvertToGamma(float gammaValue)
+    {
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                _matrix[y, x].ConvertToGamma(GammaValue, gammaValue).AssignGamma(GammaValue, gammaValue);
+            }
+        }
+
+        GammaValue = gammaValue;
 
         return this;
     }

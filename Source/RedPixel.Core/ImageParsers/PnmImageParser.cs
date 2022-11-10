@@ -14,7 +14,7 @@ public class PnmImageParser : IImageParser
     {
         var formatHeader = new byte[2];
         content.Read(formatHeader);
-        var format = new string(formatHeader.Select(x => (char) x).ToArray());
+        var format = new string(formatHeader.Select(x => (char)x).ToArray());
 
         if (format != "P5" && format != "P6")
             throw new NotSupportedException($"Unsupported image format - {format}");
@@ -38,7 +38,7 @@ public class PnmImageParser : IImageParser
         var maxColorValue = ReadNumber(content);
         _ = content.ReadByte();
 
-        var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
+        var bytesForColor = (int)Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height);
 
@@ -94,7 +94,7 @@ public class PnmImageParser : IImageParser
             if (b is < '0' or > '9')
                 break;
 
-            number.Append((char) b);
+            number.Append((char)b);
         }
 
         content.Seek(-1, SeekOrigin.Current);
@@ -131,7 +131,11 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
+    public void SerializeToStream(
+        RedPixelBitmap image, 
+        Stream stream, 
+        ColorSpace colorSpace,
+        ColorComponents components)
     {
         var bitmap = new RedPixelBitmap(image);
 
@@ -153,9 +157,15 @@ public class PnmImageParser : IImageParser
                 var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
                 if (!isGrayScale)
                 {
-                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
-                    stream.Write((components & ColorComponents.Second) != 0 ? color.SecondComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
-                    stream.Write((components & ColorComponents.Third) != 0 ? color.ThirdComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.First) != 0
+                        ? color.FirstComponent.ToBytes(color.BytesForColor)
+                        : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0
+                        ? color.SecondComponent.ToBytes(color.BytesForColor)
+                        : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0
+                        ? color.ThirdComponent.ToBytes(color.BytesForColor)
+                        : new byte[color.BytesForColor]);
                 }
                 else
                 {
@@ -163,7 +173,8 @@ public class PnmImageParser : IImageParser
                     if ((components & ColorComponents.First) != 0)
                     {
                         value = color.FirstComponent.ToBytes(color.BytesForColor);
-                    } else if ((components & ColorComponents.Second) != 0)
+                    }
+                    else if ((components & ColorComponents.Second) != 0)
                     {
                         value = color.SecondComponent.ToBytes(color.BytesForColor);
                     }
@@ -175,6 +186,7 @@ public class PnmImageParser : IImageParser
                     {
                         value = new byte[color.BytesForColor];
                     }
+
                     stream.Write(value);
                 }
             }

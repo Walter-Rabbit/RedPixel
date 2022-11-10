@@ -4,9 +4,9 @@ namespace RedPixel.Core.Colors;
 
 public class YCoCgColor : IColor
 {
-    public float FirstComponent { get; }
-    public float SecondComponent { get; }
-    public float ThirdComponent { get; }
+    public float FirstComponent { get; set; }
+    public float SecondComponent { get; set; }
+    public float ThirdComponent { get; set; }
     public int BytesForColor { get; }
 
     public YCoCgColor(float luma, float cOrange, float cGreen, int bytesForColor)

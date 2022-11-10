@@ -14,10 +14,14 @@ namespace RedPixel.Ui.Utility;
 
 public static class ImageExtensions
 {
-    public static Bitmap ConvertToAvaloniaBitmap(this RedPixelBitmap bitmap, ColorComponents components = ColorComponents.All)
+    public static Bitmap ConvertToAvaloniaBitmap(
+        this RedPixelBitmap bitmap,
+        float gammaDiffValue = 0,
+        ColorComponents components = ColorComponents.All)
     {
         using var ms = new MemoryStream();
-        ImageParserFactory.CreateParser(ImageFormat.Bmp).SerializeToStream(bitmap, ms, ColorSpace.Rgb, components);
+        (ImageParserFactory.CreateParser(ImageFormat.Bmp) as BmpImageParser)?
+            .GetBmpStreamForAvalonia(bitmap, ms, ColorSpace.Rgb, components, gammaDiffValue);
         ms.Position = 0;
         return new Bitmap(ms);
     }

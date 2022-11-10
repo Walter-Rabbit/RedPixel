@@ -41,7 +41,7 @@ namespace RedPixel.Ui.ViewModels
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                Bitmap = Image?.ConvertToAvaloniaBitmap(2, ColorComponents);
                 sw.Stop();
                 File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             });
@@ -54,7 +54,7 @@ namespace RedPixel.Ui.ViewModels
                 File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 sw.Reset();
                 sw.Start();
-                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                Bitmap = Image?.ConvertToAvaloniaBitmap(2, ColorComponents);
                 File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 sw.Stop();
             });

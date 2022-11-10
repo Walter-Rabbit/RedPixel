@@ -80,7 +80,9 @@ public class Bitmap
         {
             for (var x = 0; x < Width; x++)
             {
-                _matrix[y, x].ConvertToGamma(GammaValue, gammaValue).AssignGamma(GammaValue, gammaValue);
+                _matrix[y, x]
+                    .ConvertToGamma(GammaValue, gammaValue)
+                    .AssignGamma(GammaValue, gammaValue);
             }
         }
 

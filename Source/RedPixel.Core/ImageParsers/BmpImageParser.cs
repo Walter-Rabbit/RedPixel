@@ -90,8 +90,7 @@ public class BmpImageParser : IImageParser
             for (int x = 0; x < image.Width; x++)
             {
                 var pixel = colorSpace.Converter
-                    .Invoke(image.GetPixel(x, y).ToRgb(components))
-                    .AssignGamma(gammaValue);
+                    .Invoke(image.GetPixel(x, y).ToRgb(components));
 
                 // TODO: fix
                 stream.WriteByte(pixel.ThirdComponent.ToBytes(pixel.BytesForColor)[0]);

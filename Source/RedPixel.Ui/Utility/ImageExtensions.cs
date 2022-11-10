@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
-using Avalonia;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
+﻿using System.IO;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;

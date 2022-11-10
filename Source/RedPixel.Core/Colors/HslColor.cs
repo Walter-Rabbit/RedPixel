@@ -5,7 +5,7 @@ namespace RedPixel.Core.Colors;
 
 public class HslColor : IColorSpace
 {
-    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
+    public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var hue = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
         var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
@@ -46,12 +46,10 @@ public class HslColor : IColorSpace
             };
         }
 
-        color.FirstComponent = rgb[0] * 255;
-        color.SecondComponent = rgb[1] * 255;
-        color.ThirdComponent = rgb[2] * 255;
+        return new Color(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255);
     }
 
-    public static void FromRgb(ref Color color)
+    public static Color FromRgb(in Color color)
     {
         const float tolerance = 0.000001f;
 
@@ -69,10 +67,7 @@ public class HslColor : IColorSpace
 
         if (Math.Abs(max - min) < tolerance)
         {
-            color.FirstComponent = h;
-            color.SecondComponent = s;
-            color.ThirdComponent = l;
-            return;
+            return new Color(h, s, l);
         }
 
         if (Math.Abs(max - r) < tolerance && g >= b)
@@ -93,9 +88,7 @@ public class HslColor : IColorSpace
             h += 360;
         }
 
-        color.FirstComponent = h;
-        color.SecondComponent = s;
-        color.ThirdComponent = l;
+        return new Color(h, s, l);
     }
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
@@ -106,7 +99,7 @@ public class HslColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                ToRgb(ref bitmap.Matrix[y, x], components);
+                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
             }
         }
     }
@@ -119,7 +112,7 @@ public class HslColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                FromRgb(ref bitmap.Matrix[y, x]);
+                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
             }
         }
     }

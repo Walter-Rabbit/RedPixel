@@ -5,7 +5,7 @@ namespace RedPixel.Core.Colors;
 
 public class CmyColor : IColorSpace
 {
-    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
+    public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var r = (components & ColorComponents.First) != 0 ? 255 - color.FirstComponent : 0;
 
@@ -13,20 +13,16 @@ public class CmyColor : IColorSpace
 
         var b = (components & ColorComponents.Third) != 0 ? 255 - color.ThirdComponent : 0;
 
-        color.FirstComponent = r;
-        color.SecondComponent = g;
-        color.ThirdComponent = b;
+        return new Color(r, g, b);
     }
 
-    public static void FromRgb(ref Color rgb)
+    public static Color FromRgb(in Color rgb)
     {
         var c = 255 - rgb.FirstComponent;
         var m = 255 - rgb.SecondComponent;
         var y = 255 - rgb.ThirdComponent;
 
-        rgb.FirstComponent = c;
-        rgb.SecondComponent = m;
-        rgb.ThirdComponent = y;
+        return new Color(c, m, y);
     }
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
@@ -35,7 +31,7 @@ public class CmyColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                ToRgb(ref bitmap.Matrix[y, x], components);
+                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
             }
         }
     }
@@ -46,7 +42,7 @@ public class CmyColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                FromRgb(ref bitmap.Matrix[y, x]);
+                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
             }
         }
     }

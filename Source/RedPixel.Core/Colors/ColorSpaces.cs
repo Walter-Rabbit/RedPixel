@@ -6,21 +6,22 @@ namespace RedPixel.Core.Colors;
 
 public class ColorSpaces
 {
-    public delegate void RefAction<T>(ref T arg);
-    public delegate void RefAction<TFirst, TSecond>(ref TFirst arg, TSecond secondArg);
+    //TODO: FIX
+    public delegate Color InFunc<T>(in T arg);
+    public delegate Color InFunc<TFirst, TSecond>(in TFirst arg, TSecond secondArg);
 
     public string Name { get; }
     public string[] Components { get; }
 
-    public RefAction<Color, ColorComponents> ColorToRgb { get; }
+    public InFunc<Color, ColorComponents> ColorToRgb { get; }
 
-    public RefAction<Color> ColorFromRgb { get; }
+    public InFunc<Color> ColorFromRgb { get; }
 
     public Action<Bitmap, ColorComponents> BitmapToRgb { get; }
 
     public Action<Bitmap> BitmapFromRgb { get; }
 
-    public ColorSpaces(string name, string[] components, RefAction<Color, ColorComponents> colorToRgb, RefAction<Color> colorFromRgb, Action<Bitmap, ColorComponents> bitmapToRgb, Action<Bitmap> bitmapFromRgb)
+    public ColorSpaces(string name, string[] components, InFunc<Color, ColorComponents> colorToRgb, InFunc<Color> colorFromRgb, Action<Bitmap, ColorComponents> bitmapToRgb, Action<Bitmap> bitmapFromRgb)
     {
         Name = name;
         Components = components;

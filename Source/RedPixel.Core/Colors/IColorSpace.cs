@@ -5,8 +5,8 @@ namespace RedPixel.Core.Colors;
 
 public interface IColorSpace
 {
-    static abstract void ToRgb(ref Color bitmap, ColorComponents components = ColorComponents.All);
-    static abstract void FromRgb(ref Color bitmap);
+    static abstract Color ToRgb(in Color bitmap, ColorComponents components = ColorComponents.All);
+    static abstract Color FromRgb(in Color bitmap);
     static abstract void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All);
     static abstract void FromRgb(Bitmap bitmap);
 }

@@ -5,7 +5,7 @@ namespace RedPixel.Core.Colors;
 
 public class HsvColor : IColorSpace
 {
-    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
+    public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var hue = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
         var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
@@ -23,45 +23,19 @@ public class HsvColor : IColorSpace
         vmin *= 2.55f;
         vdec *= 2.55f;
 
-        switch (hi)
+        return hi switch
         {
-            case 0:
-                color.FirstComponent = value;
-                color.SecondComponent = vinc;
-                color.ThirdComponent = vmin;
-                break;
-            case 1:
-                color.FirstComponent = vdec;
-                color.SecondComponent = value;
-                color.ThirdComponent = vmin;
-                break;
-            case 2:
-                color.FirstComponent = vmin;
-                color.SecondComponent = value;
-                color.ThirdComponent = vinc;
-                break;
-            case 3:
-            {
-                color.FirstComponent = vmin;
-                color.SecondComponent = vdec;
-                color.ThirdComponent = value;
-                break;
-            }
-            case 4:
-                color.FirstComponent = vinc;
-                color.SecondComponent = vmin;
-                color.ThirdComponent = value;
-                break;
-            case 5:
-                color.FirstComponent = value;
-                color.SecondComponent = vmin;
-                color.ThirdComponent = vdec;
-                break;
-            default: throw new ArgumentOutOfRangeException(nameof(hue));
+            0 => new Color(value, vinc, vmin),
+            1 => new Color(vdec, value, vmin),
+            2 => new Color(vmin, value, vinc),
+            3 => new Color(vmin, vdec, value),
+            4 => new Color(vinc, vmin, value),
+            5 => new Color(value, vmin, vdec),
+            _ => throw new ArgumentOutOfRangeException(nameof(hue))
         };
     }
 
-    public static void FromRgb(ref Color color)
+    public static Color FromRgb(in Color color)
     {
         const float tolerance = 0.000001f;
 
@@ -79,10 +53,7 @@ public class HsvColor : IColorSpace
 
         if (Math.Abs(max - min) < tolerance)
         {
-            color.FirstComponent = h;
-            color.SecondComponent = s;
-            color.ThirdComponent = v;
-            return;
+            return new Color(h, s, v);
         }
 
         if (Math.Abs(max - r) < tolerance)
@@ -103,9 +74,7 @@ public class HsvColor : IColorSpace
             h += 360;
         }
 
-        color.FirstComponent = h;
-        color.SecondComponent = s;
-        color.ThirdComponent = v;
+        return new Color(h, s, v);
     }
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
@@ -116,7 +85,7 @@ public class HsvColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                ToRgb(ref bitmap.Matrix[y, x], components);
+                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
             }
         }
     }
@@ -129,7 +98,7 @@ public class HsvColor : IColorSpace
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                FromRgb(ref bitmap.Matrix[y, x]);
+                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
             }
         }
     }

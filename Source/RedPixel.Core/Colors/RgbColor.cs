@@ -7,18 +7,21 @@ using SystemColor = System.Drawing.Color;
 
 public class RgbColor : IColorSpace
 {
-    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
+    public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         if (components == ColorComponents.All)
-            return;
+            return color;
 
-        color.FirstComponent = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
-        color.SecondComponent = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
-        color.ThirdComponent = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
+        var fc = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
+        var sc = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
+        var tc = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
+
+        return new Color(fc, sc, tc);
     }
 
-    public static void FromRgb(ref Color color)
+    public static Color FromRgb(in Color color)
     {
+        return color;
     }
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
@@ -30,7 +33,7 @@ public class RgbColor : IColorSpace
         {
             for (int y = 0; y < bitmap.Height; y++)
             {
-                ToRgb(ref bitmap.Matrix[y, x], components);
+                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
             }
         }
     }

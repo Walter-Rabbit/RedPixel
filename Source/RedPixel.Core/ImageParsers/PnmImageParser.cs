@@ -148,12 +148,11 @@ public class PnmImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var pixel = image.GetPixel(x, y);
+                var pixel = image.Matrix[y, x];
                 if (colorSpace != image.ColorSpace)
                 {
-                    pixel = pixel.Copy();
-                    image.ColorSpace.ColorToRgb(ref pixel, components);
-                    colorSpace.ColorFromRgb(ref pixel);
+                    pixel = image.ColorSpace.ColorToRgb(in pixel, components);
+                    pixel = colorSpace.ColorFromRgb(in pixel);
                 }
                 if (!isGrayScale)
                 {

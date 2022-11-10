@@ -14,7 +14,7 @@ public class PnmImageParser : IImageParser
     {
         var formatHeader = new byte[2];
         content.Read(formatHeader);
-        var format = new string(formatHeader.Select(x => (char) x).ToArray());
+        var format = new string(formatHeader.Select(x => (char)x).ToArray());
 
         if (format != "P5" && format != "P6")
             throw new NotSupportedException($"Unsupported image format - {format}");
@@ -38,7 +38,7 @@ public class PnmImageParser : IImageParser
         var maxColorValue = ReadNumber(content);
         _ = content.ReadByte();
 
-        var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
+        var bytesForColor = (int)Math.Log2(maxColorValue) / 8 + 1;
 
         var bitmap = new RedPixelBitmap(width, height, bytesForColor, colorSpace);
 
@@ -94,7 +94,7 @@ public class PnmImageParser : IImageParser
             if (b is < '0' or > '9')
                 break;
 
-            number.Append((char) b);
+            number.Append((char)b);
         }
 
         content.Seek(-1, SeekOrigin.Current);
@@ -178,6 +178,7 @@ public class PnmImageParser : IImageParser
                     {
                         value = new byte[image.BytesForColor];
                     }
+
                     stream.Write(value);
                 }
             }

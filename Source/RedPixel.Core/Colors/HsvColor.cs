@@ -12,6 +12,13 @@ public class HsvColor : IColorSpace
         var value = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
 
         var hi = (int)Math.Round(hue / 60) % 6;
+    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
+    {
+        var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 100;
+        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 100;
+
+        var hi = (int)(hue / 60) % 6;
 
         var vmin = (100 - saturation) * value / 100;
         var a = (value - vmin) * ((float)Math.Round(hue) % 60) / 60;
@@ -58,15 +65,15 @@ public class HsvColor : IColorSpace
 
         if (Math.Abs(max - r) < tolerance)
         {
-            h = (int) ((g - b) / (max - min) * 60);
+            h = (int)((g - b) / (max - min) * 60);
         }
         else if (Math.Abs(max - g) < tolerance)
         {
-            h = (int) ((b - r) / (max - min) * 60 + 120);
+            h = (int)((b - r) / (max - min) * 60 + 120);
         }
         else if (Math.Abs(max - b) < tolerance)
         {
-            h = (int) ((r - g) / (max - min) * 60 + 240);
+            h = (int)((r - g) / (max - min) * 60 + 240);
         }
 
         if (h < 0)

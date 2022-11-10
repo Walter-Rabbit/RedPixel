@@ -29,6 +29,18 @@ public class ColorSpace
         new[] { "R", "G", "B" },
         color => color.ToRgb(),
         (r, g, b, bfc) => new RgbColor(r, g, b, bfc));
+    
+    public static ColorSpace YCbCr601 = new(
+        "YCbCr601",
+        new[] { "Y", "Cb", "Cr" },
+        color => color is YCbCr601Color ? color : YCbCr601Color.FromRgb(color.ToRgb()),
+        (y, cb, cr, bfc) => new YCbCr601Color(y, cb, cr, bfc));
+    
+    public static ColorSpace YCbCr709 = new(
+        "YCbCr709",
+        new[] { "Y", "Cb", "Cr" },
+        color => color is YCbCr709Color ? color : YCbCr709Color.FromRgb(color.ToRgb()),
+        (y, cb, cr, bfc) => new YCbCr709Color(y, cb, cr, bfc));
 
     public static ColorSpace Hsl = new(
         "HSL",

@@ -128,18 +128,6 @@
                                 Command="{Binding AssignGammaCommand}" />
                     </Grid>
                     <Grid Grid.Row="2" ColumnDefinitions="70,90" HorizontalAlignment="Center">
-                        <NumericUpDown Grid.Column="0"
-                                       Height="30"
-                                       Width="50"
-                                       Text="{Binding GammaValueString}"
-                                       HorizontalAlignment="Center"
-                                       Maximum="10"
-                                       Minimum="0"
-                                       Value="0"
-                                       ShowButtonSpinner="False"
-                                       AllowSpin="False"
-                                       ClipValueToMinMax="True"
-                                       CultureInfo="{Binding CultureInfo}" />
                         <Button Grid.Column="1"
                                 Height="32"
                                 Width="90"

@@ -20,10 +20,10 @@ public class HsvColor : IColor
     public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
     {
         var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 0;
-        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 100;
+        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 100;
 
-        var hi = (int)Math.Round(hue / 60) % 6;
+        var hi = (int)(hue / 60) % 6;
 
         var vmin = (100 - saturation) * value / 100;
         var a = (value - vmin) * ((float)Math.Round(hue) % 60) / 60;
@@ -37,12 +37,12 @@ public class HsvColor : IColor
 
         var rgb = hi switch
         {
-            0 => new RgbColor( value, vinc, vmin, BytesForColor-1),
-            1 => new RgbColor(vdec, value, vmin, BytesForColor-1),
-            2 => new RgbColor(vmin, value, vinc, BytesForColor-1),
-            3 => new RgbColor(vmin, vdec, value, BytesForColor-1),
-            4 => new RgbColor(vinc, vmin, value, BytesForColor-1),
-            5 => new RgbColor(value, vmin, vdec, BytesForColor-1),
+            0 => new RgbColor(value, vinc, vmin, BytesForColor - 1),
+            1 => new RgbColor(vdec, value, vmin, BytesForColor - 1),
+            2 => new RgbColor(vmin, value, vinc, BytesForColor - 1),
+            3 => new RgbColor(vmin, vdec, value, BytesForColor - 1),
+            4 => new RgbColor(vinc, vmin, value, BytesForColor - 1),
+            5 => new RgbColor(value, vmin, vdec, BytesForColor - 1),
             _ => throw new ArgumentOutOfRangeException(nameof(hue))
         };
 
@@ -72,15 +72,15 @@ public class HsvColor : IColor
 
         if (Math.Abs(max - r) < tolerance)
         {
-            h = (int) ((g - b) / (max - min) * 60);
+            h = (int)((g - b) / (max - min) * 60);
         }
         else if (Math.Abs(max - g) < tolerance)
         {
-            h = (int) ((b - r) / (max - min) * 60 + 120);
+            h = (int)((b - r) / (max - min) * 60 + 120);
         }
         else if (Math.Abs(max - b) < tolerance)
         {
-            h = (int) ((r - g) / (max - min) * 60 + 240);
+            h = (int)((r - g) / (max - min) * 60 + 240);
         }
 
         if (h < 0)

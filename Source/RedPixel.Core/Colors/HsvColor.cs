@@ -1,27 +1,15 @@
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Colors;
 
-public class HsvColor : IColor
+public class HsvColor : IColorSpace
 {
-    public float FirstComponent { get; }
-    public float SecondComponent { get; }
-    public float ThirdComponent { get; }
-    public int BytesForColor { get; }
-
-    public HsvColor(float hue, float saturation, float value, int bytesForColor)
+    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
     {
-        FirstComponent = hue;
-        SecondComponent = saturation;
-        ThirdComponent = value;
-        BytesForColor = bytesForColor;
-    }
-
-    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
-    {
-        var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 0;
-        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 0;
+        var hue = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
+        var value = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
 
         var hi = (int)Math.Round(hue / 60) % 6;
 
@@ -35,27 +23,51 @@ public class HsvColor : IColor
         vmin *= 2.55f;
         vdec *= 2.55f;
 
-        var rgb = hi switch
+        switch (hi)
         {
-            0 => new RgbColor( value, vinc, vmin, BytesForColor-1),
-            1 => new RgbColor(vdec, value, vmin, BytesForColor-1),
-            2 => new RgbColor(vmin, value, vinc, BytesForColor-1),
-            3 => new RgbColor(vmin, vdec, value, BytesForColor-1),
-            4 => new RgbColor(vinc, vmin, value, BytesForColor-1),
-            5 => new RgbColor(value, vmin, vdec, BytesForColor-1),
-            _ => throw new ArgumentOutOfRangeException(nameof(hue))
+            case 0:
+                color.FirstComponent = value;
+                color.SecondComponent = vinc;
+                color.ThirdComponent = vmin;
+                break;
+            case 1:
+                color.FirstComponent = vdec;
+                color.SecondComponent = value;
+                color.ThirdComponent = vmin;
+                break;
+            case 2:
+                color.FirstComponent = vmin;
+                color.SecondComponent = value;
+                color.ThirdComponent = vinc;
+                break;
+            case 3:
+            {
+                color.FirstComponent = vmin;
+                color.SecondComponent = vdec;
+                color.ThirdComponent = value;
+                break;
+            }
+            case 4:
+                color.FirstComponent = vinc;
+                color.SecondComponent = vmin;
+                color.ThirdComponent = value;
+                break;
+            case 5:
+                color.FirstComponent = value;
+                color.SecondComponent = vmin;
+                color.ThirdComponent = vdec;
+                break;
+            default: throw new ArgumentOutOfRangeException(nameof(hue));
         };
-
-        return rgb;
     }
 
-    public static IColor FromRgb(RgbColor rgb)
+    public static void FromRgb(ref Color color)
     {
         const float tolerance = 0.000001f;
 
-        var r = rgb.FirstComponent;
-        var g = rgb.SecondComponent;
-        var b = rgb.ThirdComponent;
+        var r = color.FirstComponent;
+        var g = color.SecondComponent;
+        var b = color.ThirdComponent;
 
         var max = Math.Max(r, Math.Max(g, b));
         var min = Math.Min(r, Math.Min(g, b));
@@ -67,7 +79,10 @@ public class HsvColor : IColor
 
         if (Math.Abs(max - min) < tolerance)
         {
-            return new HsvColor(h, s, v, rgb.BytesForColor + 1);
+            color.FirstComponent = h;
+            color.SecondComponent = s;
+            color.ThirdComponent = v;
+            return;
         }
 
         if (Math.Abs(max - r) < tolerance)
@@ -88,8 +103,34 @@ public class HsvColor : IColor
             h += 360;
         }
 
+        color.FirstComponent = h;
+        color.SecondComponent = s;
+        color.ThirdComponent = v;
+    }
+
+    public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
+    {
+        bitmap.BytesForColor -= 1;
+
+        for (int y = 0; y < bitmap.Height; y++)
         {
-            return new HsvColor(h, s, v, rgb.BytesForColor + 1);
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                ToRgb(ref bitmap.Matrix[y, x], components);
+            }
+        }
+    }
+
+    public static void FromRgb(Bitmap bitmap)
+    {
+        bitmap.BytesForColor += 1;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                FromRgb(ref bitmap.Matrix[y, x]);
+            }
         }
     }
 }

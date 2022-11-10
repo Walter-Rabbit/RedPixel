@@ -9,10 +9,10 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
-using RedPixel.Core.Bitmap;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
+using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views;
 
@@ -30,8 +30,8 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] private bool[] EnabledComponents { get; set; }
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
-        [Reactive] private ColorSpace SelectedColorSpace { get; set; }
-        private IEnumerable<ColorSpace> ColorSpaces { get; set; } = ColorSpace.AllSpaces.Value;
+        [Reactive] private ColorSpaces SelectedColorSpaces { get; set; }
+        private IEnumerable<ColorSpaces> ColorSpaces { get; set; } = Core.Colors.ColorSpaces.AllSpaces.Value;
 
         public MainWindowViewModel(MainWindow view)
         {
@@ -46,14 +46,14 @@ namespace RedPixel.Ui.ViewModels
                 File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             });
 
-            this.WhenAnyValue(x => x.SelectedColorSpace).Subscribe(x =>
+            this.WhenAnyValue(x => x.SelectedColorSpaces).Subscribe(x =>
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                Image?.ChangeColorSpace(x);
                 File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 sw.Reset();
                 sw.Start();
+                Image?.ToColorSpace(x);
                 Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 File.AppendAllText("log.txt", $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 sw.Stop();
@@ -91,7 +91,7 @@ namespace RedPixel.Ui.ViewModels
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
+            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpaces);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             Image = img;
@@ -117,7 +117,7 @@ namespace RedPixel.Ui.ViewModels
 
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
-            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
+            ImageParserFactory.CreateParser(format).SerializeToStream(Image, fileStream, SelectedColorSpaces, ColorComponents);
 
             return Unit.Default;
 

@@ -53,7 +53,7 @@
             </ScrollViewer>
 
             <Grid Classes="tools" Grid.Column="1" RowDefinitions="75,50,50,50,*">
-                <ComboBox SelectedItem="{Binding SelectedColorSpace}" Items="{Binding ColorSpaces}" SelectedIndex="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ComboBox SelectedItem="{Binding SelectedColorSpaces}" Items="{Binding ColorSpaces}" SelectedIndex="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -61,13 +61,13 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[0]}" HorizontalAlignment="Center" Grid.Row="1">
-                    <TextBlock Text="{Binding SelectedColorSpace.Components[0]}"/>
+                    <TextBlock Text="{Binding SelectedColorSpaces.Components[0]}"/>
                 </CheckBox>
                 <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[1]}" HorizontalAlignment="Center" Grid.Row="2">
-                    <TextBlock Text="{Binding SelectedColorSpace.Components[1]}"/>
+                    <TextBlock Text="{Binding SelectedColorSpaces.Components[1]}"/>
                 </CheckBox>
                 <CheckBox Command="{Binding ChangeColorLayers}" IsChecked="{Binding EnabledComponents[2]}" HorizontalAlignment="Center" Grid.Row="3">
-                    <TextBlock Text="{Binding SelectedColorSpace.Components[2]}"/>
+                    <TextBlock Text="{Binding SelectedColorSpaces.Components[2]}"/>
                 </CheckBox>
             </Grid>
         </Grid>

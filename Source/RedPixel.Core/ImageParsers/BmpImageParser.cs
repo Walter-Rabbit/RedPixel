@@ -2,20 +2,21 @@
 using System.Text;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Models;
 using RedPixel.Core.Tools;
 
 namespace RedPixel.Core.ImageParsers;
 
 public class BmpImageParser : IImageParser
 {
-    public Core.ImageFormat[] ImageFormats => new[] { Core.ImageFormat.Bmp, };
+    public Core.ImageFormat[] ImageFormats => new[] { ImageFormat.Bmp, };
 
-    public Bitmap.Bitmap Parse(Stream content, ColorSpace colorSpace)
+    public Bitmap Parse(Stream content, ColorSpaces colorSpaces)
     {
         throw new NotImplementedException();
     }
 
-    public void SerializeToStream(Bitmap.Bitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
+    public void SerializeToStream(Bitmap image, Stream stream, ColorSpaces colorSpace, ColorComponents components)
     {
         stream.Write(Encoding.ASCII.GetBytes("BM"));
 
@@ -41,11 +42,18 @@ public class BmpImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var pixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb(components));
+                var pixel = image.GetPixel(x, y);
+                if (colorSpace != image.ColorSpace || components != ColorComponents.All)
+                {
+                    pixel = pixel.Copy();
+                    image.ColorSpace.ColorToRgb(ref pixel, components);
+                    colorSpace.ColorFromRgb(ref pixel);
+                }
+
                 // TODO: fix
-                stream.WriteByte(pixel.ThirdComponent.ToBytes(pixel.BytesForColor)[0]);
-                stream.WriteByte(pixel.SecondComponent.ToBytes(pixel.BytesForColor)[0]);
-                stream.WriteByte(pixel.FirstComponent.ToBytes(pixel.BytesForColor)[0]);
+                stream.WriteByte(pixel.ThirdComponent.ToBytes(image.BytesForColor)[0]);
+                stream.WriteByte(pixel.SecondComponent.ToBytes(image.BytesForColor)[0]);
+                stream.WriteByte(pixel.FirstComponent.ToBytes(image.BytesForColor)[0]);
                 stream.WriteByte(1);
             }
         }

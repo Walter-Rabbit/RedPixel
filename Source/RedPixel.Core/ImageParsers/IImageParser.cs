@@ -1,5 +1,6 @@
 ﻿using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Models;
 
 namespace RedPixel.Core.ImageParsers;
 
@@ -7,7 +8,7 @@ public interface IImageParser
 {
     ImageFormat[] ImageFormats { get; }
 
-    Bitmap.Bitmap Parse(Stream content, ColorSpace colorSpace);
+    Bitmap Parse(Stream content, ColorSpaces colorSpaces);
 
-    void SerializeToStream(Bitmap.Bitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components);
+    void SerializeToStream(Bitmap image, Stream stream, ColorSpaces colorSpaces, ColorComponents components);
 }

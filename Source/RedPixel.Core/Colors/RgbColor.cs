@@ -1,38 +1,41 @@
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Colors;
 
 using SystemColor = System.Drawing.Color;
 
-public class RgbColor : IColor
+public class RgbColor : IColorSpace
 {
-    public float FirstComponent { get; }
-    public float SecondComponent { get; }
-    public float ThirdComponent { get; }
-    public int BytesForColor { get; }
-
-    public RgbColor(float r, float g, float b, int bytesForColor)
-    {
-        FirstComponent = r;
-        SecondComponent = g;
-        ThirdComponent = b;
-        BytesForColor = bytesForColor;
-    }
-
-    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
+    public static void ToRgb(ref Color color, ColorComponents components = ColorComponents.All)
     {
         if (components == ColorComponents.All)
-            return this;
+            return;
 
-        var r = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
-        var g = (components & ColorComponents.Second) != 0 ? SecondComponent : 0;
-        var b = (components & ColorComponents.Third) != 0 ? ThirdComponent : 0;
-
-        return new RgbColor(r, g, b, BytesForColor);
+        color.FirstComponent = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
+        color.SecondComponent = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
+        color.ThirdComponent = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
     }
 
-    public static IColor FromRgb(RgbColor rgb)
+    public static void FromRgb(ref Color color)
     {
-        return rgb;
+    }
+
+    public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
+    {
+        if (components == ColorComponents.All)
+            return;
+
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                ToRgb(ref bitmap.Matrix[y, x], components);
+            }
+        }
+    }
+
+    public static void FromRgb(Bitmap bitmap)
+    {
     }
 }

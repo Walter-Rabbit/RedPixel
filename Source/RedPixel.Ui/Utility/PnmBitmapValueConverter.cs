@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
-using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
+using RedPixelBitmap = RedPixel.Core.Models.Bitmap;
 
 namespace RedPixel.Ui.Utility;
 

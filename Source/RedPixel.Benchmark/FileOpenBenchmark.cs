@@ -1,9 +1,9 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using RedPixel.Core;
-using RedPixel.Core.Bitmap;
 using RedPixel.Core.Colors;
 using RedPixel.Core.ImageParsers;
+using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 
 namespace RedPixel.Benchmark;
@@ -17,7 +17,7 @@ public class FileOpenBenchmark
         using var fs = File.OpenRead(@"C:\Users\alex8\Desktop\1.pnm");
 
         var parser = new PnmImageParser();
-        image = parser.Parse(fs, ColorSpace.Rgb);
+        image = parser.Parse(fs, ColorSpaces.Rgb);
     }
     //
     // [Benchmark]

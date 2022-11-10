@@ -2,7 +2,7 @@
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Tools;
-using RedPixelBitmap = RedPixel.Core.Bitmap.Bitmap;
+using RedPixelBitmap = RedPixel.Core.Models.Bitmap;
 
 namespace RedPixel.Core.ImageParsers;
 
@@ -10,7 +10,7 @@ public class PnmImageParser : IImageParser
 {
     public ImageFormat[] ImageFormats => new[] { ImageFormat.Pnm };
 
-    public Bitmap.Bitmap Parse(Stream content, ColorSpace space)
+    public RedPixelBitmap Parse(Stream content, ColorSpaces colorSpace)
     {
         var formatHeader = new byte[2];
         content.Read(formatHeader);
@@ -40,13 +40,13 @@ public class PnmImageParser : IImageParser
 
         var bytesForColor = (int) Math.Log2(maxColorValue) / 8 + 1;
 
-        var bitmap = new RedPixelBitmap(width, height);
+        var bitmap = new RedPixelBitmap(width, height, bytesForColor, colorSpace);
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                var color = ReadColor(content, format, bytesForColor, space);
+                var color = ReadColor(content, format, bytesForColor);
                 bitmap.SetPixel(x, y, color);
             }
         }
@@ -101,14 +101,14 @@ public class PnmImageParser : IImageParser
         return int.Parse(number.ToString());
     }
 
-    private IColor ReadColor(Stream content, string format, int bytesForColor, ColorSpace colorSpace)
+    private Color ReadColor(Stream content, string format, int bytesForColor)
     {
         if (format == "P5")
         {
             Span<byte> sColorBytes = stackalloc byte[bytesForColor];
             content.Read(sColorBytes);
             var color = ParseColorValue(sColorBytes);
-            return colorSpace.Creator.Invoke(color, color, color, bytesForColor);
+            return new Color(color, color, color);
         }
 
         Span<byte> colorBytes = stackalloc byte[bytesForColor * 3];
@@ -117,7 +117,7 @@ public class PnmImageParser : IImageParser
         var secondComponent = ParseColorValue(colorBytes.Slice(bytesForColor, bytesForColor));
         var thirdComponent = ParseColorValue(colorBytes.Slice(bytesForColor * 2));
 
-        return colorSpace.Creator.Invoke(firstComponent, secondComponent, thirdComponent, bytesForColor);
+        return new Color(firstComponent, secondComponent, thirdComponent);
     }
 
     private int ParseColorValue(Span<byte> colorBytes)
@@ -131,11 +131,9 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpace colorSpace, ColorComponents components)
+    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpaces colorSpace, ColorComponents components)
     {
-        var bitmap = new RedPixelBitmap(image);
-
-        var isGrayScale = IsGrayScale(bitmap, components);
+        var isGrayScale = IsGrayScale(image, components);
 
         var format = isGrayScale ? "P5\n" : "P6\n";
         stream.Write(Encoding.ASCII.GetBytes(format));
@@ -150,30 +148,36 @@ public class PnmImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var color = colorSpace.Converter.Invoke(bitmap.GetPixel(x, y));
+                var pixel = image.GetPixel(x, y);
+                if (colorSpace != image.ColorSpace)
+                {
+                    pixel = pixel.Copy();
+                    image.ColorSpace.ColorToRgb(ref pixel, components);
+                    colorSpace.ColorFromRgb(ref pixel);
+                }
                 if (!isGrayScale)
                 {
-                    stream.Write((components & ColorComponents.First) != 0 ? color.FirstComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
-                    stream.Write((components & ColorComponents.Second) != 0 ? color.SecondComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
-                    stream.Write((components & ColorComponents.Third) != 0 ? color.ThirdComponent.ToBytes(color.BytesForColor) : new byte[color.BytesForColor]);
+                    stream.Write((components & ColorComponents.First) != 0 ? pixel.FirstComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0 ? pixel.SecondComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0 ? pixel.ThirdComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
                 }
                 else
                 {
                     byte[] value;
                     if ((components & ColorComponents.First) != 0)
                     {
-                        value = color.FirstComponent.ToBytes(color.BytesForColor);
+                        value = pixel.FirstComponent.ToBytes(image.BytesForColor);
                     } else if ((components & ColorComponents.Second) != 0)
                     {
-                        value = color.SecondComponent.ToBytes(color.BytesForColor);
+                        value = pixel.SecondComponent.ToBytes(image.BytesForColor);
                     }
                     else if ((components & ColorComponents.Third) != 0)
                     {
-                        value = color.ThirdComponent.ToBytes(color.BytesForColor);
+                        value = pixel.ThirdComponent.ToBytes(image.BytesForColor);
                     }
                     else
                     {
-                        value = new byte[color.BytesForColor];
+                        value = new byte[image.BytesForColor];
                     }
                     stream.Write(value);
                 }
@@ -181,7 +185,7 @@ public class PnmImageParser : IImageParser
         }
     }
 
-    private bool IsGrayScale(Bitmap.Bitmap image, ColorComponents components)
+    private bool IsGrayScale(RedPixelBitmap image, ColorComponents components)
     {
         if ((int)components == 1 || (int)components == 2 || (int)components == 4)
             return true;

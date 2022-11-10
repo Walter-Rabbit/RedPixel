@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.Extensions;
@@ -42,9 +43,9 @@ public class BmpImageParser : IImageParser
         stream.Write(BitConverter.GetBytes(256 * 256 * 256), 0, 4);
         stream.Write(BitConverter.GetBytes(0), 0, 4);
 
-        for (int y = image.Height - 1; y >= 0; y--)
+        for (var y = image.Height - 1; y >= 0; y--)
         {
-            for (int x = 0; x < image.Width; x++)
+            for (var x = 0; x < image.Width; x++)
             {
                 var pixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb(components));
                 // TODO: fix
@@ -55,13 +56,14 @@ public class BmpImageParser : IImageParser
             }
         }
     }
-    
+
+    [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
     public void GetBmpStreamForAvalonia(
         Bitmap.Bitmap image,
         Stream stream,
         ColorSpace colorSpace,
         ColorComponents components,
-        float gammaDiffValue)
+        float gammaValue)
     {
         stream.Write(Encoding.ASCII.GetBytes("BM"));
 
@@ -87,9 +89,10 @@ public class BmpImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var purePixel = colorSpace.Converter.Invoke(image.GetPixel(x, y).ToRgb(components)) as RgbColor;
-                var pixel = purePixel.AssignGamma(gammaDiffValue);
-                
+                var pixel = colorSpace.Converter
+                    .Invoke(image.GetPixel(x, y).ToRgb(components))
+                    .AssignGamma(gammaValue);
+
                 // TODO: fix
                 stream.WriteByte(pixel.ThirdComponent.ToBytes(pixel.BytesForColor)[0]);
                 stream.WriteByte(pixel.SecondComponent.ToBytes(pixel.BytesForColor)[0]);

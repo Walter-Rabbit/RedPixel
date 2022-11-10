@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
 
 namespace RedPixel.Core.Bitmap;
@@ -45,11 +46,24 @@ public class Bitmap
 
     public Bitmap ChangeColorSpace(ColorSpace space)
     {
-        for (int y = 0; y < Height; y++)
+        for (var y = 0; y < Height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (var x = 0; x < Width; x++)
             {
                 _matrix[y, x] = space.Converter.Invoke(_matrix[y, x]);
+            }
+        }
+
+        return this;
+    }
+
+    public Bitmap ConvertToGamma(float gammaValue)
+    {
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                _matrix[y, x].ConvertToGamma(gammaValue);
             }
         }
 

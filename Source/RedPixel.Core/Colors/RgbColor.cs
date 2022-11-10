@@ -6,9 +6,9 @@ using SystemColor = System.Drawing.Color;
 
 public class RgbColor : IColor
 {
-    public float FirstComponent { get; }
-    public float SecondComponent { get; }
-    public float ThirdComponent { get; }
+    public float FirstComponent { get; set; }
+    public float SecondComponent { get; set; }
+    public float ThirdComponent { get; set; }
     public int BytesForColor { get; }
 
     public RgbColor(float r, float g, float b, int bytesForColor)

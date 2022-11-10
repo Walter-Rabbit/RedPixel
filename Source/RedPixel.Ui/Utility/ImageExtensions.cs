@@ -16,12 +16,12 @@ public static class ImageExtensions
 {
     public static Bitmap ConvertToAvaloniaBitmap(
         this RedPixelBitmap bitmap,
-        float gammaDiffValue = 0,
+        float gammaValue = 0,
         ColorComponents components = ColorComponents.All)
     {
         using var ms = new MemoryStream();
         (ImageParserFactory.CreateParser(ImageFormat.Bmp) as BmpImageParser)?
-            .GetBmpStreamForAvalonia(bitmap, ms, ColorSpace.Rgb, components, gammaDiffValue);
+            .GetBmpStreamForAvalonia(bitmap, ms, ColorSpace.Rgb, components, gammaValue);
         ms.Position = 0;
         return new Bitmap(ms);
     }

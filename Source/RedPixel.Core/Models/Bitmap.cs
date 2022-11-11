@@ -47,11 +47,14 @@ public class Bitmap
 
     public Bitmap AssignGamma(float targetGammaValue)
     {
+        var fromGammaValue = Gamma == 0f ? 1 : Gamma;
+        var gammaCoefficient = targetGammaValue == 0f ? 1f / fromGammaValue : targetGammaValue / fromGammaValue;
+        var maxValue = (float)Math.Pow(2f, 8f * BytesForColor) - 1f;
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                Matrix[y, x] = Matrix[y, x].AssignGamma(BytesForColor, Gamma, targetGammaValue);
+                Matrix[y, x] = Matrix[y, x].AssignGamma(maxValue, gammaCoefficient);
             }
         }
 
@@ -61,12 +64,15 @@ public class Bitmap
 
     public Bitmap ConvertToGamma(float targetGammaValue)
     {
+        var fromGammaValue = Gamma == 0f ? 1 : Gamma;
+        var gammaCoefficient = targetGammaValue == 0f ? 1f / fromGammaValue : targetGammaValue / fromGammaValue;
+        var maxValue = (float)Math.Pow(2f, 8f * BytesForColor) - 1f;
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
                 Matrix[y, x] = Matrix[y, x]
-                    .ConvertToGammaAndAssign(BytesForColor, Gamma, targetGammaValue);
+                    .ConvertToGammaAndAssign(maxValue, gammaCoefficient);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
-using Color = RedPixel.Core.Colors.Color;
+using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Models;
 
@@ -13,6 +14,8 @@ public class Bitmap
     public int Width => Matrix.Length == 0 ? 0 : Matrix.GetLength(1);
     public int Height => Matrix.GetLength(0);
     public int BytesForColor { get; set; }
+
+    public float Gamma { get; set; } = 0;
 
     public Bitmap(int width, int height, int bytesForColor, ColorSpaces colorSpace)
     {
@@ -40,5 +43,32 @@ public class Bitmap
         colorSpace.BitmapFromRgb(this);
 
         ColorSpace = colorSpace;
+    }
+
+    public Bitmap AssignGamma(float targetGammaValue)
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                Matrix[y, x] = Matrix[y, x].AssignGamma(BytesForColor, Gamma, targetGammaValue);
+            }
+        }
+
+        Gamma = targetGammaValue;
+        return this;
+    }
+
+    public Bitmap ConvertToGamma(float targetGammaValue)
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                Matrix[y, x] = Matrix[y, x].AssignGamma(BytesForColor, Gamma, targetGammaValue);
+            }
+        }
+
+        return this;
     }
 }

@@ -61,7 +61,7 @@
                     <ComboBox Grid.Row="1" HorizontalAlignment="Center"
                               Height="30"
                               SelectedItem="{Binding SelectedColorSpace}"
-                              Items="{Binding ColorSpaces}" SelectedIndex="0"
+                              Items="{Binding AllColorSpaces}" SelectedIndex="0"
                               VerticalAlignment="Center">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

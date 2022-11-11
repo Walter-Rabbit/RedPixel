@@ -8,14 +8,8 @@ public class YCoCgColor : IColorSpace
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var luma = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
-        var cOrange = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
-        var cGreen = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
-
-    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
-    {
-        var luma = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
-        var cOrange = (components & ColorComponents.Second) != 0 ? SecondComponent : 255;
-        var cGreen = (components & ColorComponents.Third) != 0 ? ThirdComponent : 255;
+        var cOrange = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 255;
+        var cGreen = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 255;
 
         var y = luma;
         var cO = cOrange - 255;
@@ -38,7 +32,7 @@ public class YCoCgColor : IColorSpace
         var cG = (-b + 2*g - r)/4 + 255;
         var cO = (-b + r) / 2 + 255;
 
-        return new Color(y, co, cg);
+        return new Color(y, cO, cG);
     }
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)

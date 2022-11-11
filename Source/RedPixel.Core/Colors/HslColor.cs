@@ -8,8 +8,8 @@ public class HslColor : IColorSpace
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var hue = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
-        var lightness = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 100;
+        var lightness = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 50;
 
         var h = hue / 360;
         var s = saturation / 100;

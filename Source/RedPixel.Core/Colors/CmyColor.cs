@@ -1,5 +1,6 @@
 ﻿using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
+using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Colors;
 

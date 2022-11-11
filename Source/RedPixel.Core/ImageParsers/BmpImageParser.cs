@@ -62,9 +62,9 @@ public class BmpImageParser : IImageParser
 
     [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
     public void GetBmpStreamForAvalonia(
-        Bitmap.Bitmap image,
+        Bitmap image,
         Stream stream,
-        ColorSpace colorSpace,
+        ColorSpaces colorSpace,
         ColorComponents components,
         float gammaValue)
     {
@@ -92,13 +92,17 @@ public class BmpImageParser : IImageParser
         {
             for (int x = 0; x < image.Width; x++)
             {
-                var pixel = colorSpace.Converter
-                    .Invoke(image.GetPixel(x, y).ToRgb(components));
+                var pixel = image.Matrix[y, x];
+                if (colorSpace != image.ColorSpace || components != ColorComponents.All)
+                {
+                    pixel = image.ColorSpace.ColorToRgb(in pixel, components);
+                    pixel = colorSpace.ColorFromRgb(in pixel);
+                }
 
                 // TODO: fix
-                stream.WriteByte(pixel.ThirdComponent.ToBytes(pixel.BytesForColor)[0]);
-                stream.WriteByte(pixel.SecondComponent.ToBytes(pixel.BytesForColor)[0]);
-                stream.WriteByte(pixel.FirstComponent.ToBytes(pixel.BytesForColor)[0]);
+                stream.WriteByte(pixel.ThirdComponent.ToBytes(image.BytesForColor)[0]);
+                stream.WriteByte(pixel.SecondComponent.ToBytes(image.BytesForColor)[0]);
+                stream.WriteByte(pixel.FirstComponent.ToBytes(image.BytesForColor)[0]);
                 stream.WriteByte(1);
             }
         }

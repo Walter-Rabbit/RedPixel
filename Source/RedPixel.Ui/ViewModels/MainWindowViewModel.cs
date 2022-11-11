@@ -16,7 +16,7 @@ using RedPixel.Core.ImageParsers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views;
-using Bitmap = RedPixel.Core.Bitmap.Bitmap;
+using Bitmap = RedPixel.Core.Models.Bitmap;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -34,11 +34,11 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] private bool[] EnabledComponents { get; set; }
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
-        [Reactive] private ColorSpace SelectedColorSpace { get; set; }
+        [Reactive] private ColorSpaces SelectedColorSpace { get; set; }
         [Reactive] private string GammaValueString { get; set; }
         [Reactive] private float GammaValue { get; set; } = 0;
         private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
-        private IEnumerable<ColorSpace> ColorSpaces { get; set; } = ColorSpace.AllSpaces.Value;
+        private IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 
         public MainWindowViewModel(MainWindow view)
         {
@@ -49,7 +49,7 @@ namespace RedPixel.Ui.ViewModels
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
                     sw.Stop();
                     File.AppendAllText(
                         "log.txt",
@@ -61,11 +61,11 @@ namespace RedPixel.Ui.ViewModels
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    Image?.ChangeColorSpace(x);
                     File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                     sw.Reset();
                     sw.Start();
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+                    Image?.ToColorSpace(x);
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
@@ -86,16 +86,16 @@ namespace RedPixel.Ui.ViewModels
             try
             {
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Bitmap = Image?.AssignGamma(GammaValue).ConvertToAvaloniaBitmap(GammaValue, ColorComponents);
+                Bitmap = Image?.AssignGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
             }
             catch (Exception e)
             {
                 File.AppendAllText("log.txt", $"{e.Message}");
             }
-            
+
             return Unit.Default;
         }
-        
+
         private Unit ConvertToGamma()
         {
             try
@@ -107,7 +107,7 @@ namespace RedPixel.Ui.ViewModels
             {
                 File.AppendAllText("log.txt", $"{e.Message}");
             }
-            
+
             return Unit.Default;
         }
 
@@ -136,7 +136,7 @@ namespace RedPixel.Ui.ViewModels
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpaces);
+            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             Image = img;

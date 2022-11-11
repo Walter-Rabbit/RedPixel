@@ -8,15 +8,9 @@ public class HsvColor : IColorSpace
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
         var hue = (components & ColorComponents.First) != 0 ? color.FirstComponent : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
-        var value = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
+        var saturation = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 100;
+        var value = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 100;
 
-        var hi = (int)Math.Round(hue / 60) % 6;
-    public RgbColor ToRgb(ColorComponents components = ColorComponents.All)
-    {
-        var hue = (components & ColorComponents.First) != 0 ? FirstComponent : 0;
-        var saturation = (components & ColorComponents.Second) != 0 ? SecondComponent : 100;
-        var value = (components & ColorComponents.Third) != 0 ? ThirdComponent : 100;
 
         var hi = (int)(hue / 60) % 6;
 

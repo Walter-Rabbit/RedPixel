@@ -64,14 +64,12 @@ namespace RedPixel.Ui.ViewModels
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    File.AppendAllText("log.txt", $"ChangeColorSpace: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                    sw.Reset();
-                    sw.Start();
+                    File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
                     Image?.ToColorSpace(x);
                     Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
                     File.AppendAllText(
                         "log.txt",
-                        $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                        $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                     sw.Stop();
                 });
 
@@ -88,13 +86,19 @@ namespace RedPixel.Ui.ViewModels
         {
             ConvertGammaMessage = $"Convert gamma to {e.NewValue}";
         }
-        
+
         private Unit AssignGamma()
         {
             try
             {
+                var sw = new Stopwatch();
+                sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
                 Bitmap = Image?.AssignGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
+                sw.Stop();
+                File.AppendAllText(
+                    "log.txt",
+                    $"AssignGamma: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             }
             catch (Exception e)
             {
@@ -108,8 +112,14 @@ namespace RedPixel.Ui.ViewModels
         {
             try
             {
+                var sw = new Stopwatch();
+                sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
                 Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap();
+                sw.Stop();
+                File.AppendAllText(
+                    "log.txt",
+                    $"ConvertToGamma: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             }
             catch (Exception e)
             {

@@ -66,8 +66,7 @@ public class Bitmap
             for (int x = 0; x < Width; x++)
             {
                 Matrix[y, x] = Matrix[y, x]
-                    .ConvertToGamma(BytesForColor, Gamma, targetGammaValue)
-                    .AssignGamma(BytesForColor, Gamma, targetGammaValue);
+                    .ConvertToGammaAndAssign(BytesForColor, Gamma, targetGammaValue);
             }
         }
 

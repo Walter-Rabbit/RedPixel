@@ -17,7 +17,7 @@ public static class RgbGammaConversion
         return new Color(fc, sc, tc);
     }
 
-    public static Color ConvertToGamma(this Color color, int bytesForColor, float fromGammaValue, float targetGammaValue = 0f)
+    public static Color ConvertToGammaAndAssign(this Color color, int bytesForColor, float fromGammaValue, float targetGammaValue = 0f)
     {
         fromGammaValue = fromGammaValue == 0f ? 1 : fromGammaValue;
         var gammaCoefficient = targetGammaValue == 0f ? 1f / fromGammaValue : targetGammaValue / fromGammaValue;
@@ -26,6 +26,10 @@ public static class RgbGammaConversion
         var fc = (float)Math.Pow(color.FirstComponent / maxValue, 1f / gammaCoefficient) * maxValue;
         var sc = (float)Math.Pow(color.SecondComponent / maxValue, 1f / gammaCoefficient) * maxValue;
         var tc = (float)Math.Pow(color.ThirdComponent / maxValue, 1f / gammaCoefficient) * maxValue;
+
+        fc = (float)(maxValue * Math.Pow(fc / maxValue, gammaCoefficient));
+        sc = (float)(maxValue * Math.Pow(sc / maxValue, gammaCoefficient));
+        tc = (float)(maxValue * Math.Pow(tc / maxValue, gammaCoefficient));
 
         return new Color(fc, sc, tc);
     }

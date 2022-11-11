@@ -4,7 +4,7 @@ using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Colors;
 
-public class CmyColor : IColorSpace
+public class CmyColorSpace : IColorSpace
 {
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {

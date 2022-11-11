@@ -5,7 +5,7 @@ namespace RedPixel.Core.Colors;
 
 using SystemColor = System.Drawing.Color;
 
-public class RgbColor : IColorSpace
+public class RgbColorSpace : IColorSpace
 {
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {

@@ -34,58 +34,58 @@ public class ColorSpaces
     public static ColorSpaces Rgb = new(
         "RGB",
         new[] { "R", "G", "B" },
-        RgbColor.ToRgb,
-        RgbColor.FromRgb,
-        RgbColor.ToRgb,
-        RgbColor.FromRgb);
+        RgbColorSpace.ToRgb,
+        RgbColorSpace.FromRgb,
+        RgbColorSpace.ToRgb,
+        RgbColorSpace.FromRgb);
 
     public static ColorSpaces Hsl = new(
         "HSL",
         new[] { "H", "S", "L" },
-        HslColor.ToRgb,
-        HslColor.FromRgb,
-        HslColor.ToRgb,
-        HslColor.FromRgb);
+        HslColorSpace.ToRgb,
+        HslColorSpace.FromRgb,
+        HslColorSpace.ToRgb,
+        HslColorSpace.FromRgb);
 
     public static ColorSpaces Hsv = new(
         "HSV",
         new[] { "H", "S", "V" },
-        HsvColor.ToRgb,
-        HsvColor.FromRgb,
-        HsvColor.ToRgb,
-        HsvColor.FromRgb);
+        HsvColorSpace.ToRgb,
+        HsvColorSpace.FromRgb,
+        HsvColorSpace.ToRgb,
+        HsvColorSpace.FromRgb);
 
     public static ColorSpaces YCoCg = new(
         "YCoCg",
         new[] { "Y", "Co", "Cg" },
-        YCoCgColor.ToRgb,
-        YCoCgColor.FromRgb,
-        YCoCgColor.ToRgb,
-        YCoCgColor.FromRgb);
+        YCoCgColorSpace.ToRgb,
+        YCoCgColorSpace.FromRgb,
+        YCoCgColorSpace.ToRgb,
+        YCoCgColorSpace.FromRgb);
 
     public static ColorSpaces Cmy = new(
         "CMY",
         new[] { "C", "M", "Y" },
-        CmyColor.ToRgb,
-        CmyColor.FromRgb,
-        CmyColor.ToRgb,
-        CmyColor.FromRgb);
+        CmyColorSpace.ToRgb,
+        CmyColorSpace.FromRgb,
+        CmyColorSpace.ToRgb,
+        CmyColorSpace.FromRgb);
 
     public static ColorSpaces YCbCr601 = new(
         "YCbCr601",
         new[] { "Y", "Cb", "Cr" },
-        YCbCr601Color.ToRgb,
-        YCbCr601Color.FromRgb,
-        YCbCr601Color.ToRgb,
-        YCbCr601Color.FromRgb);
+        YCbCr601ColorSpace.ToRgb,
+        YCbCr601ColorSpace.FromRgb,
+        YCbCr601ColorSpace.ToRgb,
+        YCbCr601ColorSpace.FromRgb);
 
     public static ColorSpaces YCbCr709 = new(
         "YCbCr709",
         new[] { "Y", "Cb", "Cr" },
-        YCbCr709Color.ToRgb,
-        YCbCr709Color.FromRgb,
-        YCbCr709Color.ToRgb,
-        YCbCr709Color.FromRgb);
+        YCbCr709ColorSpace.ToRgb,
+        YCbCr709ColorSpace.FromRgb,
+        YCbCr709ColorSpace.ToRgb,
+        YCbCr709ColorSpace.FromRgb);
 
     public static Lazy<IEnumerable<ColorSpaces>> AllSpaces => new(
         () => typeof(ColorSpaces)

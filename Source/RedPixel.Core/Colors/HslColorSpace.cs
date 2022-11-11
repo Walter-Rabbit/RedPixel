@@ -3,7 +3,7 @@ using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Colors;
 
-public class HslColor : IColorSpace
+public class HslColorSpace : IColorSpace
 {
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {

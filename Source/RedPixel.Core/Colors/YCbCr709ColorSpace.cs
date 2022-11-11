@@ -3,7 +3,7 @@ using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Colors;
 
-public class YCbCr601Color : IColorSpace
+public class YCbCr709ColorSpace : IColorSpace
 {
     public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
     {
@@ -12,21 +12,23 @@ public class YCbCr601Color : IColorSpace
         var cr = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 128;
 
         return new Color(
-            298.082f / 256 * y + 408.583f / 256 * cr - 222.921f,
-            296.082f / 256 * y - 100.291f / 256 * cb - 208.120f / 256 * cr + 135.576f,
-            298.082f / 256 * y + 516.412f / 256 * cb - 276.836f
+            y + 1.402f * (cr - 128f),
+            y - 0.34414f * (cb - 128f) - 0.71414f * (cr - 128f),
+            y + 1.772f * (cb - 128f)
         );
     }
 
     public static Color FromRgb(in Color color)
     {
-        var r = color.FirstComponent;
-        var g = color.SecondComponent;
-        var b = color.ThirdComponent;
+        var R = color.FirstComponent;
+        var G = color.SecondComponent;
+        var B = color.ThirdComponent;
 
-        var y = 16 + (65.738f * r + 129.057f * g + 25.064f * b) / 256;
-        var cb = 128 + (-37.945f * r - 74.494f * g + 112.439f * b) / 256;
-        var cr = 128 + (112.439f * r - 94.154f * g - 18.285f * b) / 256;
+
+        var y = 0.299f * R + 0.587f * G + 0.114f * B;
+        var cb = 128f - 0.168736f * R - 0.331264f * G + 0.5f * B;
+        var cr = 128f + 0.5f * R - 0.418688f * G - 0.081312f * B;
+
 
         return new Color(y, cb, cr);
     }

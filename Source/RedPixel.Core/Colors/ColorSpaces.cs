@@ -8,6 +8,7 @@ public class ColorSpaces
 {
     //TODO: FIX
     public delegate Color InFunc<T>(in T arg);
+
     public delegate Color InFunc<TFirst, TSecond>(in TFirst arg, TSecond secondArg);
 
     public string Name { get; }
@@ -21,7 +22,13 @@ public class ColorSpaces
 
     public Action<Bitmap> BitmapFromRgb { get; }
 
-    public ColorSpaces(string name, string[] components, InFunc<Color, ColorComponents> colorToRgb, InFunc<Color> colorFromRgb, Action<Bitmap, ColorComponents> bitmapToRgb, Action<Bitmap> bitmapFromRgb)
+    public ColorSpaces(
+        string name,
+        string[] components,
+        InFunc<Color, ColorComponents> colorToRgb,
+        InFunc<Color> colorFromRgb,
+        Action<Bitmap, ColorComponents> bitmapToRgb,
+        Action<Bitmap> bitmapFromRgb)
     {
         Name = name;
         Components = components;

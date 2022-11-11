@@ -28,8 +28,8 @@ public class YCoCgColorSpace : IColorSpace
         var g = color.SecondComponent * 2;
         var b = color.ThirdComponent * 2;
 
-        var y = (b + 2*g + r)/4;
-        var cG = (-b + 2*g - r)/4 + 255;
+        var y = (b + 2 * g + r) / 4;
+        var cG = (-b + 2 * g - r) / 4 + 255;
         var cO = (-b + r) / 2 + 255;
 
         return new Color(y, cO, cG);

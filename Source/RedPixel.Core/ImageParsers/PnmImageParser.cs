@@ -131,7 +131,11 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(RedPixelBitmap image, Stream stream, ColorSpaces colorSpace, ColorComponents components)
+    public void SerializeToStream(
+        RedPixelBitmap image,
+        Stream stream,
+        ColorSpaces colorSpace,
+        ColorComponents components)
     {
         var isGrayScale = IsGrayScale(image, components);
 
@@ -154,11 +158,18 @@ public class PnmImageParser : IImageParser
                     pixel = image.ColorSpace.ColorToRgb(in pixel, components);
                     pixel = colorSpace.ColorFromRgb(in pixel);
                 }
+
                 if (!isGrayScale)
                 {
-                    stream.Write((components & ColorComponents.First) != 0 ? pixel.FirstComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
-                    stream.Write((components & ColorComponents.Second) != 0 ? pixel.SecondComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
-                    stream.Write((components & ColorComponents.Third) != 0 ? pixel.ThirdComponent.ToBytes(image.BytesForColor) : new byte[image.BytesForColor]);
+                    stream.Write((components & ColorComponents.First) != 0
+                        ? pixel.FirstComponent.ToBytes(image.BytesForColor)
+                        : new byte[image.BytesForColor]);
+                    stream.Write((components & ColorComponents.Second) != 0
+                        ? pixel.SecondComponent.ToBytes(image.BytesForColor)
+                        : new byte[image.BytesForColor]);
+                    stream.Write((components & ColorComponents.Third) != 0
+                        ? pixel.ThirdComponent.ToBytes(image.BytesForColor)
+                        : new byte[image.BytesForColor]);
                 }
                 else
                 {
@@ -166,7 +177,8 @@ public class PnmImageParser : IImageParser
                     if ((components & ColorComponents.First) != 0)
                     {
                         value = pixel.FirstComponent.ToBytes(image.BytesForColor);
-                    } else if ((components & ColorComponents.Second) != 0)
+                    }
+                    else if ((components & ColorComponents.Second) != 0)
                     {
                         value = pixel.SecondComponent.ToBytes(image.BytesForColor);
                     }

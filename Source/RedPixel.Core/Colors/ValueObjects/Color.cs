@@ -1,4 +1,5 @@
 namespace RedPixel.Core.Colors.ValueObjects;
+
 public readonly struct Color
 {
     public float FirstComponent { get; }

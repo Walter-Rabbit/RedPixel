@@ -65,10 +65,13 @@ public class Bitmap
         {
             for (int x = 0; x < Width; x++)
             {
-                Matrix[y, x] = Matrix[y, x].AssignGamma(BytesForColor, Gamma, targetGammaValue);
+                Matrix[y, x] = Matrix[y, x]
+                    .ConvertToGamma(BytesForColor, Gamma, targetGammaValue)
+                    .AssignGamma(BytesForColor, Gamma, targetGammaValue);
             }
         }
 
+        Gamma = targetGammaValue;
         return this;
     }
 }

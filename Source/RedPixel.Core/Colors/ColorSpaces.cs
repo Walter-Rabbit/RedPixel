@@ -71,6 +71,21 @@ public class ColorSpaces
         CmyColor.ToRgb,
         CmyColor.FromRgb);
 
+    public static ColorSpaces YCbCr601 = new(
+        "YCbCr601",
+        new[] { "Y", "Cb", "Cr" },
+        YCbCr601Color.ToRgb,
+        YCbCr601Color.FromRgb,
+        YCbCr601Color.ToRgb,
+        YCbCr601Color.FromRgb);
+
+    public static ColorSpaces YCbCr709 = new(
+        "YCbCr709",
+        new[] { "Y", "Cb", "Cr" },
+        YCbCr709Color.ToRgb,
+        YCbCr709Color.FromRgb,
+        YCbCr709Color.ToRgb,
+        YCbCr709Color.FromRgb);
 
     public static Lazy<IEnumerable<ColorSpaces>> AllSpaces => new(
         () => typeof(ColorSpaces)

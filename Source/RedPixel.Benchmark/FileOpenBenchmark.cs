@@ -1,10 +1,7 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Engines;
-using RedPixel.Core;
 using RedPixel.Core.Colors;
 using RedPixel.Core.ImageParsers;
 using RedPixel.Core.Models;
-using RedPixel.Ui.Utility;
 
 namespace RedPixel.Benchmark;
 

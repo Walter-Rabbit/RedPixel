@@ -2,7 +2,6 @@
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
-using SkiaSharp;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using ImageFormat = RedPixel.Core.ImageFormat;
 using RedPixelBitmap = RedPixel.Core.Models.Bitmap;

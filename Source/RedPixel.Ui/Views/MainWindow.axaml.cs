@@ -1,6 +1,4 @@
-using System.IO;
 using Avalonia.Controls;
-using Avalonia.Input;
 using RedPixel.Ui.ViewModels;
 
 namespace RedPixel.Ui.Views

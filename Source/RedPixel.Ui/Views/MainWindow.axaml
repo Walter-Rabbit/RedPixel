@@ -38,7 +38,7 @@
                 <MenuItem Header="Save" Command="{Binding SaveImageAsync}" />
             </MenuItem>
         </Menu>
-        <Grid ColumnDefinitions="7*,1*" Classes="main">
+        <Grid ColumnDefinitions="7*,200" Classes="main">
             <ScrollViewer Grid.Column="0">
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                             MinZoomX="0.05" MinZoomY="0.05">
@@ -61,7 +61,7 @@
                     <ComboBox Grid.Row="1" HorizontalAlignment="Center"
                               Height="30"
                               SelectedItem="{Binding SelectedColorSpace}"
-                              Items="{Binding ColorSpaces}" SelectedIndex="0"
+                              Items="{Binding AllColorSpaces}" SelectedIndex="0"
                               VerticalAlignment="Center">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

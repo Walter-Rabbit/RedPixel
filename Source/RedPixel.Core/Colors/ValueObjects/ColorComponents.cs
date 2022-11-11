@@ -1,4 +1,5 @@
 namespace RedPixel.Core.Colors.ValueObjects;
+
 [Flags]
 public enum ColorComponents
 {

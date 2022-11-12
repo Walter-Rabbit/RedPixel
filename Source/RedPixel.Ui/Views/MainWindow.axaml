@@ -105,7 +105,7 @@
                     <TextBlock Grid.Row="0" Text="Gamma correction:"
                                HorizontalAlignment="Left"
                                Margin="10, 10, 0, 0"/>
-                    <Grid Grid.Row="1" ColumnDefinitions="70,95" HorizontalAlignment="Center">
+                    <Grid Grid.Row="1" ColumnDefinitions="75,100" HorizontalAlignment="Center">
                         <NumericUpDown Grid.Column="0"
                                        Height="30"
                                        Width="65"
@@ -113,7 +113,7 @@
                                        HorizontalAlignment="Center"
                                        Maximum="10"
                                        Minimum="0"
-                                       Value="0"
+                                       Value="1"
                                        ShowButtonSpinner="False"
                                        AllowSpin="False"
                                        ClipValueToMinMax="True"
@@ -130,7 +130,7 @@
                     </Grid>
                     <Button Grid.Row="2"
                             Height="32"
-                            Width="165"
+                            Width="170"
                             Content="{Binding ConvertGammaMessage}"
                             HorizontalContentAlignment="Center"
                             HorizontalAlignment="Center"

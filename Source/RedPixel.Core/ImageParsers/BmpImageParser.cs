@@ -1,11 +1,16 @@
 ﻿using System.Text;
 using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 using RedPixel.Core.Tools;
 
 namespace RedPixel.Core.ImageParsers;
 
+
+/// <summary>
+/// Только для последующей конвертации в avalonia bitmap. Не использовать для сохранения файла.
+/// </summary>
 public class BmpImageParser : IImageParser
 {
     public Core.ImageFormat[] ImageFormats => new[] { ImageFormat.Bmp, };
@@ -47,7 +52,8 @@ public class BmpImageParser : IImageParser
                     pixel = image.ColorSpace.ColorToRgb(in pixel, components);
                     pixel = colorSpace.ColorFromRgb(in pixel);
                 }
-
+                
+                pixel = pixel.AssignGamma(image.Gamma);
                 // TODO: fix
                 stream.WriteByte(pixel.ThirdComponent.ToBytes(image.BytesForColor)[0]);
                 stream.WriteByte(pixel.SecondComponent.ToBytes(image.BytesForColor)[0]);

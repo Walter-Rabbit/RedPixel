@@ -34,9 +34,9 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
         [Reactive] private ColorSpaces SelectedColorSpace { get; set; }
-        [Reactive] private string GammaValueString { get; set; }
-        [Reactive] private float GammaValue { get; set; } = 0;
-        [Reactive] private string ConvertGammaMessage { get; set; } = "Convert gamma";
+        [Reactive] private string GammaValueString { get; set; } = "1";
+        [Reactive] private float GammaValue { get; set; } = 1;
+        [Reactive] private string ConvertGammaMessage { get; set; } = "Convert γ";
 
         private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
         private IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
@@ -82,7 +82,7 @@ namespace RedPixel.Ui.ViewModels
 
         public void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
         {
-            ConvertGammaMessage = $"Convert gamma to {e.NewValue}";
+            ConvertGammaMessage = $"Convert γ to {e.NewValue}";
         }
 
         private Unit AssignGamma()
@@ -92,7 +92,8 @@ namespace RedPixel.Ui.ViewModels
                 var sw = new Stopwatch();
                 sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Bitmap = Image?.AssignGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
+                Image.Gamma = GammaValue;
+                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -113,7 +114,7 @@ namespace RedPixel.Ui.ViewModels
                 var sw = new Stopwatch();
                 sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap();
+                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -155,6 +156,8 @@ namespace RedPixel.Ui.ViewModels
             var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+            GammaValue = 1;
+            GammaValueString = "1";
             Image = img;
             return Unit.Default;
         }

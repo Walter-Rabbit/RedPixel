@@ -4,25 +4,97 @@ namespace RedPixel.Core.Colors.Extensions;
 
 public static class RgbGammaConversion
 {
-    public static Color AssignGamma(this Color color, float maxValue, float gammaCoefficient)
+    public static Color AssignGamma(this Color color, float gammaValue)
     {
-        var fc = (float)(maxValue * Math.Pow(color.FirstComponent / maxValue, gammaCoefficient));
-        var sc = (float)(maxValue * Math.Pow(color.SecondComponent / maxValue, gammaCoefficient));
-        var tc = (float)(maxValue * Math.Pow(color.ThirdComponent / maxValue, gammaCoefficient));
+        var fc = color.FirstComponent / 255f;
+        var sc = color.SecondComponent / 255f;
+        var tc = color.ThirdComponent / 255f;
 
-        return new Color(fc, sc, tc);
+        if (gammaValue == 0f)
+        {
+            if (fc <= 0.0031308f)
+            {
+                fc = 12.92f * fc;
+            }
+            else
+            {
+                fc = 1.055f * (float)Math.Pow(fc, 1f / 2.4f) - 0.055f;
+            }
+
+            if (sc <= 0.0031308f)
+            {
+                sc = 12.92f * sc;
+            }
+            else
+            {
+                sc = 1.055f * (float)Math.Pow(sc, 1f / 2.4f) - 0.055f;
+            }
+
+            if (tc <= 0.0031308f)
+            {
+                tc = 12.92f * tc;
+            }
+            else
+            {
+                tc = 1.055f * (float)Math.Pow(tc, 1f / 2.4f) - 0.055f;
+            }
+        }
+        else
+        {
+            fc = (float)Math.Pow(fc, gammaValue);
+            sc = (float)Math.Pow(sc, gammaValue);
+            tc = (float)Math.Pow(tc, gammaValue);
+        }
+
+        return new Color(fc * 255f, sc * 255f, tc * 255f);
     }
 
-    public static Color ConvertToGammaAndAssign(this Color color, float maxValue, float gammaCoefficient)
+    public static Color ConvertToGamma(
+        this Color color,
+        float fromGammaValue,
+        float targetGammaValue)
     {
-        var fc = (float)Math.Pow(color.FirstComponent / maxValue, 1f / gammaCoefficient) * maxValue;
-        var sc = (float)Math.Pow(color.SecondComponent / maxValue, 1f / gammaCoefficient) * maxValue;
-        var tc = (float)Math.Pow(color.ThirdComponent / maxValue, 1f / gammaCoefficient) * maxValue;
+        var newColor = color.AssignGamma(fromGammaValue);
+        var fc = newColor.FirstComponent / 255f;
+        var sc = newColor.SecondComponent / 255f;
+        var tc = newColor.ThirdComponent / 255f;
 
-        fc = (float)(maxValue * Math.Pow(fc / maxValue, gammaCoefficient));
-        sc = (float)(maxValue * Math.Pow(sc / maxValue, gammaCoefficient));
-        tc = (float)(maxValue * Math.Pow(tc / maxValue, gammaCoefficient));
+        if (targetGammaValue == 0f)
+        {
+            if (fc <= 0.04045f)
+            {
+                fc = fc / 12.92f;
+            }
+            else
+            {
+                fc = (float)Math.Pow((fc + 0.055f) / 1.055f, 2.4f);
+            }
 
-        return new Color(fc, sc, tc);
+            if (sc <= 0.04045f)
+            {
+                sc = sc / 12.92f;
+            }
+            else
+            {
+                sc = (float)Math.Pow((sc + 0.055f) / 1.055f, 2.4f);
+            }
+
+            if (tc <= 0.04045f)
+            {
+                tc = tc / 12.92f;
+            }
+            else
+            {
+                tc = (float)Math.Pow((tc + 0.055f) / 1.055f, 2.4f);
+            }
+        }
+        else
+        {
+            fc = (float)Math.Pow(fc, 1f / targetGammaValue);
+            sc = (float)Math.Pow(sc, 1f / targetGammaValue);
+            tc = (float)Math.Pow(tc, 1f / targetGammaValue);
+        }
+
+        return new Color(fc * 255f, sc * 255f, tc * 255f);
     }
 }

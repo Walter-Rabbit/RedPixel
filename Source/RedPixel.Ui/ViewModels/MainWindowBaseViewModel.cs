@@ -10,74 +10,69 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
-using RedPixel.Core.Colors;
-using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using RedPixel.Ui.Utility;
+using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
 using Bitmap = RedPixel.Core.Models.Bitmap;
 
 namespace RedPixel.Ui.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowBaseViewModel : BaseViewModel
     {
         private readonly MainWindow _view;
         [Reactive] private Bitmap Image { get; set; }
 
         private ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         private ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
-        private ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
         private ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
         private ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
-
-        [Reactive] private bool[] EnabledComponents { get; set; }
+        
         [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
-        [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
-        [Reactive] private ColorSpaces SelectedColorSpace { get; set; }
         [Reactive] private string GammaValueString { get; set; } = "1";
         [Reactive] private float GammaValue { get; set; } = 1;
         [Reactive] private string ConvertGammaMessage { get; set; } = "Convert γ";
 
+        private ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
-        private IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 
-        public MainWindowViewModel(MainWindow view)
+        public MainWindowBaseViewModel(MainWindow view)
         {
+            _view = view;
+            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool);
+            
             this.WhenAnyValue(
                     x => x.Image,
-                    x => x.ColorComponents)
+                    x => x.ColorSpaceToolViewModel.ColorComponents)
                 .Subscribe(x =>
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
                     sw.Stop();
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
 
-            this.WhenAnyValue(x => x.SelectedColorSpace)
+            this.WhenAnyValue(x => x.ColorSpaceToolViewModel.SelectedColorSpace)
                 .Subscribe(x =>
                 {
                     var sw = new Stopwatch();
                     sw.Start();
                     File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
                     Image?.ToColorSpace(x);
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                     sw.Stop();
                 });
-
-            _view = view;
-            EnabledComponents = new bool[] { true, true, true };
+            
             AssignGammaCommand = ReactiveCommand.Create(AssignGamma);
             ConvertToGammaCommand = ReactiveCommand.Create(ConvertToGamma);
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
-            ChangeColorLayersCommand = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
         }
 
         public void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
@@ -93,7 +88,7 @@ namespace RedPixel.Ui.ViewModels
                 sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
                 Image.Gamma = GammaValue;
-                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -114,7 +109,7 @@ namespace RedPixel.Ui.ViewModels
                 var sw = new Stopwatch();
                 sw.Start();
                 GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
+                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -153,7 +148,7 @@ namespace RedPixel.Ui.ViewModels
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
+            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, ColorSpaceToolViewModel.SelectedColorSpace);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             GammaValue = 1;
@@ -182,16 +177,7 @@ namespace RedPixel.Ui.ViewModels
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
             ImageParserFactory.CreateParser(format)
-                .SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
-
-            return Unit.Default;
-        }
-
-        private async Task<Unit> ChangeColorLayersAsync()
-        {
-            ColorComponents = (EnabledComponents[0] ? ColorComponents.First : ColorComponents.None)
-                              | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)
-                              | (EnabledComponents[2] ? ColorComponents.Third : ColorComponents.None);
+                .SerializeToStream(Image, fileStream, ColorSpaceToolViewModel.SelectedColorSpace, ColorSpaceToolViewModel.ColorComponents);
 
             return Unit.Default;
         }

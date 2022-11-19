@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -25,8 +24,11 @@ namespace RedPixel.Ui.ViewModels
 
         public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
+        public ReactiveCommand<Unit, Unit> SwitchColorSpacesCommand { get; }
+        public ReactiveCommand<Unit, Unit> SwitchGammaCorrectionCommand { get; }
 
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
+        [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaConversionToolViewModel GammaConversionToolViewModel { get; set; }
@@ -48,9 +50,11 @@ namespace RedPixel.Ui.ViewModels
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
-
+            
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
+            SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
+            SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -111,6 +115,22 @@ namespace RedPixel.Ui.ViewModels
                 .SerializeToStream(Image, fileStream, ColorSpaceToolViewModel.SelectedColorSpace,
                     ColorSpaceToolViewModel.ColorComponents);
 
+            return Unit.Default;
+        }
+
+        private Unit SwitchColorSpaces()
+        {
+            ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
+
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            return Unit.Default;
+        }
+        
+        private Unit SwitchGammaCorrection()
+        {
+            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
+
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
         }
     }

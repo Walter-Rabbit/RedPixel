@@ -7,11 +7,11 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Ui.Utility;
-using RedPixel.Ui.Views;
+using RedPixel.Ui.Views.Tools;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
-public class GammaConversionToolViewModel : BaseToolViewModel
+public class GammaConversionToolViewModel : BaseViewModel
 {
     private readonly GammaConversionTool _view;
     private readonly MainWindowViewModel _parentViewModel;
@@ -22,6 +22,7 @@ public class GammaConversionToolViewModel : BaseToolViewModel
     [Reactive] public string GammaValueString { get; set; } = "1";
     [Reactive] public float GammaValue { get; set; } = 1;
     [Reactive] public string ConvertGammaMessage { get; set; } = "Convert γ";
+    [Reactive] public bool IsVisible { get; set; } = false;
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 

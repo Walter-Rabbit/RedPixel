@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
-        xmlns:globalization="clr-namespace:System.Globalization;assembly=System.Runtime"
-        xmlns:views="using:RedPixel.Ui.Views"
+        xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -26,7 +25,7 @@
         <Style Selector="Grid.main">
             <Setter Property="Background" Value="#1e1f22" />
         </Style>
-        <Style Selector="Grid.tools">
+        <Style Selector="StackPanel.tools">
             <Setter Property="Background" Value="#2b2d30" />
         </Style>
     </Window.Styles>
@@ -34,13 +33,39 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Open" Command="{Binding OpenImageAsync}" />
+                <MenuItem
+                    Header="Open"
+                    Command="{Binding OpenImageAsync}" />
                 <Separator />
-                <MenuItem Header="Save" Command="{Binding SaveImageAsync}" />
+                <MenuItem
+                    Header="Save"
+                    Command="{Binding SaveImageAsync}" />
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <CheckBox
+                    Content="Color Spaces"
+                    Command="{Binding SwitchColorSpaces}" />
+                <CheckBox
+                    Content="Gamma Correction"
+                    Command="{Binding SwitchGammaCorrection}" />
             </MenuItem>
         </Menu>
-        <Grid ColumnDefinitions="7*,200" Classes="main">
-            <ScrollViewer Grid.Column="0">
+        <StackPanel DockPanel.Dock="Right"
+                    Orientation="Vertical"
+                    Classes="tools"
+                    Width="200"
+                    ZIndex="50"
+                    IsVisible="{Binding ToolPanelIsVisible}">
+            <tools:ColorSpaceTool
+                IsVisible="{Binding IsVisible}"
+                DataContext="{Binding ColorSpaceToolViewModel}" />
+            <tools:GammaConversionTool
+                IsVisible="{Binding IsVisible}"
+                DataContext="{Binding GammaConversionToolViewModel }" />
+        </StackPanel>
+        <Grid Classes="main"
+                ZIndex="20">
+            <ScrollViewer>
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                             MinZoomX="0.05" MinZoomY="0.05">
                     <Image
@@ -48,15 +73,10 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
-                        Stretch="Uniform">
+                        Stretch="None">
                     </Image>
-
                 </ZoomBorder>
             </ScrollViewer>
-            <Grid Classes="tools" Grid.Column="1" RowDefinitions="117,115">
-                <views:ColorSpaceTool Grid.Row="0" DataContext="{Binding ColorSpaceToolViewModel}" />
-                <views:GammaConversionTool Grid.Row="1" DataContext="{Binding GammaConversionToolViewModel }" />
-            </Grid>
         </Grid>
     </DockPanel>
 </Window>

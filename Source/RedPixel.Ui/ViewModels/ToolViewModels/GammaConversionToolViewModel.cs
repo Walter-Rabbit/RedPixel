@@ -13,8 +13,8 @@ namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
 public class GammaConversionToolViewModel : BaseToolViewModel
 {
-    private GammaConversionTool _view;
-    private MainWindowViewModel _parentViewModel;
+    private readonly GammaConversionTool _view;
+    private readonly MainWindowViewModel _parentViewModel;
 
     public ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
     public ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }

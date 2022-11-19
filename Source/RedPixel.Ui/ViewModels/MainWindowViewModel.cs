@@ -34,12 +34,10 @@ namespace RedPixel.Ui.ViewModels
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
-            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool);
+            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
             GammaConversionToolViewModel = new GammaConversionToolViewModel(_view.GammaConversionTool, this);
 
-            this.WhenAnyValue(
-                    x => x.Image,
-                    x => x.ColorSpaceToolViewModel.ColorComponents)
+            this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
                 {
                     var sw = new Stopwatch();
@@ -49,20 +47,6 @@ namespace RedPixel.Ui.ViewModels
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                });
-
-            this.WhenAnyValue(x => x.ColorSpaceToolViewModel.SelectedColorSpace)
-                .Subscribe(x =>
-                {
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
-                    Image?.ToColorSpace(x);
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
-                    File.AppendAllText(
-                        "log.txt",
-                        $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                    sw.Stop();
                 });
 
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);

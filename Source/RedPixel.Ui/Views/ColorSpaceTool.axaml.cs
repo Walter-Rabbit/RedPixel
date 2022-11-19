@@ -7,7 +7,6 @@ public partial class ColorSpaceTool : UserControl
 {
     public ColorSpaceTool()
     {
-        DataContext = new ColorSpaceToolViewModel(this);
         InitializeComponent();
     }
 }

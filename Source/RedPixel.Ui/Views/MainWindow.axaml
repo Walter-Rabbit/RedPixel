@@ -73,7 +73,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
-                        Stretch="None">
+                        Stretch="Uniform">
                     </Image>
                 </ZoomBorder>
             </ScrollViewer>

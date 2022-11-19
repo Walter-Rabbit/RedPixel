@@ -41,9 +41,9 @@ public static class RgbGammaConversion
         }
         else
         {
-            fc = (float)Math.Pow(fc, gammaValue);
-            sc = (float)Math.Pow(sc, gammaValue);
-            tc = (float)Math.Pow(tc, gammaValue);
+            fc = (float)Math.Pow(fc, 1f / gammaValue);
+            sc = (float)Math.Pow(sc, 1f / gammaValue);
+            tc = (float)Math.Pow(tc, 1f / gammaValue);
         }
 
         return new Color(fc * 255f, sc * 255f, tc * 255f);
@@ -90,9 +90,9 @@ public static class RgbGammaConversion
         }
         else
         {
-            fc = (float)Math.Pow(fc, 1f / targetGammaValue);
-            sc = (float)Math.Pow(sc, 1f / targetGammaValue);
-            tc = (float)Math.Pow(tc, 1f / targetGammaValue);
+            fc = (float)Math.Pow(fc, targetGammaValue);
+            sc = (float)Math.Pow(sc, targetGammaValue);
+            tc = (float)Math.Pow(tc, targetGammaValue);
         }
 
         return new Color(fc * 255f, sc * 255f, tc * 255f);

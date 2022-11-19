@@ -47,12 +47,11 @@ public class Bitmap
 
     public Bitmap ConvertToGamma(float targetGammaValue)
     {
-        var fromGammaValue = Gamma == 0f ? 2.2f : Gamma;
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                Matrix[y, x] = Matrix[y, x].ConvertToGamma(fromGammaValue, targetGammaValue);
+                Matrix[y, x] = Matrix[y, x].ConvertToGamma(Gamma, targetGammaValue);
             }
         }
 

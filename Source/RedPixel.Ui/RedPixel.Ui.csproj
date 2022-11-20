@@ -36,4 +36,14 @@
     <ItemGroup>
       <ProjectReference Include="..\RedPixel.Core\RedPixel.Core.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
+        <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Tools\GammaConvertionTool.axaml.cs">
+        <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

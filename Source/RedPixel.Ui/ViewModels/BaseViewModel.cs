@@ -2,7 +2,7 @@
 
 namespace RedPixel.Ui.ViewModels
 {
-    public class ViewModelBase : ReactiveObject
+    public class BaseViewModel : ReactiveObject
     {
     }
 }

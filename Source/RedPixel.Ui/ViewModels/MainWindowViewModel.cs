@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -10,122 +9,52 @@ using Avalonia.Controls;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
-using RedPixel.Core.Colors;
-using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.ImageParsers;
 using RedPixel.Ui.Utility;
+using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
 using Bitmap = RedPixel.Core.Models.Bitmap;
 
 namespace RedPixel.Ui.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : BaseViewModel
     {
         private readonly MainWindow _view;
-        [Reactive] private Bitmap Image { get; set; }
+        [Reactive] public Bitmap Image { get; set; }
 
-        private ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
-        private ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
-        private ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
-        private ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
-        private ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
+        public ReactiveCommand<Unit, Unit> SwitchColorSpacesCommand { get; }
+        public ReactiveCommand<Unit, Unit> SwitchGammaCorrectionCommand { get; }
 
-        [Reactive] private bool[] EnabledComponents { get; set; }
-        [Reactive] private Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
-        [Reactive] private ColorComponents ColorComponents { get; set; } = ColorComponents.All;
-        [Reactive] private ColorSpaces SelectedColorSpace { get; set; }
-        [Reactive] private string GammaValueString { get; set; } = "1";
-        [Reactive] private float GammaValue { get; set; } = 1;
-        [Reactive] private string ConvertGammaMessage { get; set; } = "Convert γ";
+        [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
+        [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
 
-        private CultureInfo CultureInfo => CultureInfo.InvariantCulture;
-        private IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
+        public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
+        public GammaConversionToolViewModel GammaConversionToolViewModel { get; set; }
 
         public MainWindowViewModel(MainWindow view)
         {
-            this.WhenAnyValue(
-                    x => x.Image,
-                    x => x.ColorComponents)
+            _view = view;
+            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
+            GammaConversionToolViewModel = new GammaConversionToolViewModel(_view.GammaConversionTool, this);
+
+            this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorSpaceToolViewModel.ColorComponents);
                     sw.Stop();
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
-
-            this.WhenAnyValue(x => x.SelectedColorSpace)
-                .Subscribe(x =>
-                {
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
-                    Image?.ToColorSpace(x);
-                    Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
-                    File.AppendAllText(
-                        "log.txt",
-                        $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-                    sw.Stop();
-                });
-
-            _view = view;
-            EnabledComponents = new bool[] { true, true, true };
-            AssignGammaCommand = ReactiveCommand.Create(AssignGamma);
-            ConvertToGammaCommand = ReactiveCommand.Create(ConvertToGamma);
+            
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
-            ChangeColorLayersCommand = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
-        }
-
-        public void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
-        {
-            ConvertGammaMessage = $"Convert γ to {e.NewValue}";
-        }
-
-        private Unit AssignGamma()
-        {
-            try
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Image.Gamma = GammaValue;
-                Bitmap = Image?.ConvertToAvaloniaBitmap(ColorComponents);
-                sw.Stop();
-                File.AppendAllText(
-                    "log.txt",
-                    $"AssignGamma: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            }
-            catch (Exception e)
-            {
-                File.AppendAllText("log.txt", $"{e.Message}");
-            }
-
-            return Unit.Default;
-        }
-
-        private Unit ConvertToGamma()
-        {
-            try
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-                GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-                Bitmap = Image?.ConvertToGamma(GammaValue).ConvertToAvaloniaBitmap(ColorComponents);
-                sw.Stop();
-                File.AppendAllText(
-                    "log.txt",
-                    $"ConvertToGamma: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            }
-            catch (Exception e)
-            {
-                File.AppendAllText("log.txt", $"{e.Message}");
-            }
-
-            return Unit.Default;
+            SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
+            SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -153,11 +82,12 @@ namespace RedPixel.Ui.ViewModels
 
             var sw = new Stopwatch();
             sw.Start();
-            var img = ImageParserFactory.CreateParser(format).Parse(fileStream, SelectedColorSpace);
+            var img = ImageParserFactory.CreateParser(format)
+                .Parse(fileStream, ColorSpaceToolViewModel.SelectedColorSpace);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            GammaValue = 1;
-            GammaValueString = "1";
+            GammaConversionToolViewModel.GammaValue = 1;
+            GammaConversionToolViewModel.GammaValueString = "1";
             Image = img;
             return Unit.Default;
         }
@@ -182,17 +112,25 @@ namespace RedPixel.Ui.ViewModels
             var format = ImageFormat.Parse(extension);
             await using var fileStream = File.OpenWrite(result);
             ImageParserFactory.CreateParser(format)
-                .SerializeToStream(Image, fileStream, SelectedColorSpace, ColorComponents);
+                .SerializeToStream(Image, fileStream, ColorSpaceToolViewModel.SelectedColorSpace,
+                    ColorSpaceToolViewModel.ColorComponents);
 
             return Unit.Default;
         }
 
-        private async Task<Unit> ChangeColorLayersAsync()
+        private Unit SwitchColorSpaces()
         {
-            ColorComponents = (EnabledComponents[0] ? ColorComponents.First : ColorComponents.None)
-                              | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)
-                              | (EnabledComponents[2] ? ColorComponents.Third : ColorComponents.None);
+            ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
 
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            return Unit.Default;
+        }
+        
+        private Unit SwitchGammaCorrection()
+        {
+            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
+
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
         }
     }

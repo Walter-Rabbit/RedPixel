@@ -63,7 +63,7 @@ public static class RgbGammaConversion
         {
             if (fc <= 0.04045f)
             {
-                fc = fc / 12.92f;
+                fc /= 12.92f;
             }
             else
             {
@@ -72,7 +72,7 @@ public static class RgbGammaConversion
 
             if (sc <= 0.04045f)
             {
-                sc = sc / 12.92f;
+                sc /= 12.92f;
             }
             else
             {
@@ -81,7 +81,7 @@ public static class RgbGammaConversion
 
             if (tc <= 0.04045f)
             {
-                tc = tc / 12.92f;
+                tc /= 12.92f;
             }
             else
             {

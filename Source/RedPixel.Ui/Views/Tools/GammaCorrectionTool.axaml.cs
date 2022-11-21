@@ -3,15 +3,15 @@ using RedPixel.Ui.ViewModels.ToolViewModels;
 
 namespace RedPixel.Ui.Views.Tools;
 
-public partial class GammaConversionTool : UserControl
+public partial class GammaCorrectionTool : UserControl
 {
-    public GammaConversionTool()
+    public GammaCorrectionTool()
     {
         InitializeComponent();
     }
     
     private void NumericUpDown_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
     {
-        (DataContext as GammaConversionToolViewModel)?.NumericUpDown_OnValueChanged(sender, e);
+        (DataContext as GammaCorrectionToolViewModel)?.NumericUpDown_OnValueChanged(sender, e);
     }
 }

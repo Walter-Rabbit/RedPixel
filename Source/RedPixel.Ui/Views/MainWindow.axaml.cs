@@ -7,13 +7,13 @@ namespace RedPixel.Ui.Views
     public partial class MainWindow : Window
     {
         public ColorSpaceTool ColorSpaceTool { get; }
-        public GammaConversionTool GammaConversionTool { get; }
+        public GammaCorrectionTool GammaCorrectionTool { get; }
 
         public MainWindow()
         {
             DataContext = new MainWindowViewModel(this);
             ColorSpaceTool = new ColorSpaceTool();
-            GammaConversionTool = new GammaConversionTool();
+            GammaCorrectionTool = new GammaCorrectionTool();
             InitializeComponent();
         }
     }

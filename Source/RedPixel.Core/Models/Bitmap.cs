@@ -15,7 +15,7 @@ public class Bitmap
     public int Height => Matrix.GetLength(0);
     public int BytesForColor { get; set; }
 
-    public float Gamma { get; set; } = 1;
+    public float Gamma { get; set; } = 0;
 
     public Bitmap(int width, int height, int bytesForColor, ColorSpaces colorSpace)
     {
@@ -47,12 +47,11 @@ public class Bitmap
 
     public Bitmap ConvertToGamma(float targetGammaValue)
     {
-        var fromGammaValue = Gamma == 0f ? 2.2f : Gamma;
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                Matrix[y, x] = Matrix[y, x].ConvertToGamma(fromGammaValue, targetGammaValue);
+                Matrix[y, x] = Matrix[y, x].ConvertToGamma(Gamma, targetGammaValue);
             }
         }
 

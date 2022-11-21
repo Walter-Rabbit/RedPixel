@@ -41,7 +41,7 @@
         <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Tools\GammaConvertionTool.axaml.cs">
+      <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
         <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>

@@ -11,22 +11,22 @@ using RedPixel.Ui.Views.Tools;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
-public class GammaConversionToolViewModel : BaseViewModel
+public class GammaCorrectionToolViewModel : BaseViewModel
 {
-    private readonly GammaConversionTool _view;
+    private readonly GammaCorrectionTool _view;
     private readonly MainWindowViewModel _parentViewModel;
 
     public ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
     public ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
 
-    [Reactive] public string GammaValueString { get; set; } = "1";
-    [Reactive] public float GammaValue { get; set; } = 1;
+    [Reactive] public string GammaValueString { get; set; } = "0";
+    [Reactive] public float GammaValue { get; set; } = 0;
     [Reactive] public string ConvertGammaMessage { get; set; } = "Convert γ";
     [Reactive] public bool IsVisible { get; set; } = false;
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 
-    public GammaConversionToolViewModel(GammaConversionTool view, MainWindowViewModel parentViewModel)
+    public GammaCorrectionToolViewModel(GammaCorrectionTool view, MainWindowViewModel parentViewModel)
     {
         AssignGammaCommand = ReactiveCommand.Create(AssignGamma);
         ConvertToGammaCommand = ReactiveCommand.Create(ConvertToGamma);

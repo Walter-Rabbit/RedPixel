@@ -59,9 +59,9 @@
             <tools:ColorSpaceTool
                 IsVisible="{Binding IsVisible}"
                 DataContext="{Binding ColorSpaceToolViewModel}" />
-            <tools:GammaConversionTool
+            <tools:GammaCorrectionTool
                 IsVisible="{Binding IsVisible}"
-                DataContext="{Binding GammaConversionToolViewModel }" />
+                DataContext="{Binding GammaCorrectionToolViewModel }" />
         </StackPanel>
         <Grid Classes="main"
                 ZIndex="20">

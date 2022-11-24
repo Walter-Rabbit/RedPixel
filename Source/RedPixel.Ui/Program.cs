@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.ReactiveUI;
 using System;
-using System.IO;
+using System.Diagnostics;
 
 namespace RedPixel.Ui
 {
@@ -13,15 +13,10 @@ namespace RedPixel.Ui
         [STAThread]
         public static void Main(string[] args)
         {
-            try
-            {
-                BuildAvaloniaApp()
-                    .StartWithClassicDesktopLifetime(args);
-            }
-            catch (Exception e)
-            {
-                File.AppendAllText("log.txt", $"{e.Message}");
-            }
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

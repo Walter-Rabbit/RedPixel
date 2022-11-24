@@ -8,10 +8,12 @@ namespace RedPixel.Ui.Views
     {
         public ColorSpaceTool ColorSpaceTool { get; }
         public GammaCorrectionTool GammaCorrectionTool { get; }
+        public DitheringTool DitheringTool { get; }
 
         public MainWindow()
         {
             DataContext = new MainWindowViewModel(this);
+            DitheringTool = new DitheringTool();
             ColorSpaceTool = new ColorSpaceTool();
             GammaCorrectionTool = new GammaCorrectionTool();
             InitializeComponent();

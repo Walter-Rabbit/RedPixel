@@ -45,5 +45,9 @@
         <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\Tools\DitheringTool.axaml.cs">
+        <DependentUpon>DitheringTool.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

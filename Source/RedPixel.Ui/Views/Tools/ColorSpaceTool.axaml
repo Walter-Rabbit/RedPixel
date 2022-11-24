@@ -3,6 +3,7 @@
              xmlns:tvm="using:RedPixel.Ui.ViewModels.ToolViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialog="clr-namespace:Egorozh.ColorPicker.Dialog;assembly=Egorozh.ColorPicker.Avalonia.Dialog"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="RedPixel.Ui.Views.Tools.ColorSpaceTool">
 
@@ -10,7 +11,7 @@
         <tvm:ColorSpaceToolViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="25,50,40,1,40">
+    <Grid RowDefinitions="25,50,40,1,40,20,50">
         <TextBlock Grid.Row="0" Text="Color spaces:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -57,6 +58,16 @@
                    Height="1"
                    Fill="#1e1f22" />
 
-        <Button Grid.Row="4" Command="{Binding DrawLine}" >Do shit</Button>
+        <dialog:ColorPickerButton x:Name="ColorPicker" Grid.Row="4" Color="#FFFF0000" Cursor="Hand" PropertyChanged="ColorPicker_OnPropertyChanged"/>
+
+        <TextBlock Grid.Row="5" Text="{Binding Thickness, StringFormat='Thinkness: {0}'}" />
+
+        <Slider
+            Grid.Row="6"
+            Minimum="1"
+            Maximum="10"
+            Orientation="Horizontal"
+            TickFrequency="1"
+            Value="{Binding Thickness}"/>
     </Grid>
 </UserControl>

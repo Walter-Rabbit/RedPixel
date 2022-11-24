@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
@@ -16,8 +15,10 @@ using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
+using RedPixel.Ui.Views.Tools;
 using Bitmap = RedPixel.Core.Models.Bitmap;
 using Color = RedPixel.Core.Colors.ValueObjects.Color;
+using Point = Avalonia.Point;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -145,12 +146,18 @@ namespace RedPixel.Ui.ViewModels
 
             if (DrawingInProgress)
             {
+                var color = ColorSpaceTool.SelectedColor;
+                var colorInCurrentColorSpace =
+                    ColorSpaceToolViewModel.SelectedColorSpace.ColorFromRgb(new Color(color.R, color.G, color.B));
+
+
                 Image.DrawLine(
                     (int)_startPoint.X,
                     (int)_startPoint.Y,
                     x, y,
-                    0.5f,
-                    new Color(255, 0, 0), 5);
+                    (float)color.A / 255,
+                    colorInCurrentColorSpace,
+                    ColorSpaceToolViewModel.Thickness);
                 Bitmap = Image.ConvertToAvaloniaBitmap();
                 DrawingInProgress = false;
             } else if (clickCount == 2)
@@ -158,6 +165,20 @@ namespace RedPixel.Ui.ViewModels
                 DrawingInProgress = true;
                 _startPoint = new Point(x, y);
             }
+        }
+
+        private System.Drawing.Color FromHex(string hex)
+        {
+            if (hex.StartsWith("#"))
+                hex = hex.Substring(1);
+
+            if (hex.Length != 8) throw new Exception("Color not valid");
+
+            return System.Drawing.Color.FromArgb(
+                int.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
+                int.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
+                int.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
+                int.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
         }
     }
 }

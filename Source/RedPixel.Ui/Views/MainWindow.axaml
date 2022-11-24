@@ -80,12 +80,6 @@
                     </Image>
                 </ZoomBorder>
             </ScrollViewer>
-            <Line
-                Stroke="{Binding LineStroke}"
-                StrokeThickness="{Binding LineStrokeThickness}"
-                StartPoint="{Binding StartPreviewPoint}"
-                EndPoint="{Binding EndPreviewPoint}"
-                IsVisible="{Binding DrawingInProgress}" />
         </Grid>
     </DockPanel>
 </Window>

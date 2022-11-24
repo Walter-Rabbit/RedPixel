@@ -12,6 +12,7 @@ using RedPixel.Core.Models;
 using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
+using Color = System.Drawing.Color;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
@@ -26,6 +27,8 @@ public class ColorSpaceToolViewModel : BaseViewModel
     [Reactive] public ColorSpaces SelectedColorSpace { get; set; }
     [Reactive] public bool[] EnabledComponents { get; set; }
     [Reactive] public bool IsVisible { get; set; } = false;
+
+    [Reactive] public int Thickness { get; set; } = 1;
 
     public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 

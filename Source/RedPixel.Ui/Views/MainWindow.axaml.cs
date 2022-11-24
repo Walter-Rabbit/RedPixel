@@ -19,9 +19,9 @@ namespace RedPixel.Ui.Views
 
         public MainWindow()
         {
-            DataContext = new MainWindowViewModel(this);
             ColorSpaceTool = new ColorSpaceTool();
             GammaCorrectionTool = new GammaCorrectionTool();
+            DataContext = new MainWindowViewModel(this);
             InitializeComponent();
         }
 

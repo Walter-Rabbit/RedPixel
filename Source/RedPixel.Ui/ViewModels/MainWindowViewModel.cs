@@ -31,13 +31,13 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
-        public GammaCorrectionToolViewModel GammaCorrectionToolViewModel { get; set; }
+        public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
 
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
             ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
-            GammaCorrectionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
+            GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -86,8 +86,8 @@ namespace RedPixel.Ui.ViewModels
                 .Parse(fileStream, ColorSpaceToolViewModel.SelectedColorSpace);
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            GammaCorrectionToolViewModel.GammaValue = 0;
-            GammaCorrectionToolViewModel.GammaValueString = "0";
+            GammaConversionToolViewModel.GammaValue = 1;
+            GammaConversionToolViewModel.GammaValueString = "1";
             Image = img;
             return Unit.Default;
         }
@@ -122,15 +122,15 @@ namespace RedPixel.Ui.ViewModels
         {
             ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
 
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaCorrectionToolViewModel.IsVisible;
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
         }
         
         private Unit SwitchGammaCorrection()
         {
-            GammaCorrectionToolViewModel.IsVisible = !GammaCorrectionToolViewModel.IsVisible;;
+            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
 
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaCorrectionToolViewModel.IsVisible;
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
         }
     }

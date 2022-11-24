@@ -61,7 +61,7 @@
                 DataContext="{Binding ColorSpaceToolViewModel}" />
             <tools:GammaCorrectionTool
                 IsVisible="{Binding IsVisible}"
-                DataContext="{Binding GammaCorrectionToolViewModel }" />
+                DataContext="{Binding GammaConversionToolViewModel }" />
         </StackPanel>
         <Grid Classes="main"
                 ZIndex="20">
@@ -73,7 +73,8 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
-                        Stretch="Uniform">
+                        Stretch="Uniform"
+                        RenderOptions.BitmapInterpolationMode="Default">
                     </Image>
                 </ZoomBorder>
             </ScrollViewer>

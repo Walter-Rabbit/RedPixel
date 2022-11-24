@@ -5,21 +5,27 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
 using RedPixel.Core.ImageParsers;
+using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
 using Bitmap = RedPixel.Core.Models.Bitmap;
+using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Ui.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
         private readonly MainWindow _view;
+        [Reactive] public bool DrawingInProgress { get; set; }
+        private Point _startPoint;
         [Reactive] public Bitmap Image { get; set; }
 
         public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
@@ -50,7 +56,7 @@ namespace RedPixel.Ui.ViewModels
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
-            
+
             OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
             SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
@@ -125,13 +131,33 @@ namespace RedPixel.Ui.ViewModels
             ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
         }
-        
+
         private Unit SwitchGammaCorrection()
         {
             GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
 
             ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
             return Unit.Default;
+        }
+
+        public void ImageClicked(int x, int y, int clickCount)
+        {
+
+            if (DrawingInProgress)
+            {
+                Image.DrawLine(
+                    (int)_startPoint.X,
+                    (int)_startPoint.Y,
+                    x, y,
+                    0.5f,
+                    new Color(255, 0, 0), 5);
+                Bitmap = Image.ConvertToAvaloniaBitmap();
+                DrawingInProgress = false;
+            } else if (clickCount == 2)
+            {
+                DrawingInProgress = true;
+                _startPoint = new Point(x, y);
+            }
         }
     }
 }

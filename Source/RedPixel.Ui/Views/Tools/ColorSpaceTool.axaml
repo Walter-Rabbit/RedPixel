@@ -9,8 +9,8 @@
     <Design.DataContext>
         <tvm:ColorSpaceToolViewModel />
     </Design.DataContext>
-    
-    <Grid RowDefinitions="25,50,40,1">
+
+    <Grid RowDefinitions="25,50,40,1,40">
         <TextBlock Grid.Row="0" Text="Color spaces:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -56,5 +56,7 @@
         <Rectangle Grid.Row="3"
                    Height="1"
                    Fill="#1e1f22" />
+
+        <Button Grid.Row="4" Command="{Binding DrawLine}" >Do shit</Button>
     </Grid>
 </UserControl>

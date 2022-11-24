@@ -69,6 +69,8 @@
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                             MinZoomX="0.05" MinZoomY="0.05">
                     <Image
+                        PointerPressed="InputElement_OnPointerPressed"
+                        UseLayoutRounding="False"
                         Margin="30"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -78,6 +80,12 @@
                     </Image>
                 </ZoomBorder>
             </ScrollViewer>
+            <Line
+                Stroke="{Binding LineStroke}"
+                StrokeThickness="{Binding LineStrokeThickness}"
+                StartPoint="{Binding StartPreviewPoint}"
+                EndPoint="{Binding EndPreviewPoint}"
+                IsVisible="{Binding DrawingInProgress}" />
         </Grid>
     </DockPanel>
 </Window>

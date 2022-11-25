@@ -6,22 +6,38 @@
              xmlns:toolViewModels="clr-namespace:RedPixel.Ui.ViewModels.ToolViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="RedPixel.Ui.Views.Tools.LineDrawingTool">
-    
+
     <Design.DataContext>
         <toolViewModels:LineDrawingToolViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="40,20,50">
-        <dialog:ColorPickerButton x:Name="ColorPicker" Grid.Row="0" Color="#FFFF0000" Cursor="Hand" PropertyChanged="ColorPicker_OnPropertyChanged"/>
+    <Grid RowDefinitions="25,40,20,50,2">
+        <TextBlock Grid.Row="0" Text="GenerateGradient:"
+                   HorizontalAlignment="Left"
+                   Margin="10, 10, 0, 0" />
 
-        <TextBlock Grid.Row="1" Text="{Binding Thickness, StringFormat='Thinkness: {0}'}" />
+        <dialog:ColorPickerButton Grid.Row="1"
+                                  Margin="5, 5, 5, 0"
+                                  x:Name="ColorPicker"
+                                  Color="#FFFF0000"
+                                  Cursor="Hand"
+                                  PropertyChanged="ColorPicker_OnPropertyChanged" />
+
+        <TextBlock Grid.Row="2"
+                   Text="{Binding Thickness, 
+                   StringFormat='Thinkness: {0}'}"
+                   Margin="10, 10, 0, 0" />
 
         <Slider
-            Grid.Row="2"
+            Grid.Row="3"
             Minimum="1"
             Maximum="10"
             Orientation="Horizontal"
             TickFrequency="1"
-            Value="{Binding Thickness}"/>
+            Value="{Binding Thickness}" />
+
+        <Rectangle Grid.Row="4"
+                   Height="1"
+                   Fill="#1e1f22" />
     </Grid>
 </UserControl>

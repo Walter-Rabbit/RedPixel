@@ -1,14 +1,8 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Tools;
-using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels;
 using RedPixel.Ui.Views.Tools;
-using Splat;
 
 namespace RedPixel.Ui.Views
 {

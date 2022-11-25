@@ -1,8 +1,10 @@
-﻿using ReactiveUI.Fody.Helpers;
+﻿using Avalonia.Media;
+using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
-using Color = RedPixel.Core.Colors.ValueObjects.Color;
+using RedPixelColor = RedPixel.Core.Colors.ValueObjects.Color;
+using AvaloniaColor = Avalonia.Media.Color;
 using Point = Avalonia.Point;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
@@ -12,6 +14,7 @@ public class LineDrawingToolViewModel : BaseViewModel
     private readonly LineDrawingTool _view;
     private readonly MainWindowViewModel _parentViewModel;
 
+    [Reactive] public AvaloniaColor SelectedColor { get; set; } = Colors.Red;
     [Reactive] public bool DrawingInProgress { get; set; } = false;
     [Reactive] public int Thickness { get; set; } = 1;
     [Reactive] public bool IsVisible { get; set; } = false;
@@ -32,9 +35,9 @@ public class LineDrawingToolViewModel : BaseViewModel
 
         if (DrawingInProgress)
         {
-            var color = LineDrawingTool.SelectedColor;
+            var color = SelectedColor;
             var colorInCurrentColorSpace =
-                _parentViewModel.ColorSpaceToolViewModel.SelectedColorSpace.ColorFromRgb(new Color(color.R, color.G, color.B));
+                _parentViewModel.ColorSpaceToolViewModel.SelectedColorSpace.ColorFromRgb(new RedPixelColor(color.R, color.G, color.B));
 
 
             _parentViewModel.Image.DrawLine(
@@ -56,5 +59,10 @@ public class LineDrawingToolViewModel : BaseViewModel
             StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
             EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
         }
+    }
+
+    public void ColorChanged(AvaloniaColor color)
+    {
+        SelectedColor = color;
     }
 }

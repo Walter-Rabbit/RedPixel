@@ -160,6 +160,14 @@ namespace RedPixel.Ui.ViewModels
             
             return Unit.Default;
         }
+        
+        private Unit SwitchUtilities()
+        {
+            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
+            return Unit.Default;
+        }
 
         private void SwitchToolPanel()
         {
@@ -167,7 +175,8 @@ namespace RedPixel.Ui.ViewModels
                 ColorSpaceToolViewModel.IsVisible || 
                 GammaConversionToolViewModel.IsVisible ||
                 UtilitiesToolViewModel.IsVisible ||
-                DitheringToolViewModel.IsVisible;
+                DitheringToolViewModel.IsVisible || 
+                LineDrawingToolViewModel.IsVisible;
         }
     }
 }

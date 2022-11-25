@@ -54,7 +54,6 @@ public class BmpImageParser : IImageParser
                 }
                 
                 pixel = pixel.AssignGamma(image.Gamma);
-                pixel = pixel.AssignGamma(-1f);
                 // TODO: fix
                 stream.WriteByte(pixel.ThirdComponent.ToBytes(image.BytesForColor)[0]);
                 stream.WriteByte(pixel.SecondComponent.ToBytes(image.BytesForColor)[0]);

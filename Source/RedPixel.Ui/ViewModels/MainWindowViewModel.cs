@@ -89,10 +89,10 @@ namespace RedPixel.Ui.ViewModels
             sw.Start();
             var img = ImageParserFactory.CreateParser(format)
                 .Parse(fileStream, ColorSpaceToolViewModel.SelectedColorSpace);
+            img.Gamma = GammaConversionToolViewModel.GammaValue;
+            
             sw.Stop();
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
-            GammaConversionToolViewModel.GammaValue = 1;
-            GammaConversionToolViewModel.GammaValueString = "1";
             Image = img;
             return Unit.Default;
         }

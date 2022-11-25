@@ -19,8 +19,8 @@ public class GammaCorrectionToolViewModel : BaseViewModel
     public ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
     public ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
 
-    [Reactive] public string GammaValueString { get; set; } = "0";
-    [Reactive] public float GammaValue { get; set; } = 0;
+    [Reactive] public string GammaValueString { get; set; } = "1";
+    [Reactive] public float GammaValue { get; set; } = 1;
     [Reactive] public string ConvertGammaMessage { get; set; } = "Convert γ";
     [Reactive] public bool IsVisible { get; set; } = false;
 

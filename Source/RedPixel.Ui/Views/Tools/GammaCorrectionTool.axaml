@@ -22,7 +22,7 @@
                            HorizontalAlignment="Center"
                            Maximum="10"
                            Minimum="0"
-                           Value="0"
+                           Value="1"
                            ShowButtonSpinner="False"
                            AllowSpin="False"
                            ClipValueToMinMax="True"

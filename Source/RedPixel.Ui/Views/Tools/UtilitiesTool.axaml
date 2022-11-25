@@ -10,13 +10,13 @@
         <tvm:UtilitiesToolViewModel />
     </Design.DataContext>
     
-    <Grid RowDefinitions="25,50,50">
+    <Grid RowDefinitions="25,80,40,40,2">
         <TextBlock Grid.Row="0" Text="GenerateGradient:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
         
         <Grid Grid.Row="1" RowDefinitions="40,40" HorizontalAlignment="Center">
-            <Grid Grid.Row="0" ColumnDefinitions="30,80" HorizontalAlignment="Center">
+            <Grid Grid.Row="0" ColumnDefinitions="60,80" HorizontalAlignment="Center">
                 <TextBlock Grid.Column="0" Text="Height:" Margin="10, 10, 0, 0"/>
                 <NumericUpDown Grid.Column="1"
                                Height="30"
@@ -24,7 +24,7 @@
                                HorizontalAlignment="Right"
                                Maximum="1080"
                                Minimum="1"
-                               Value="1"
+                               Value="1080"
                                ShowButtonSpinner="False"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
@@ -32,7 +32,7 @@
                                Text="{Binding HeightString}"/>
             </Grid>
             
-            <Grid Grid.Row="1" ColumnDefinitions="30,80" HorizontalAlignment="Center">
+            <Grid Grid.Row="1" ColumnDefinitions="60,80" HorizontalAlignment="Center">
                 <TextBlock Grid.Column="0" Text="Width:" Margin="10, 10, 0, 0"/>
                 <NumericUpDown Grid.Column="1"
                                Height="30"
@@ -40,15 +40,33 @@
                                HorizontalAlignment="Right"
                                Maximum="1920"
                                Minimum="1"
-                               Value="1"
+                               Value="1920"
                                ShowButtonSpinner="False"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
                                CultureInfo="{Binding CultureInfo}"
                                Text="{Binding WidthString}"/>
-            </Grid>
+            </Grid> 
         </Grid>
-        <Rectangle Grid.Row="2"
+        <Button Grid.Row="2"
+                Height="30"
+                Width="170"
+                Content="GenerateGradient"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding GenerateGradientCommand}" />
+        
+        <Button Grid.Row="3"
+                Height="30"
+                Width="170"
+                Content="ConvertToBlackWhite"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ConvertToBlackWhiteCommand}" />
+        
+        <Rectangle Grid.Row="4"
                    Height="1"
                    Fill="#1e1f22" />
     </Grid>

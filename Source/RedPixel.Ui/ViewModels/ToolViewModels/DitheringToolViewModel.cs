@@ -29,9 +29,7 @@ public class DitheringToolViewModel : BaseViewModel
     private readonly MainWindowViewModel _parentViewModel;
     
     public ReactiveCommand<Unit, Unit> ApplyDitheringCommand { get; }
-    public ReactiveCommand<Unit, Unit> ConvertToBlackWhiteCommand { get; }
-    public ReactiveCommand<Unit, Unit> GenerateGradientCommand { get; }
-    
+
     public IEnumerable<DitheringAlgorithms> AllDitheringAlgorithms { get; set; } = 
         DitheringAlgorithms.AllAlgorithms.Value;
     
@@ -42,9 +40,7 @@ public class DitheringToolViewModel : BaseViewModel
         
         SelectedDitheringAlgorithm = DitheringAlgorithms.RawConversion;
         ApplyDitheringCommand = ReactiveCommand.Create(ApplyDithering);
-        ConvertToBlackWhiteCommand = ReactiveCommand.Create(ConvertToBlackWhite);
-        GenerateGradientCommand = ReactiveCommand.Create(GenerateGradient);
-        
+
         this.WhenAnyValue(x => x.SelectedDitheringAlgorithm)
             .Subscribe(x =>
             {
@@ -66,32 +62,6 @@ public class DitheringToolViewModel : BaseViewModel
         SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.Image, depth);
         _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
-        return Unit.Default;
-    }
-    
-    public Unit ConvertToBlackWhite()
-    {
-        BwConverter.ConvertToBlackAndWhite(_parentViewModel.Image);
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
-            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
-        return Unit.Default;
-    }
-
-    public Unit GenerateGradient()
-    {
-        var bytesForColor = _parentViewModel.Image?.BytesForColor ?? 1;
-        var colorSpace = _parentViewModel.Image?.ColorSpace ?? ColorSpaces.Rgb;
-
-        if (_parentViewModel == null) return Unit.Default;
-        _parentViewModel.Image = GradientGenerator.Generate(
-             1080,
-            1920,
-            bytesForColor,
-            colorSpace);
-
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
-            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
-
         return Unit.Default;
     }
 }

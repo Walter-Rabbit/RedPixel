@@ -28,6 +28,10 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public bool DrawingInProgress { get; set; }
         private Point _startPoint;
         [Reactive] public Bitmap Image { get; set; }
+        [Reactive] public Point StartPoint1 { get; set; }
+        [Reactive] public Point StartPoint2 { get; set; }
+        [Reactive] public Point EndPoint1 { get; set; }
+        [Reactive] public Point EndPoint2 { get; set; }
 
         public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
@@ -141,7 +145,7 @@ namespace RedPixel.Ui.ViewModels
             return Unit.Default;
         }
 
-        public void ImageClicked(int x, int y, int clickCount)
+        public void ImageClicked(int x, int y, int clickCount, Point previewPosition)
         {
 
             if (DrawingInProgress)
@@ -164,6 +168,11 @@ namespace RedPixel.Ui.ViewModels
             {
                 DrawingInProgress = true;
                 _startPoint = new Point(x, y);
+
+                StartPoint1 = new Point(previewPosition.X - 5, previewPosition.Y - 5);
+                EndPoint1 = new Point(previewPosition.X + 5, previewPosition.Y + 5);
+                StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
+                EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
             }
         }
 

@@ -35,7 +35,7 @@ namespace RedPixel.Ui.Views
 
             var previewPosition = e.GetPosition((IVisual)e.Source.InteractiveParent);
 
-            (DataContext as MainWindowViewModel)?.ImageClicked(x, y, e.ClickCount);
+            (DataContext as MainWindowViewModel)?.ImageClicked(x, y, e.ClickCount, previewPosition);
         }
     }
 }

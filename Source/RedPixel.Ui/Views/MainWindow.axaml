@@ -49,6 +49,9 @@
                     Content="Gamma Correction"
                     Command="{Binding SwitchGammaCorrection}" />
                 <CheckBox
+                    Content="Line Drawing"
+                    Command="{Binding SwitchLineDrawing}" />
+                <CheckBox
                     Content="Dithering"
                     Command="{Binding SwitchDithering}" />
                 <CheckBox
@@ -68,6 +71,9 @@
             <tools:GammaCorrectionTool
                 IsVisible="{Binding IsVisible}"
                 DataContext="{Binding GammaConversionToolViewModel }" />
+            <tools:LineDrawingTool
+                IsVisible="{Binding IsVisible}"
+                DataContext="{Binding LineDrawingToolViewModel }" />
             <tools:DitheringTool
                 IsVisible="{Binding IsVisible}"
                 DataContext="{Binding DitheringToolViewModel }" />
@@ -81,6 +87,8 @@
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                             MinZoomX="0.05" MinZoomY="0.05">
                     <Image
+                        PointerPressed="InputElement_OnPointerPressed"
+                        UseLayoutRounding="False"
                         Margin="30"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -90,6 +98,20 @@
                     </Image>
                 </ZoomBorder>
             </ScrollViewer>
+            <Line
+                Stroke="Red"
+                StrokeThickness="4"
+                StartPoint="{Binding StartPoint1}"
+                EndPoint="{Binding EndPoint1}"
+                IsVisible="{Binding DrawingInProgress}"
+                DataContext="{Binding LineDrawingToolViewModel}"/>
+            <Line
+                Stroke="Red"
+                StrokeThickness="4"
+                StartPoint="{Binding StartPoint2}"
+                EndPoint="{Binding EndPoint2}"
+                IsVisible="{Binding DrawingInProgress}"
+                DataContext="{Binding LineDrawingToolViewModel}"/>
         </Grid>
     </DockPanel>
 </Window>

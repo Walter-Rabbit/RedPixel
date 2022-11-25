@@ -8,8 +8,11 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
+using RedPixel.Core.Models;
+using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
+using Color = System.Drawing.Color;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
 

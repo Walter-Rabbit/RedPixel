@@ -10,7 +10,7 @@
         <tvm:DitheringToolViewModel />
     </Design.DataContext>
     
-    <Grid RowDefinitions="25,40,120,40,40,40,40">
+    <Grid RowDefinitions="25,40,120,40,4">
         <TextBlock Grid.Row="0" Text="Dithering algorithm:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -83,7 +83,7 @@
                 VerticalContentAlignment="Center"
                 Command="{Binding ApplyDitheringCommand}" />
         
-        <Rectangle Grid.Row="6"
+        <Rectangle Grid.Row="4"
                    Height="1"
                    Fill="#1e1f22" />
     </Grid>

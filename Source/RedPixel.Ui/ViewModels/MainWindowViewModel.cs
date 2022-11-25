@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -26,6 +27,7 @@ namespace RedPixel.Ui.ViewModels
         public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
         public ReactiveCommand<Unit, Unit> SwitchColorSpacesCommand { get; }
         public ReactiveCommand<Unit, Unit> SwitchGammaCorrectionCommand { get; }
+        public ReactiveCommand<Unit, Unit> LineDrawingCommand { get; }
 
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
@@ -35,11 +37,14 @@ namespace RedPixel.Ui.ViewModels
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         
+        public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
+
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
             ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
             GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
+            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
             DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
 
@@ -60,6 +65,7 @@ namespace RedPixel.Ui.ViewModels
             SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
             SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
             
+            LineDrawingCommand = ReactiveCommand.Create(SwitchLineDrawing);
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -133,15 +139,15 @@ namespace RedPixel.Ui.ViewModels
         
         private Unit SwitchGammaCorrection()
         {
-            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
+            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;
             SwitchToolPanel();
             
             return Unit.Default;
         }
-        
-        private Unit SwitchUtilities()
+
+        private Unit SwitchLineDrawing()
         {
-            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
+            LineDrawingToolViewModel.IsVisible = !LineDrawingToolViewModel.IsVisible;
             SwitchToolPanel();
             
             return Unit.Default;
@@ -154,6 +160,14 @@ namespace RedPixel.Ui.ViewModels
             
             return Unit.Default;
         }
+        
+        private Unit SwitchUtilities()
+        {
+            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
+            return Unit.Default;
+        }
 
         private void SwitchToolPanel()
         {
@@ -161,7 +175,8 @@ namespace RedPixel.Ui.ViewModels
                 ColorSpaceToolViewModel.IsVisible || 
                 GammaConversionToolViewModel.IsVisible ||
                 UtilitiesToolViewModel.IsVisible ||
-                DitheringToolViewModel.IsVisible;
+                DitheringToolViewModel.IsVisible || 
+                LineDrawingToolViewModel.IsVisible;
         }
     }
 }

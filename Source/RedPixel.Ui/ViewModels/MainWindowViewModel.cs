@@ -32,9 +32,7 @@ namespace RedPixel.Ui.ViewModels
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
-
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
-        
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         
         public MainWindowViewModel(MainWindow view)

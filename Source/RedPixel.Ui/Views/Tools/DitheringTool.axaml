@@ -82,7 +82,15 @@
                 HorizontalAlignment="Center"
                 VerticalContentAlignment="Center"
                 Command="{Binding ApplyDitheringCommand}" />
-        <Rectangle Grid.Row="4"
+        <Button Grid.Row="4"
+                Height="30"
+                Width="170"
+                Content="ConvertToBlackWhite"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ConvertToBlackWhiteCommand}" />
+        <Rectangle Grid.Row="5"
                    Height="1"
                    Fill="#1e1f22" />
     </Grid>

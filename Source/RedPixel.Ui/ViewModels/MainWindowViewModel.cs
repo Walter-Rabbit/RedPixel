@@ -35,12 +35,15 @@ namespace RedPixel.Ui.ViewModels
 
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         
+        public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
+        
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
             ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
             GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
             DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
+            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -138,6 +141,14 @@ namespace RedPixel.Ui.ViewModels
             return Unit.Default;
         }
         
+        private Unit SwitchUtilities()
+        {
+            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
+            return Unit.Default;
+        }
+        
         private Unit SwitchDithering()
         {
             DitheringToolViewModel.IsVisible = !DitheringToolViewModel.IsVisible;
@@ -151,6 +162,7 @@ namespace RedPixel.Ui.ViewModels
             ToolPanelIsVisible = 
                 ColorSpaceToolViewModel.IsVisible || 
                 GammaConversionToolViewModel.IsVisible ||
+                UtilitiesToolViewModel.IsVisible ||
                 DitheringToolViewModel.IsVisible;
         }
     }

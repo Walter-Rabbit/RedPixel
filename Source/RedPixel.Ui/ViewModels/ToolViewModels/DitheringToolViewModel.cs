@@ -9,6 +9,7 @@ using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Dithering;
+using RedPixel.Core.Dithering.utils;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
 
@@ -28,6 +29,7 @@ public class DitheringToolViewModel : BaseViewModel
     private readonly MainWindowViewModel _parentViewModel;
     
     public ReactiveCommand<Unit, Unit> ApplyDitheringCommand { get; }
+    public ReactiveCommand<Unit, Unit> ConvertToBlackWhiteCommand { get; }
     
     public IEnumerable<DitheringAlgorithms> AllDitheringAlgorithms { get; set; } = 
         DitheringAlgorithms.AllAlgorithms.Value;
@@ -39,6 +41,7 @@ public class DitheringToolViewModel : BaseViewModel
         
         SelectedDitheringAlgorithm = DitheringAlgorithms.RawConversion;
         ApplyDitheringCommand = ReactiveCommand.Create(ApplyDithering);
+        ConvertToBlackWhiteCommand = ReactiveCommand.Create(ConvertToBlackWhite);
         
         this.WhenAnyValue(x => x.SelectedDitheringAlgorithm)
             .Subscribe(x =>
@@ -58,7 +61,15 @@ public class DitheringToolViewModel : BaseViewModel
     {
         var depth = new ColorDepth(int.Parse(RString), int.Parse(GString), int.Parse(BString));
         
-        SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.Image);
+        SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.Image, depth);
+        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+        return Unit.Default;
+    }
+    
+    public Unit ConvertToBlackWhite()
+    {
+        BwConverter.ConvertToBlackAndWhite(_parentViewModel.Image);
         _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;

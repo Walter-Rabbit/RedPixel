@@ -49,5 +49,9 @@
         <DependentUpon>DitheringTool.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
+        <DependentUpon>Utilities.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

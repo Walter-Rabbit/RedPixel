@@ -4,17 +4,17 @@ namespace RedPixel.Core.Dithering;
 
 public abstract class ADitheringAlgo
 {
-        protected static Color FindClosestPaletteColor(Color clr)
+        protected static Color FindClosestPaletteColor(Color clr, ColorDepth depth)
         {
-                var bwPixel = (float)(
-                        0.0722 * clr.FirstComponent +
-                        0.7152 * clr.SecondComponent +
-                        0.2126 * clr.ThirdComponent
-                );
+                var firstDelta = (int) Math.Pow(2, 8 - depth.FirstComponent);
+                var secondDelta = (int) Math.Pow(2, 8 - depth.SecondComponent);
+                var thirdDelta = (int) Math.Pow(2, 8 - depth.ThirdComponent);
 
-                bwPixel = bwPixel > 128 ? 255 : 0;
-
-                return new Color(bwPixel, bwPixel, bwPixel);
+                var firstColor = (int)clr.FirstComponent / firstDelta * firstDelta;
+                var secondColor = (int)clr.SecondComponent / secondDelta * secondDelta;
+                var thirdColor = (int)clr.ThirdComponent / thirdDelta * thirdDelta;
+                
+                return Normalize(new Color(firstColor, secondColor, thirdColor));
         }
         
         protected static Color GetError(Color lhs, Color rhs)
@@ -29,21 +29,18 @@ public abstract class ADitheringAlgo
         protected static Color GetPixelWithError(Color clr, Color error, float weight)
         {
                 var first = clr.FirstComponent + error.FirstComponent * weight;
-                first = first > 255f ? 255 : first;
-                first = first < 0f ? 0 : first;
-        
                 var second = clr.SecondComponent + error.SecondComponent * weight;
-                second = second > 255f ? 255 : second;
-                second = second < 0f ? 0 : second;
-        
                 var third = clr.ThirdComponent + error.ThirdComponent * weight;
-                third = third > 255f ? 255 : third;
-                third = third < 0f ? 0 : third;
-        
-                return new Color(
-                        first,
-                        second,
-                        third
-                );
+
+                return Normalize(new Color(first, second, third));
+        }
+
+        protected static Color Normalize(Color clr)
+        {
+                var firstColor = Math.Min(Math.Max(clr.FirstComponent, 0), 255);
+                var secondColor = Math.Min(Math.Max(clr.SecondComponent, 0), 255);
+                var thirdColor = Math.Min(Math.Max(clr.ThirdComponent, 0), 255);
+
+                return new Color(firstColor, secondColor, thirdColor);
         }
 }

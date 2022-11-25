@@ -3,9 +3,9 @@ using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Dithering;
 
-public class RandomDithering : IDitheringAlgo
+public class RandomDithering : ADitheringAlgo, IDitheringAlgo
 {
-    public static void ApplyDithering(Bitmap bitmap)
+    public static void ApplyDithering(Bitmap bitmap, ColorDepth depth)
     {
         var rand = new Random();
         
@@ -13,17 +13,15 @@ public class RandomDithering : IDitheringAlgo
         {
             for (var x = 0; x < bitmap.Width; x++)
             {
-                var pixel = bitmap.Matrix[y, x];
+                var pixel = FindClosestPaletteColor(bitmap.Matrix[y, x], depth);
 
-                var bwPixel = (float)(
-                    0.0722 * pixel.FirstComponent +
-                    0.7152 * pixel.SecondComponent +
-                    0.2126 * pixel.ThirdComponent
-                );
-
-                bwPixel = bwPixel + 128 - (rand.NextInt64() % 256) > 128 ? 255 : 0;
+                var delta = 128 - (rand.NextInt64() % 256) > 128 ? 255 : 0;
                 
-                bitmap.SetPixel(x, y, new Color(bwPixel, bwPixel, bwPixel));
+                bitmap.SetPixel(x, y, Normalize(new Color(
+                    pixel.FirstComponent + delta, 
+                    pixel.SecondComponent + delta, 
+                    pixel.ThirdComponent + delta)
+                ));
             }
         }
     }

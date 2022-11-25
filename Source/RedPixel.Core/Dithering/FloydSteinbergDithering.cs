@@ -5,14 +5,14 @@ namespace RedPixel.Core.Dithering;
 
 public class FloydSteinbergDithering : ADitheringAlgo,  IDitheringAlgo
 {
-    public static void ApplyDithering(Bitmap bitmap)
+    public static void ApplyDithering(Bitmap bitmap, ColorDepth depth)
     {
         for (var y = 0; y < bitmap.Height; y++)
         {
             for (var x = 0; x < bitmap.Width; x++)
             {
                 var oldPixel = bitmap.GetPixel(x, y);
-                var newPixel = FindClosestPaletteColor(oldPixel);
+                var newPixel = FindClosestPaletteColor(oldPixel, depth);
                 bitmap.SetPixel(x, y, newPixel);
 
                 var quantError = GetError(oldPixel, newPixel);

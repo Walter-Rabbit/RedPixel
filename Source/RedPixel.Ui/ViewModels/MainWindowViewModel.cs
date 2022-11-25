@@ -25,8 +25,6 @@ namespace RedPixel.Ui.ViewModels
     public class MainWindowViewModel : BaseViewModel
     {
         private readonly MainWindow _view;
-        [Reactive] public bool DrawingInProgress { get; set; }
-        private Point _startPoint;
         [Reactive] public Bitmap Image { get; set; }
         [Reactive] public Point StartPoint1 { get; set; }
         [Reactive] public Point StartPoint2 { get; set; }
@@ -37,18 +35,21 @@ namespace RedPixel.Ui.ViewModels
         public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
         public ReactiveCommand<Unit, Unit> SwitchColorSpacesCommand { get; }
         public ReactiveCommand<Unit, Unit> SwitchGammaCorrectionCommand { get; }
+        public ReactiveCommand<Unit, Unit> LineDrawingCommand { get; }
 
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
+        public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
 
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
             ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
             GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
+            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -66,6 +67,7 @@ namespace RedPixel.Ui.ViewModels
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
             SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
             SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
+            LineDrawingCommand = ReactiveCommand.Create(SwitchLineDrawing);
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -133,47 +135,30 @@ namespace RedPixel.Ui.ViewModels
         {
             ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
 
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible ||
+                                 GammaConversionToolViewModel.IsVisible ||
+                                 LineDrawingToolViewModel.IsVisible;
             return Unit.Default;
         }
 
         private Unit SwitchGammaCorrection()
         {
-            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
+            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;
 
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible ||
+                                 GammaConversionToolViewModel.IsVisible ||
+                                 LineDrawingToolViewModel.IsVisible;
             return Unit.Default;
         }
 
-        public void ImageClicked(int x, int y, int clickCount, Point previewPosition)
+        private Unit SwitchLineDrawing()
         {
+            LineDrawingToolViewModel.IsVisible = !LineDrawingToolViewModel.IsVisible;
 
-            if (DrawingInProgress)
-            {
-                var color = ColorSpaceTool.SelectedColor;
-                var colorInCurrentColorSpace =
-                    ColorSpaceToolViewModel.SelectedColorSpace.ColorFromRgb(new Color(color.R, color.G, color.B));
-
-
-                Image.DrawLine(
-                    (int)_startPoint.X,
-                    (int)_startPoint.Y,
-                    x, y,
-                    (float)color.A / 255,
-                    colorInCurrentColorSpace,
-                    ColorSpaceToolViewModel.Thickness);
-                Bitmap = Image.ConvertToAvaloniaBitmap();
-                DrawingInProgress = false;
-            } else if (clickCount == 2)
-            {
-                DrawingInProgress = true;
-                _startPoint = new Point(x, y);
-
-                StartPoint1 = new Point(previewPosition.X - 5, previewPosition.Y - 5);
-                EndPoint1 = new Point(previewPosition.X + 5, previewPosition.Y + 5);
-                StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
-                EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
-            }
+            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible ||
+                                 GammaConversionToolViewModel.IsVisible ||
+                                 LineDrawingToolViewModel.IsVisible;
+            return Unit.Default;
         }
 
         private System.Drawing.Color FromHex(string hex)

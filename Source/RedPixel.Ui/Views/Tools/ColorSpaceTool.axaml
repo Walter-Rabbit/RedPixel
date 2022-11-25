@@ -11,7 +11,7 @@
         <tvm:ColorSpaceToolViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="25,50,40,1,40,20,50">
+    <Grid RowDefinitions="25,50,40,1">
         <TextBlock Grid.Row="0" Text="Color spaces:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -57,17 +57,5 @@
         <Rectangle Grid.Row="3"
                    Height="1"
                    Fill="#1e1f22" />
-
-        <dialog:ColorPickerButton x:Name="ColorPicker" Grid.Row="4" Color="#FFFF0000" Cursor="Hand" PropertyChanged="ColorPicker_OnPropertyChanged"/>
-
-        <TextBlock Grid.Row="5" Text="{Binding Thickness, StringFormat='Thinkness: {0}'}" />
-
-        <Slider
-            Grid.Row="6"
-            Minimum="1"
-            Maximum="10"
-            Orientation="Horizontal"
-            TickFrequency="1"
-            Value="{Binding Thickness}"/>
     </Grid>
 </UserControl>

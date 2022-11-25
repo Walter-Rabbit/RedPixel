@@ -16,11 +16,13 @@ namespace RedPixel.Ui.Views
     {
         public ColorSpaceTool ColorSpaceTool { get; }
         public GammaCorrectionTool GammaCorrectionTool { get; }
+        public LineDrawingTool LineDrawingTool { get; }
 
         public MainWindow()
         {
             ColorSpaceTool = new ColorSpaceTool();
             GammaCorrectionTool = new GammaCorrectionTool();
+            LineDrawingTool = new LineDrawingTool();
             DataContext = new MainWindowViewModel(this);
             InitializeComponent();
         }
@@ -35,7 +37,7 @@ namespace RedPixel.Ui.Views
 
             var previewPosition = e.GetPosition((IVisual)e.Source.InteractiveParent);
 
-            (DataContext as MainWindowViewModel)?.ImageClicked(x, y, e.ClickCount, previewPosition);
+            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount, previewPosition);
         }
     }
 }

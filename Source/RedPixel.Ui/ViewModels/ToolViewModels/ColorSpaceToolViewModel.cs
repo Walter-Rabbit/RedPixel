@@ -28,8 +28,6 @@ public class ColorSpaceToolViewModel : BaseViewModel
     [Reactive] public bool[] EnabledComponents { get; set; }
     [Reactive] public bool IsVisible { get; set; } = false;
 
-    [Reactive] public int Thickness { get; set; } = 1;
-
     public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 
     public ColorSpaceToolViewModel(ColorSpaceTool view, MainWindowViewModel parentViewModel)

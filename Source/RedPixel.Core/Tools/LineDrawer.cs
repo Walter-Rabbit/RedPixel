@@ -1,3 +1,4 @@
+using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 
@@ -7,6 +8,8 @@ public static class LineDrawer
 {
     private static void DrawPoint(Bitmap bitmap, int x, int y, float alpha, Color color)
     {
+        color = color.AssignGamma(1f / bitmap.Gamma);
+        
         if (x < 0 || x >= bitmap.Width || y < 0 || y >= bitmap.Height)
             return;
 

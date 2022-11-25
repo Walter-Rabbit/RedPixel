@@ -1,13 +1,14 @@
-﻿using RedPixel.Core.Colors.ValueObjects;
+﻿using RedPixel.Core.Colors;
+using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 
 namespace RedPixel.Core.Dithering.utils;
 
 public class GradientGenerator
 {
-    public static void Generate(Bitmap bitmap, int height, int width)
+    public static Bitmap Generate(int height, int width, int bytesForColor, ColorSpaces colorSpace)
     {
-        bitmap = new Bitmap(width, height, bitmap.BytesForColor, bitmap.ColorSpace);
+        var bitmap = new Bitmap(width, height, bytesForColor, colorSpace);
         
         for (var y = 0; y < bitmap.Height; y++)
         {
@@ -17,5 +18,7 @@ public class GradientGenerator
                 bitmap.SetPixel(x, y, new Color(bwColor, bwColor, bwColor));
             }
         }
+
+        return bitmap;
     }
 }

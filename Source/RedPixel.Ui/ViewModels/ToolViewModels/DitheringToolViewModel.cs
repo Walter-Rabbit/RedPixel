@@ -79,9 +79,19 @@ public class DitheringToolViewModel : BaseViewModel
 
     public Unit GenerateGradient()
     {
-        GradientGenerator.Generate(_parentViewModel.Image, 300, 300);
+        var bytesForColor = _parentViewModel.Image?.BytesForColor ?? 1;
+        var colorSpace = _parentViewModel.Image?.ColorSpace ?? ColorSpaces.Rgb;
+
+        if (_parentViewModel == null) return Unit.Default;
+        _parentViewModel.Image = GradientGenerator.Generate(
+            300,
+            300,
+            bytesForColor,
+            colorSpace);
+
         _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+
         return Unit.Default;
     }
 }

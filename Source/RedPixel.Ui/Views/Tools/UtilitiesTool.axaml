@@ -10,7 +10,7 @@
         <tvm:UtilitiesToolViewModel />
     </Design.DataContext>
     
-    <Grid RowDefinitions="25,50,120,50,50,50">
+    <Grid RowDefinitions="25,50,50">
         <TextBlock Grid.Row="0" Text="GenerateGradient:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -48,7 +48,7 @@
                                Text="{Binding WidthString}"/>
             </Grid>
         </Grid>
-        <Rectangle Grid.Row="5"
+        <Rectangle Grid.Row="2"
                    Height="1"
                    Fill="#1e1f22" />
     </Grid>

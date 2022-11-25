@@ -10,7 +10,7 @@
         <tvm:DitheringToolViewModel />
     </Design.DataContext>
     
-    <Grid RowDefinitions="25,50,120,50,50,50">
+    <Grid RowDefinitions="25,40,120,40,40,40,40">
         <TextBlock Grid.Row="0" Text="Dithering algorithm:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
@@ -90,7 +90,15 @@
                 HorizontalAlignment="Center"
                 VerticalContentAlignment="Center"
                 Command="{Binding ConvertToBlackWhiteCommand}" />
-        <Rectangle Grid.Row="5"
+        <Button Grid.Row="5"
+                Height="30"
+                Width="170"
+                Content="GenerateGradient"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding GenerateGradientCommand}" />
+        <Rectangle Grid.Row="6"
                    Height="1"
                    Fill="#1e1f22" />
     </Grid>

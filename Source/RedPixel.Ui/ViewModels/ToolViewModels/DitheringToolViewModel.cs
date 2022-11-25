@@ -30,6 +30,7 @@ public class DitheringToolViewModel : BaseViewModel
     
     public ReactiveCommand<Unit, Unit> ApplyDitheringCommand { get; }
     public ReactiveCommand<Unit, Unit> ConvertToBlackWhiteCommand { get; }
+    public ReactiveCommand<Unit, Unit> GenerateGradientCommand { get; }
     
     public IEnumerable<DitheringAlgorithms> AllDitheringAlgorithms { get; set; } = 
         DitheringAlgorithms.AllAlgorithms.Value;
@@ -42,6 +43,7 @@ public class DitheringToolViewModel : BaseViewModel
         SelectedDitheringAlgorithm = DitheringAlgorithms.RawConversion;
         ApplyDitheringCommand = ReactiveCommand.Create(ApplyDithering);
         ConvertToBlackWhiteCommand = ReactiveCommand.Create(ConvertToBlackWhite);
+        GenerateGradientCommand = ReactiveCommand.Create(GenerateGradient);
         
         this.WhenAnyValue(x => x.SelectedDitheringAlgorithm)
             .Subscribe(x =>
@@ -70,6 +72,14 @@ public class DitheringToolViewModel : BaseViewModel
     public Unit ConvertToBlackWhite()
     {
         BwConverter.ConvertToBlackAndWhite(_parentViewModel.Image);
+        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+        return Unit.Default;
+    }
+
+    public Unit GenerateGradient()
+    {
+        GradientGenerator.Generate(_parentViewModel.Image, 300, 300);
         _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;

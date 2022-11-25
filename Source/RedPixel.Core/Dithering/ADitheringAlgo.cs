@@ -10,9 +10,9 @@ public abstract class ADitheringAlgo
                 var secondDelta = (int) Math.Pow(2, 8 - depth.SecondComponent);
                 var thirdDelta = (int) Math.Pow(2, 8 - depth.ThirdComponent);
 
-                var firstColor = (int)clr.FirstComponent / firstDelta * firstDelta;
-                var secondColor = (int)clr.SecondComponent / secondDelta * secondDelta;
-                var thirdColor = (int)clr.ThirdComponent / thirdDelta * thirdDelta;
+                var firstColor = (int)clr.FirstComponent / firstDelta * firstDelta * 2;
+                var secondColor = (int)clr.SecondComponent / secondDelta * secondDelta * 2;
+                var thirdColor = (int)clr.ThirdComponent / thirdDelta * thirdDelta * 2;
                 
                 return Normalize(new Color(firstColor, secondColor, thirdColor));
         }

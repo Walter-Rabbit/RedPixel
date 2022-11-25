@@ -13,15 +13,16 @@ public class RandomDithering : ADitheringAlgo, IDitheringAlgo
         {
             for (var x = 0; x < bitmap.Width; x++)
             {
-                var pixel = FindClosestPaletteColor(bitmap.Matrix[y, x], depth);
+                var pixel = bitmap.Matrix[y, x];
 
-                var delta = 128 - (rand.NextInt64() % 256) > 128 ? 255 : 0;
+                var delta = 128 - (rand.NextInt64() % 256);
                 
-                bitmap.SetPixel(x, y, Normalize(new Color(
+                bitmap.SetPixel(x, y, Normalize(FindClosestPaletteColor(new Color(
                     pixel.FirstComponent + delta, 
                     pixel.SecondComponent + delta, 
-                    pixel.ThirdComponent + delta)
-                ));
+                    pixel.ThirdComponent + delta
+                    ), depth
+                )));
             }
         }
     }

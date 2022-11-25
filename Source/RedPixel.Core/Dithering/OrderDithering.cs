@@ -27,13 +27,22 @@ public class OrderDithering : ADitheringAlgo, IDitheringAlgo
                 var patternX = y % 8;
                 
                 var oldPixel = bitmap.GetPixel(x, y);
-                var newPixel = FindClosestPaletteColor(oldPixel, depth);
+                // var newPixel = FindClosestPaletteColor(oldPixel, depth);
 
-                var firstComponent = newPixel.FirstComponent > pattern[patternY][patternX] * 4 ? 255 : 0;
-                var secondComponent = newPixel.SecondComponent > pattern[patternY][patternX] * 4 ? 255 : 0;
-                var thirdComponent = newPixel.ThirdComponent > pattern[patternY][patternX] * 4 ? 255 : 0;
+                /*var firstComponent = oldPixel.FirstComponent > pattern[patternY][patternX] * 4 ? 255 : 0;
+                var secondComponent = oldPixel.SecondComponent > pattern[patternY][patternX] * 4 ? 255 : 0;
+                var thirdComponent = oldPixel.ThirdComponent > pattern[patternY][patternX] * 4 ? 255 : 0;*/
+
+                var r = 255f / 8;
                 
-                bitmap.SetPixel(x, y, new Color(firstComponent, secondComponent, thirdComponent));
+                var firstComponent = oldPixel.FirstComponent + r * ((float) pattern[patternY][patternX] / 64 - 1f / 2);
+                var secondComponent = oldPixel.SecondComponent + r * ((float) pattern[patternY][patternX] / 64 - 1f / 2);
+                var thirdComponent = oldPixel.ThirdComponent + r * ((float) pattern[patternY][patternX] / 64 - 1f / 2);
+                
+                
+                bitmap.SetPixel(x, y, FindClosestPaletteColor(
+                    new Color(firstComponent, secondComponent, thirdComponent), depth
+                    ));
             }
         }
     }

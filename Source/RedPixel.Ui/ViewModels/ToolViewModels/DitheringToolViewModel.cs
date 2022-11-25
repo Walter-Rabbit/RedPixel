@@ -21,9 +21,9 @@ public class DitheringToolViewModel : BaseViewModel
     
     [Reactive] public bool IsVisible { get; set; } = false;
     [Reactive] public DitheringAlgorithms SelectedDitheringAlgorithm { get; set; }
-    [Reactive] public string RString { get; set; } = "8";
-    [Reactive] public string GString { get; set; } = "8";
-    [Reactive] public string BString { get; set; } = "8";
+    [Reactive] public string RString { get; set; } = "1";
+    [Reactive] public string GString { get; set; } = "1";
+    [Reactive] public string BString { get; set; } = "1";
     
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
     private readonly MainWindowViewModel _parentViewModel;
@@ -84,8 +84,8 @@ public class DitheringToolViewModel : BaseViewModel
 
         if (_parentViewModel == null) return Unit.Default;
         _parentViewModel.Image = GradientGenerator.Generate(
-            300,
-            300,
+             1080,
+            1920,
             bytesForColor,
             colorSpace);
 

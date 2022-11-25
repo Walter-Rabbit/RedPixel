@@ -14,7 +14,7 @@ public class GradientGenerator
         {
             for (var x = 0; x < bitmap.Width; x++)
             {
-                var bwColor = 255f * x / bitmap.Height;
+                var bwColor = 255f * x / bitmap.Width;
                 bitmap.SetPixel(x, y, new Color(bwColor, bwColor, bwColor));
             }
         }

@@ -91,13 +91,15 @@
                 StrokeThickness="4"
                 StartPoint="{Binding StartPoint1}"
                 EndPoint="{Binding EndPoint1}"
-                IsVisible="{Binding LineDrawingToolViewModel.DrawingInProgress}" />
+                IsVisible="{Binding DrawingInProgress}"
+                DataContext="{Binding LineDrawingToolViewModel}"/>
             <Line
                 Stroke="Red"
                 StrokeThickness="4"
                 StartPoint="{Binding StartPoint2}"
                 EndPoint="{Binding EndPoint2}"
-                IsVisible="{Binding LineDrawingToolViewModel.DrawingInProgress}" />
+                IsVisible="{Binding DrawingInProgress}"
+                DataContext="{Binding LineDrawingToolViewModel}"/>
         </Grid>
     </DockPanel>
 </Window>

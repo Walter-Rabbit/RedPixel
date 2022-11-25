@@ -1,21 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reactive;
-using System.Threading.Tasks;
-using Avalonia;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using RedPixel.Core.Colors;
-using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
+﻿using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Tools;
-using RedPixel.Core;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
-using RedPixel.Ui.Views.Tools;
-using Bitmap = RedPixel.Core.Models.Bitmap;
 using Color = RedPixel.Core.Colors.ValueObjects.Color;
 using Point = Avalonia.Point;
 
@@ -29,6 +15,10 @@ public class LineDrawingToolViewModel : BaseViewModel
     [Reactive] public bool DrawingInProgress { get; set; } = false;
     [Reactive] public int Thickness { get; set; } = 1;
     [Reactive] public bool IsVisible { get; set; } = false;
+    [Reactive] public Point StartPoint1 { get; set; }
+    [Reactive] public Point StartPoint2 { get; set; }
+    [Reactive] public Point EndPoint1 { get; set; }
+    [Reactive] public Point EndPoint2 { get; set; }
     private Point _startPoint;
 
     public LineDrawingToolViewModel(LineDrawingTool view, MainWindowViewModel parentViewModel)
@@ -61,10 +51,10 @@ public class LineDrawingToolViewModel : BaseViewModel
             DrawingInProgress = true;
             _startPoint = new Point(x, y);
 
-            _parentViewModel.StartPoint1 = new Point(previewPosition.X - 5, previewPosition.Y - 5);
-            _parentViewModel.EndPoint1 = new Point(previewPosition.X + 5, previewPosition.Y + 5);
-            _parentViewModel.StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
-            _parentViewModel.EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
+            StartPoint1 = new Point(previewPosition.X - 5, previewPosition.Y - 5);
+            EndPoint1 = new Point(previewPosition.X + 5, previewPosition.Y + 5);
+            StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
+            EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
         }
     }
 }

@@ -11,14 +11,10 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
 using RedPixel.Core.ImageParsers;
-using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
-using RedPixel.Ui.Views.Tools;
 using Bitmap = RedPixel.Core.Models.Bitmap;
-using Color = RedPixel.Core.Colors.ValueObjects.Color;
-using Point = Avalonia.Point;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -26,10 +22,6 @@ namespace RedPixel.Ui.ViewModels
     {
         private readonly MainWindow _view;
         [Reactive] public Bitmap Image { get; set; }
-        [Reactive] public Point StartPoint1 { get; set; }
-        [Reactive] public Point StartPoint2 { get; set; }
-        [Reactive] public Point EndPoint1 { get; set; }
-        [Reactive] public Point EndPoint2 { get; set; }
 
         public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
@@ -159,20 +151,6 @@ namespace RedPixel.Ui.ViewModels
                                  GammaConversionToolViewModel.IsVisible ||
                                  LineDrawingToolViewModel.IsVisible;
             return Unit.Default;
-        }
-
-        private System.Drawing.Color FromHex(string hex)
-        {
-            if (hex.StartsWith("#"))
-                hex = hex.Substring(1);
-
-            if (hex.Length != 8) throw new Exception("Color not valid");
-
-            return System.Drawing.Color.FromArgb(
-                int.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
-                int.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
-                int.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
-                int.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
         }
     }
 }

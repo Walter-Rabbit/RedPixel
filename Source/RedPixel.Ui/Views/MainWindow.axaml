@@ -48,6 +48,12 @@
                 <CheckBox
                     Content="Gamma Correction"
                     Command="{Binding SwitchGammaCorrection}" />
+                <CheckBox
+                    Content="Dithering"
+                    Command="{Binding SwitchDithering}" />
+                <CheckBox
+                    Content="Utilities"
+                    Command="{Binding SwitchUtilities}" />
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Right"
@@ -62,6 +68,12 @@
             <tools:GammaCorrectionTool
                 IsVisible="{Binding IsVisible}"
                 DataContext="{Binding GammaConversionToolViewModel }" />
+            <tools:DitheringTool
+                IsVisible="{Binding IsVisible}"
+                DataContext="{Binding DitheringToolViewModel }" />
+            <tools:UtilitiesTool
+                IsVisible="{Binding IsVisible}"
+                DataContext="{Binding UtilitiesToolViewModel }" />
         </StackPanel>
         <Grid Classes="main"
                 ZIndex="20">

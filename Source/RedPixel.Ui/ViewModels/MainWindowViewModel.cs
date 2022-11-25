@@ -32,12 +32,16 @@ namespace RedPixel.Ui.ViewModels
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
-
+        public DitheringToolViewModel DitheringToolViewModel { get; set; }
+        public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
+        
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
             ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
             GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
+            DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
+            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -55,6 +59,7 @@ namespace RedPixel.Ui.ViewModels
             SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
             SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
             SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
+            
         }
 
         private async Task<Unit> OpenImageAsync()
@@ -121,17 +126,42 @@ namespace RedPixel.Ui.ViewModels
         private Unit SwitchColorSpaces()
         {
             ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
-
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
             return Unit.Default;
         }
         
         private Unit SwitchGammaCorrection()
         {
             GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;;
-
-            ToolPanelIsVisible = ColorSpaceToolViewModel.IsVisible || GammaConversionToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
             return Unit.Default;
+        }
+        
+        private Unit SwitchUtilities()
+        {
+            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
+            return Unit.Default;
+        }
+        
+        private Unit SwitchDithering()
+        {
+            DitheringToolViewModel.IsVisible = !DitheringToolViewModel.IsVisible;
+            SwitchToolPanel();
+            
+            return Unit.Default;
+        }
+
+        private void SwitchToolPanel()
+        {
+            ToolPanelIsVisible = 
+                ColorSpaceToolViewModel.IsVisible || 
+                GammaConversionToolViewModel.IsVisible ||
+                UtilitiesToolViewModel.IsVisible ||
+                DitheringToolViewModel.IsVisible;
         }
     }
 }

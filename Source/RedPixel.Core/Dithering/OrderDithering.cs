@@ -27,7 +27,7 @@ public class OrderDithering : ADitheringAlgo, IDitheringAlgo
                 var patternX = x % 8;
                 
                 var oldPixel = bitmap.GetPixel(x, y);
-                var r = 255f / 8;
+                var r = 255f / depth.FirstComponent;
                 
                 var firstComponent = oldPixel.FirstComponent + r * ((float) pattern[patternY][patternX] / 64 - 1f / 2f);
                 var secondComponent = oldPixel.SecondComponent + r * ((float) pattern[patternY][patternX] / 64 - 1f / 2f);

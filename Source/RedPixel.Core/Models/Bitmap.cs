@@ -1,12 +1,18 @@
 ﻿using RedPixel.Core.Colors;
-using RedPixel.Core.Colors.Extensions;
 using RedPixel.Core.Colors.ValueObjects;
-using Color = RedPixel.Core.Colors.ValueObjects.Color;
+using RedPixel.Core.Tools;
 
 namespace RedPixel.Core.Models;
 
 public class Bitmap
 {
+    public Bitmap(int width, int height, int bytesForColor, ColorSpaces colorSpace)
+    {
+        ColorSpace = colorSpace;
+        BytesForColor = bytesForColor;
+        Matrix = new Color[height, width];
+    }
+
     public Color[,] Matrix { get; }
 
     public ColorSpaces ColorSpace { get; private set; }
@@ -16,13 +22,6 @@ public class Bitmap
     public int BytesForColor { get; set; }
 
     public float Gamma { get; set; } = 1;
-
-    public Bitmap(int width, int height, int bytesForColor, ColorSpaces colorSpace)
-    {
-        ColorSpace = colorSpace;
-        BytesForColor = bytesForColor;
-        Matrix = new Color[height, width];
-    }
 
     public void SetPixel(int x, int y, Color clr)
     {

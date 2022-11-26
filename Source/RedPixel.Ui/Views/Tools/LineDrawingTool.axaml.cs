@@ -1,8 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using RedPixel.Ui.ViewModels;
+using Avalonia.Media;
 using RedPixel.Ui.ViewModels.ToolViewModels;
-using Color = Avalonia.Media.Color;
 
 namespace RedPixel.Ui.Views.Tools;
 
@@ -12,7 +11,7 @@ public partial class LineDrawingTool : UserControl
     {
         InitializeComponent();
     }
-    
+
     private void ColorPicker_OnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property.Name == "Color")

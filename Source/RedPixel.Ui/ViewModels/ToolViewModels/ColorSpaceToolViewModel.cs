@@ -8,27 +8,15 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
-using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
-using Color = System.Drawing.Color;
 
 namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
 public class ColorSpaceToolViewModel : BaseViewModel
 {
-    private readonly ColorSpaceTool _view;
     private readonly MainWindowViewModel _parentViewModel;
-
-    public ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
-
-    [Reactive] public ColorComponents ColorComponents { get; set; } = ColorComponents.All;
-    [Reactive] public ColorSpaces SelectedColorSpace { get; set; }
-    [Reactive] public bool[] EnabledComponents { get; set; }
-    [Reactive] public bool IsVisible { get; set; } = false;
-
-    public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
+    private readonly ColorSpaceTool _view;
 
     public ColorSpaceToolViewModel(ColorSpaceTool view, MainWindowViewModel parentViewModel)
     {
@@ -65,6 +53,15 @@ public class ColorSpaceToolViewModel : BaseViewModel
                 sw.Stop();
             });
     }
+
+    public ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
+
+    [Reactive] public ColorComponents ColorComponents { get; set; } = ColorComponents.All;
+    [Reactive] public ColorSpaces SelectedColorSpace { get; set; }
+    [Reactive] public bool[] EnabledComponents { get; set; }
+    [Reactive] public bool IsVisible { get; set; } = false;
+
+    public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 
     public async Task<Unit> ChangeColorLayersAsync()
     {

@@ -3,7 +3,6 @@
              xmlns:tvm="using:RedPixel.Ui.ViewModels.ToolViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dialog="clr-namespace:Egorozh.ColorPicker.Dialog;assembly=Egorozh.ColorPicker.Avalonia.Dialog"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="RedPixel.Ui.Views.Tools.ColorSpaceTool">
 
@@ -30,7 +29,7 @@
               ColumnDefinitions="60,60,60"
               HorizontalAlignment="Center">
             <CheckBox Grid.Column="0"
-                      Command="{Binding ChangeColorLayersCommand}"
+                      Command="{Binding ChangeColorLayers}"
                       IsChecked="{Binding EnabledComponents[0]}"
                       HorizontalAlignment="Center">
                 <TextBlock
@@ -38,7 +37,7 @@
                     HorizontalAlignment="Left" />
             </CheckBox>
             <CheckBox Grid.Column="1"
-                      Command="{Binding ChangeColorLayersCommand}"
+                      Command="{Binding ChangeColorLayers}"
                       IsChecked="{Binding EnabledComponents[1]}"
                       HorizontalAlignment="Center">
                 <TextBlock
@@ -46,7 +45,7 @@
                     HorizontalAlignment="Left" />
             </CheckBox>
             <CheckBox Grid.Column="2"
-                      Command="{Binding ChangeColorLayersCommand}"
+                      Command="{Binding ChangeColorLayers}"
                       IsChecked="{Binding EnabledComponents[2]}"
                       HorizontalAlignment="Center">
                 <TextBlock

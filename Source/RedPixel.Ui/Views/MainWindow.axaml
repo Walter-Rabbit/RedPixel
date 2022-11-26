@@ -82,7 +82,7 @@
                 DataContext="{Binding UtilitiesToolViewModel }" />
         </StackPanel>
         <Grid Classes="main"
-                ZIndex="20">
+              ZIndex="20">
             <ScrollViewer>
                 <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                             MinZoomX="0.05" MinZoomY="0.05">
@@ -94,8 +94,7 @@
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default">
-                    </Image>
+                        RenderOptions.BitmapInterpolationMode="Default" />
                 </ZoomBorder>
             </ScrollViewer>
             <Line
@@ -104,14 +103,14 @@
                 StartPoint="{Binding StartPoint1}"
                 EndPoint="{Binding EndPoint1}"
                 IsVisible="{Binding DrawingInProgress}"
-                DataContext="{Binding LineDrawingToolViewModel}"/>
+                DataContext="{Binding LineDrawingToolViewModel}" />
             <Line
                 Stroke="Red"
                 StrokeThickness="4"
                 StartPoint="{Binding StartPoint2}"
                 EndPoint="{Binding EndPoint2}"
                 IsVisible="{Binding DrawingInProgress}"
-                DataContext="{Binding LineDrawingToolViewModel}"/>
+                DataContext="{Binding LineDrawingToolViewModel}" />
         </Grid>
     </DockPanel>
 </Window>

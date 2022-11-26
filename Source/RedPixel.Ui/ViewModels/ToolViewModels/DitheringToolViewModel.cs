@@ -24,7 +24,6 @@ public class DitheringToolViewModel : BaseViewModel
         _parentViewModel = parentViewModel;
 
         SelectedDitheringAlgorithm = DitheringAlgorithms.RawConversion;
-        ApplyDitheringCommand = ReactiveCommand.Create(ApplyDithering);
 
         this.WhenAnyValue(x => x.SelectedDitheringAlgorithm)
             .Subscribe(x =>
@@ -47,8 +46,6 @@ public class DitheringToolViewModel : BaseViewModel
     [Reactive] public string BString { get; set; } = "1";
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
-
-    public ReactiveCommand<Unit, Unit> ApplyDitheringCommand { get; }
 
     public IEnumerable<DitheringAlgorithms> AllDitheringAlgorithms { get; set; } =
         DitheringAlgorithms.AllAlgorithms.Value;

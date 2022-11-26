@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Reactive;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
 using RedPixel.Core.Dithering.Utilities;
@@ -18,17 +17,11 @@ public class UtilitiesToolViewModel : BaseViewModel
     {
         _parentViewModel = parentViewModel;
         _view = view;
-
-        GenerateGradientCommand = ReactiveCommand.Create(GenerateGradient);
-        ConvertToBlackWhiteCommand = ReactiveCommand.Create(ConvertToBlackWhite);
     }
 
     [Reactive] public string WidthString { get; set; } = "1920";
     [Reactive] public string HeightString { get; set; } = "1080";
     [Reactive] public bool IsVisible { get; set; } = false;
-
-    public ReactiveCommand<Unit, Unit> GenerateGradientCommand { get; }
-    public ReactiveCommand<Unit, Unit> ConvertToBlackWhiteCommand { get; }
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 

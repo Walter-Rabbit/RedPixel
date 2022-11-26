@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive;
-using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
@@ -22,7 +21,6 @@ public class ColorSpaceToolViewModel : BaseViewModel
     {
         EnabledComponents = new bool[] { true, true, true };
         SelectedColorSpace = ColorSpaces.Rgb;
-        ChangeColorLayersCommand = ReactiveCommand.CreateFromTask(ChangeColorLayersAsync);
         _view = view;
         _parentViewModel = parentViewModel;
 
@@ -54,8 +52,6 @@ public class ColorSpaceToolViewModel : BaseViewModel
             });
     }
 
-    public ReactiveCommand<Unit, Unit> ChangeColorLayersCommand { get; }
-
     [Reactive] public ColorComponents ColorComponents { get; set; } = ColorComponents.All;
     [Reactive] public ColorSpaces SelectedColorSpace { get; set; }
     [Reactive] public bool[] EnabledComponents { get; set; }
@@ -63,7 +59,7 @@ public class ColorSpaceToolViewModel : BaseViewModel
 
     public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 
-    public async Task<Unit> ChangeColorLayersAsync()
+    public Unit ChangeColorLayers()
     {
         ColorComponents = (EnabledComponents[0] ? ColorComponents.First : ColorComponents.None)
                           | (EnabledComponents[1] ? ColorComponents.Second : ColorComponents.None)

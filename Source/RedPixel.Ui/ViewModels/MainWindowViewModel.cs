@@ -41,23 +41,9 @@ namespace RedPixel.Ui.ViewModels
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
-
-            OpenFileDialogCommand = ReactiveCommand.CreateFromTask(OpenImageAsync);
-            SaveFileDialogCommand = ReactiveCommand.CreateFromTask(SaveImageAsync);
-            SwitchColorSpacesCommand = ReactiveCommand.Create(SwitchColorSpaces);
-            SwitchGammaCorrectionCommand = ReactiveCommand.Create(SwitchGammaCorrection);
-
-            LineDrawingCommand = ReactiveCommand.Create(SwitchLineDrawing);
         }
 
         [Reactive] public Bitmap Image { get; set; }
-
-        public ReactiveCommand<Unit, Unit> OpenFileDialogCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveFileDialogCommand { get; }
-        public ReactiveCommand<Unit, Unit> SwitchColorSpacesCommand { get; }
-        public ReactiveCommand<Unit, Unit> SwitchGammaCorrectionCommand { get; }
-        public ReactiveCommand<Unit, Unit> LineDrawingCommand { get; }
-
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
 

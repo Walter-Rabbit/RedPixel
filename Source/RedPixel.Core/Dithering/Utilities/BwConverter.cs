@@ -1,7 +1,7 @@
 ﻿using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 
-namespace RedPixel.Core.Dithering.utils;
+namespace RedPixel.Core.Dithering.Utilities;
 
 public class BwConverter
 {
@@ -18,7 +18,7 @@ public class BwConverter
                     0.7152 * pixel.SecondComponent +
                     0.2126 * pixel.ThirdComponent
                 );
-                
+
                 bitmap.SetPixel(x, y, new Color(bwPixel, bwPixel, bwPixel));
             }
         }

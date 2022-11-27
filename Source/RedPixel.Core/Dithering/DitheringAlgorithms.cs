@@ -7,10 +7,26 @@ namespace RedPixel.Core.Dithering;
 public class DitheringAlgorithms
 {
     public delegate void InFunc<TF, TS>(TF first, TS second);
-    
-    public string Name { get; }
-    
-    public InFunc<Bitmap, ColorDepth> ApplyDithering { get; }
+
+    public static DitheringAlgorithms RawConversion = new DitheringAlgorithms(
+        "RawConversion",
+        RawConversionDithering.ApplyDithering);
+
+    public static DitheringAlgorithms RandomConversion = new DitheringAlgorithms(
+        "Random",
+        RandomDithering.ApplyDithering);
+
+    public static DitheringAlgorithms FloydSteinbergConversion = new DitheringAlgorithms(
+        "Floyd Steinberg",
+        FloydSteinbergDithering.ApplyDithering);
+
+    public static DitheringAlgorithms AtkinsonConversion = new DitheringAlgorithms(
+        "Atkinson",
+        AtkinsonDithering.ApplyDithering);
+
+    public static DitheringAlgorithms OrderConversion = new DitheringAlgorithms(
+        "Order",
+        OrderDithering.ApplyDithering);
 
     public DitheringAlgorithms(
         string name,
@@ -20,26 +36,10 @@ public class DitheringAlgorithms
         ApplyDithering = applyDithering;
     }
 
-    public static DitheringAlgorithms RawConversion = new DitheringAlgorithms(
-        "RawConversion",
-        RawConversionDithering.ApplyDithering);
-    
-    public static DitheringAlgorithms RandomConversion = new DitheringAlgorithms(
-        "Random",
-        RandomDithering.ApplyDithering);
-    
-    public static DitheringAlgorithms FloydSteinbergConversion = new DitheringAlgorithms(
-        "Floyd Steinberg",
-        FloydSteinbergDithering.ApplyDithering);
-    
-    public static DitheringAlgorithms AtkinsonConversion = new DitheringAlgorithms(
-        "Atkinson",
-        AtkinsonDithering.ApplyDithering);
-    
-    public static DitheringAlgorithms OrderConversion = new DitheringAlgorithms(
-        "Order",
-        OrderDithering.ApplyDithering);
-    
+    public string Name { get; }
+
+    public InFunc<Bitmap, ColorDepth> ApplyDithering { get; }
+
     public static Lazy<IEnumerable<DitheringAlgorithms>> AllAlgorithms => new(
         () => typeof(DitheringAlgorithms)
             .GetFields(BindingFlags.Public | BindingFlags.Static)

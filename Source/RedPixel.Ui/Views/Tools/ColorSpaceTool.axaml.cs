@@ -1,9 +1,4 @@
-﻿using System;
-using Avalonia;
-using Avalonia.Controls;
-using Egorozh.ColorPicker.Dialog;
-using RedPixel.Core.Colors.ValueObjects;
-using Color = Avalonia.Media.Color;
+﻿using Avalonia.Controls;
 
 namespace RedPixel.Ui.Views.Tools;
 

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Reactive;
 using Avalonia.Controls;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
@@ -13,11 +12,14 @@ namespace RedPixel.Ui.ViewModels.ToolViewModels;
 
 public class GammaCorrectionToolViewModel : BaseViewModel
 {
-    private readonly GammaCorrectionTool _view;
     private readonly MainWindowViewModel _parentViewModel;
+    private readonly GammaCorrectionTool _view;
 
-    public ReactiveCommand<Unit, Unit> AssignGammaCommand { get; }
-    public ReactiveCommand<Unit, Unit> ConvertToGammaCommand { get; }
+    public GammaCorrectionToolViewModel(GammaCorrectionTool view, MainWindowViewModel parentViewModel)
+    {
+        _parentViewModel = parentViewModel;
+        _view = view;
+    }
 
     [Reactive] public string GammaValueString { get; set; } = "1";
     [Reactive] public float GammaValue { get; set; } = 1;
@@ -25,15 +27,6 @@ public class GammaCorrectionToolViewModel : BaseViewModel
     [Reactive] public bool IsVisible { get; set; } = false;
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
-
-    public GammaCorrectionToolViewModel(GammaCorrectionTool view, MainWindowViewModel parentViewModel)
-    {
-        AssignGammaCommand = ReactiveCommand.Create(AssignGamma);
-        ConvertToGammaCommand = ReactiveCommand.Create(ConvertToGamma);
-        _parentViewModel = parentViewModel;
-
-        _view = view;
-    }
 
     public Unit AssignGamma()
     {

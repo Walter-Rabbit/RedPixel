@@ -35,7 +35,7 @@
                     HorizontalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Command="{Binding AssignGammaCommand}" />
+                    Command="{Binding AssignGamma}" />
         </Grid>
         <Button Grid.Row="2"
                 Height="32"
@@ -44,7 +44,7 @@
                 HorizontalContentAlignment="Center"
                 HorizontalAlignment="Center"
                 VerticalContentAlignment="Center"
-                Command="{Binding ConvertToGammaCommand}" />
+                Command="{Binding ConvertToGamma}" />
         <Rectangle Grid.Row="3"
                    Height="1"
                    Margin="0,5,0,0"

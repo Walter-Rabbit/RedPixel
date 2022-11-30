@@ -51,7 +51,6 @@ namespace RedPixel.Ui.ViewModels
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
-
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()

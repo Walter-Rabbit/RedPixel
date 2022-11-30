@@ -7,6 +7,8 @@
         xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
+        ExtendClientAreaToDecorationsHint="True"
+        Background="#3c3f41"
         Icon="/Assets/avalonia-logo.ico"
         Title="RedPixel.Ui">
 
@@ -31,7 +33,7 @@
     </Window.Styles>
 
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" HorizontalAlignment="Left" Width="110" Height="30">
             <MenuItem Header="File">
                 <MenuItem
                     Header="Open"

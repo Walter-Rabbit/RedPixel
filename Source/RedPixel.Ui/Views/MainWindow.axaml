@@ -7,7 +7,7 @@
         xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
-        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
         ExtendClientAreaTitleBarHeightHint="40"
         Background="#3c3f41"
         Icon="/Assets/avalonia-logo.ico"

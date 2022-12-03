@@ -34,6 +34,9 @@
         <Style Selector="Window[WindowState=Maximized]">
             <Setter Property="Padding" Value="8" />
         </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
     </Window.Styles>
 
     <DockPanel>
@@ -50,47 +53,33 @@
                     Header="Save"
                     Command="{Binding SaveImageAsync}" />
             </MenuItem>
-            <MenuItem Header="Tools">
-                <CheckBox
-                    Content="Color Spaces"
-                    Command="{Binding SwitchColorSpaces}" />
-                <CheckBox
-                    Content="Gamma Correction"
-                    Command="{Binding SwitchGammaCorrection}" />
-                <CheckBox
-                    Content="Line Drawing"
-                    Command="{Binding SwitchLineDrawing}" />
-                <CheckBox
-                    Content="Dithering"
-                    Command="{Binding SwitchDithering}" />
-                <CheckBox
-                    Content="Utilities"
-                    Command="{Binding SwitchUtilities}" />
-            </MenuItem>
         </Menu>
         <ScrollViewer DockPanel.Dock="Right">
-            <StackPanel
-                Orientation="Vertical"
+            <TabControl
                 Classes="tools"
-                Width="200"
-                ZIndex="50"
-                IsVisible="{Binding ToolPanelIsVisible}">
-                <tools:ColorSpaceTool
-                    IsVisible="{Binding IsVisible}"
-                    DataContext="{Binding ColorSpaceToolViewModel}" />
-                <tools:GammaCorrectionTool
-                    IsVisible="{Binding IsVisible}"
-                    DataContext="{Binding GammaConversionToolViewModel }" />
-                <tools:LineDrawingTool
-                    IsVisible="{Binding IsVisible}"
-                    DataContext="{Binding LineDrawingToolViewModel }" />
-                <tools:DitheringTool
-                    IsVisible="{Binding IsVisible}"
-                    DataContext="{Binding DitheringToolViewModel }" />
-                <tools:UtilitiesTool
-                    IsVisible="{Binding IsVisible}"
-                    DataContext="{Binding UtilitiesToolViewModel }" />
-            </StackPanel>
+                Width="250"
+                ZIndex="50">
+                <TabItem Header="Color Space">
+                    <tools:ColorSpaceTool
+                        DataContext="{Binding ColorSpaceToolViewModel}" />
+                </TabItem>
+                <TabItem Header="Gamma correction">
+                    <tools:GammaCorrectionTool
+                        DataContext="{Binding GammaConversionToolViewModel }" />
+                </TabItem>
+                <TabItem Header="Line drawing">
+                    <tools:LineDrawingTool
+                        DataContext="{Binding LineDrawingToolViewModel }" />
+                </TabItem>
+                <TabItem Header="Dithering">
+                    <tools:DitheringTool
+                        DataContext="{Binding DitheringToolViewModel }" />
+                </TabItem>
+                <TabItem Header="Utility">
+                    <tools:UtilitiesTool
+                        DataContext="{Binding UtilitiesToolViewModel }" />
+                </TabItem>
+            </TabControl>
         </ScrollViewer>
         <Grid Classes="main"
               ZIndex="20">

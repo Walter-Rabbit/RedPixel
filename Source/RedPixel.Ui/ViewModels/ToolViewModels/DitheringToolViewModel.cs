@@ -38,8 +38,6 @@ public class DitheringToolViewModel : BaseViewModel
                 sw.Stop();
             });
     }
-
-    [Reactive] public bool IsVisible { get; set; } = false;
     [Reactive] public DitheringAlgorithms SelectedDitheringAlgorithm { get; set; }
     [Reactive] public string RString { get; set; } = "1";
     [Reactive] public string GString { get; set; } = "1";

@@ -117,55 +117,5 @@ namespace RedPixel.Ui.ViewModels
 
             return Unit.Default;
         }
-
-        private Unit SwitchColorSpaces()
-        {
-            ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchGammaCorrection()
-        {
-            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchLineDrawing()
-        {
-            LineDrawingToolViewModel.IsVisible = !LineDrawingToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchDithering()
-        {
-            DitheringToolViewModel.IsVisible = !DitheringToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchUtilities()
-        {
-            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private void SwitchToolPanel()
-        {
-            ToolPanelIsVisible =
-                ColorSpaceToolViewModel.IsVisible ||
-                GammaConversionToolViewModel.IsVisible ||
-                UtilitiesToolViewModel.IsVisible ||
-                DitheringToolViewModel.IsVisible ||
-                LineDrawingToolViewModel.IsVisible;
-        }
     }
 }

@@ -35,14 +35,14 @@
             <Setter Property="Padding" Value="8" />
         </Style>
         <Style Selector="TabItem">
-            <Setter Property="Padding" Value="0,0,10,0" />
+            <Setter Property="Padding" Value="10,0,0,0" />
             <Setter Property="Margin" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="#3c3f41" />
             <Setter Property="Width" Value="40" />
         </Style>
         <Style Selector="Image.tool">
-            <Setter Property="Width" Value="29" />
+            <Setter Property="Width" Value="36" />
             <Setter Property="Height" Value="36" />
         </Style>
     </Window.Styles>
@@ -69,7 +69,7 @@
                 BorderThickness="0"
                 Margin="0"
                 Padding="0"
-                TabStripPlacement="Left">
+                TabStripPlacement="Right">
                 <TabItem>
                     <TabItem.Header>
                         <Image ToolTip.Tip="Color Space"
@@ -117,8 +117,8 @@
                 </TabItem>
             </TabControl>
             <StackPanel Orientation="Horizontal">
-                <Grid Height="900" Width="40" Background="#3c3f41" />
                 <Grid Height="900" Width="200" Background="#2b2d30" />
+                <Grid Height="900" Width="40" Background="#3c3f41" />
             </StackPanel>
         </StackPanel>
         <Grid Classes="main"

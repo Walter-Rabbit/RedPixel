@@ -12,12 +12,12 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,40,20,50,2">
-        <TextBlock Grid.Row="0" Text="GenerateGradient:"
+        <TextBlock Grid.Row="0" Text="Line Drawing:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
 
         <dialog:ColorPickerButton Grid.Row="1"
-                                  Margin="5, 5, 5, 0"
+                                  Margin="0, 5, 0, 0"
                                   x:Name="ColorPicker"
                                   Color="#FFFF0000"
                                   Cursor="Hand"
@@ -25,7 +25,7 @@
 
         <TextBlock Grid.Row="2"
                    Text="{Binding Thickness, 
-                   StringFormat='Thinkness: {0}'}"
+                   StringFormat='Thickness: {0}'}"
                    Margin="10, 10, 0, 0" />
 
         <Slider
@@ -38,6 +38,6 @@
 
         <Rectangle Grid.Row="4"
                    Height="1"
-                   Fill="#1e1f22" />
+                   Fill="#3c3f41" />
     </Grid>
 </UserControl>

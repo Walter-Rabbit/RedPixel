@@ -85,6 +85,11 @@ public class LineDrawingToolViewModel : BaseViewModel
         }
     }
 
+    public void DrawingCanceled()
+    {
+        DrawingInProgress = false;
+    }
+
     public void ColorChanged(AvaloniaColor color)
     {
         SelectedColor = color;

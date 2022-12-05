@@ -45,5 +45,13 @@ namespace RedPixel.Ui.Views
             (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.PointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
         }
+
+        private void InputElement_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.DrawingCanceled();
+            }
+        }
     }
 }

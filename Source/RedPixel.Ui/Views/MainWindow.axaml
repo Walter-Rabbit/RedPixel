@@ -11,7 +11,8 @@
         ExtendClientAreaTitleBarHeightHint="40"
         Background="#3c3f41"
         Icon="/Assets/avalonia-logo.ico"
-        Title="RedPixel.Ui">
+        Title="RedPixel.Ui"
+        KeyDown="InputElement_OnKeyDown">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />

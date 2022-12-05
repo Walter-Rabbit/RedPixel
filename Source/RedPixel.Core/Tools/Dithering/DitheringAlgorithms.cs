@@ -9,7 +9,7 @@ public class DitheringAlgorithms
     public delegate void InFunc<TF, TS>(TF first, TS second);
 
     public static DitheringAlgorithms RawConversion = new DitheringAlgorithms(
-        "RawConversion",
+        "Raw Conversion",
         RawConversionDithering.ApplyDithering);
 
     public static DitheringAlgorithms RandomConversion = new DitheringAlgorithms(

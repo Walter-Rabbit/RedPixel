@@ -7,7 +7,7 @@ using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Dithering;
+using RedPixel.Core.Tools.Dithering;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
 
@@ -38,8 +38,6 @@ public class DitheringToolViewModel : BaseViewModel
                 sw.Stop();
             });
     }
-
-    [Reactive] public bool IsVisible { get; set; } = false;
     [Reactive] public DitheringAlgorithms SelectedDitheringAlgorithm { get; set; }
     [Reactive] public string RString { get; set; } = "1";
     [Reactive] public string GString { get; set; } = "1";

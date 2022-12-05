@@ -1,6 +1,6 @@
 ﻿using RedPixel.Core.Colors.ValueObjects;
 
-namespace RedPixel.Core.Dithering;
+namespace RedPixel.Core.Tools.Dithering;
 
 public abstract class ADitheringAlgo
 {

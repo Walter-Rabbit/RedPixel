@@ -2,7 +2,7 @@
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 
-namespace RedPixel.Core.Dithering.Utilities;
+namespace RedPixel.Core.Tools.Utilities;
 
 public class GradientGenerator
 {

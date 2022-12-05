@@ -2,7 +2,7 @@
 using System.Reactive;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors;
-using RedPixel.Core.Dithering.Utilities;
+using RedPixel.Core.Tools.Utilities;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
 
@@ -21,7 +21,6 @@ public class UtilitiesToolViewModel : BaseViewModel
 
     [Reactive] public string WidthString { get; set; } = "1920";
     [Reactive] public string HeightString { get; set; } = "1080";
-    [Reactive] public bool IsVisible { get; set; } = false;
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 

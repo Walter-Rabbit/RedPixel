@@ -4,5 +4,5 @@ namespace RedPixel.Core.Tools.Filtering;
 
 public interface IFiltering
 {
-    static abstract void ApplyFiltering(Bitmap bitmap);
+    static abstract void ApplyFiltering(Bitmap bitmap, float parameter);
 }

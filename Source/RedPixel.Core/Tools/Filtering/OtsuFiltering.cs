@@ -4,7 +4,7 @@ namespace RedPixel.Core.Tools.Filtering;
 
 public class OtsuFiltering : IFiltering
 {
-    public static void ApplyFiltering(Bitmap bitmap)
+    public static void ApplyFiltering(Bitmap bitmap, float _)
     {
         throw new NotImplementedException();
     }

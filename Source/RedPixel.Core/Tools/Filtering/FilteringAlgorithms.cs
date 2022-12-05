@@ -5,7 +5,7 @@ namespace RedPixel.Core.Tools.Filtering;
 
 public class FilteringAlgorithms
 {
-    public delegate void InFunc<TF>(TF first);
+    public delegate void InFunc<TF, TS>(TF first, TS second);
 
     public static FilteringAlgorithms Threshold = new(
         "Threshold Filtering",
@@ -37,7 +37,7 @@ public class FilteringAlgorithms
 
     public FilteringAlgorithms(
         string name,
-        InFunc<Bitmap> applyFiltering)
+        InFunc<Bitmap, float> applyFiltering)
     {
         Name = name;
         ApplyFiltering = applyFiltering;
@@ -45,7 +45,7 @@ public class FilteringAlgorithms
 
     public string Name { get; }
 
-    public InFunc<Bitmap> ApplyFiltering { get; }
+    public InFunc<Bitmap, float> ApplyFiltering { get; }
 
     public static Lazy<IEnumerable<FilteringAlgorithms>> AllAlgorithms => new(
         () => typeof(FilteringAlgorithms)

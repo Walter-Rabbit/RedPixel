@@ -120,7 +120,7 @@
                     <TabItem.Header>
                         <Image ToolTip.Tip="Filtering"
                                Classes="tool"
-                               Source="../Assets/utilities.png" />
+                               Source="../Assets/filtering.png" />
                     </TabItem.Header>
                     <tools:FilteringTool
                         DataContext="{Binding FilteringToolViewModel }" />

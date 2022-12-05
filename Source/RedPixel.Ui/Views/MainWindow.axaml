@@ -101,7 +101,8 @@
                     <TabItem.Header>
                         <Image ToolTip.Tip="Disering"
                                Classes="tool"
-                               Source="../Assets/disering.png" />
+                               Source="../Assets/disering.png"
+                               RenderOptions.BitmapInterpolationMode="HighQuality" />
                     </TabItem.Header>
                     <tools:DitheringTool
                         DataContext="{Binding DitheringToolViewModel }" />

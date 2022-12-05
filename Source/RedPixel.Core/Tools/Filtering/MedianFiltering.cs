@@ -1,11 +1,12 @@
-﻿using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
+﻿using System.Drawing;
+using Bitmap = RedPixel.Core.Models.Bitmap;
+using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Tools.Filtering;
 
 public class MedianFiltering : IFiltering
 {
-    public static Bitmap ApplyFiltering(Bitmap bitmap, float coreRadius)
+    public static Bitmap ApplyFiltering(Bitmap bitmap, float coreRadius, Point leftTopPoint, Point rightBottomPoint)
     {
         var capacity = (int)((2 * coreRadius + 1) * (2 * coreRadius + 1));
         var areaPixels = new List<float[]>
@@ -15,12 +16,13 @@ public class MedianFiltering : IFiltering
             new float[capacity],
         };
         var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
+        newBitmap.Matrix = bitmap.Matrix.Clone() as Color[,];
 
         var radius = (int)Math.Round(coreRadius);
 
-        for (var i = 0; i < bitmap.Width; i++)
+        for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
         {
-            for (var j = 0; j < bitmap.Height; j++)
+            for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
             {
                 GetAreaPixels(bitmap, i, j, radius, areaPixels);
 

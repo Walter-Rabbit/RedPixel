@@ -13,7 +13,7 @@ public class Bitmap
         Matrix = new Color[height, width];
     }
 
-    public Color[,] Matrix { get; }
+    public Color[,] Matrix { get; set; }
 
     public ColorSpaces ColorSpace { get; private set; }
 

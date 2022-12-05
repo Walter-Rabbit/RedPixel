@@ -14,6 +14,7 @@ using RedPixel.Core.ImageParsers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
+using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
 
 namespace RedPixel.Ui.ViewModels
@@ -31,6 +32,7 @@ namespace RedPixel.Ui.ViewModels
             DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
             FilteringToolViewModel = new FilteringToolViewModel(_view.FilteringTool, this);
+            SelectionViewModel = new SelectionViewModel(_view.Selection, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -57,6 +59,7 @@ namespace RedPixel.Ui.ViewModels
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
         public FilteringToolViewModel FilteringToolViewModel { get; set; }
+        public SelectionViewModel SelectionViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
         {

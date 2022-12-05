@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reactive;
@@ -59,10 +60,59 @@ public class FilteringToolViewModel : BaseViewModel
     public Unit ApplyFiltering()
     {
         var parameter = Convert.ToSingle(Parameter);
-        
-        _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(_parentViewModel.Image, parameter);
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
-            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+
+        if (_parentViewModel.SelectionViewModel.IsSelected)
+        {
+            var (leftTopPoint, rightBottomPoint) = GetCornerPoints();
+
+            _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _parentViewModel.Image,
+                parameter,
+                leftTopPoint,
+                rightBottomPoint);
+            _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+                _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+        }
+        else
+        {
+            _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _parentViewModel.Image,
+                parameter,
+                new Point(0, 0),
+                new Point(_parentViewModel.Image.Width - 1, _parentViewModel.Image.Height - 1));
+            _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+                _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+        }
+
         return Unit.Default;
+    }
+
+    private (Point, Point) GetCornerPoints()
+    {
+        var points = new[]
+        {
+            _parentViewModel.SelectionViewModel.RealFirstPoint,
+            _parentViewModel.SelectionViewModel.RealSecondPoint,
+            _parentViewModel.SelectionViewModel.RealThirdPoint,
+            _parentViewModel.SelectionViewModel.RealFourthPoint
+        };
+
+        var leftTopPoint = new Point((int)points[0].X, (int)points[0].Y);
+        var rightBottomPoint = new Point((int)points[0].X, (int)points[0].Y);
+
+        for (var i = 0; i < 4; i++)
+        {
+            if (points[i].X < leftTopPoint.X && points[i].Y < leftTopPoint.Y)
+            {
+                leftTopPoint = new Point((int)points[i].X, (int)points[i].Y);
+            }
+
+            if (points[i].X > rightBottomPoint.X && points[i].Y > rightBottomPoint.Y)
+            {
+                rightBottomPoint = new Point((int)points[i].X, (int)points[i].Y);
+            }
+        }
+
+        return (leftTopPoint, rightBottomPoint);
     }
 }

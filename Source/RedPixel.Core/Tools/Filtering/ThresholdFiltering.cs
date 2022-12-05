@@ -1,15 +1,16 @@
-﻿using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
+﻿using System.Drawing;
+using Bitmap = RedPixel.Core.Models.Bitmap;
+using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Tools.Filtering;
 
 public class ThresholdFiltering : IFiltering
 {
-    public static Bitmap ApplyFiltering(Bitmap bitmap, float threshold)
+    public static Bitmap ApplyFiltering(Bitmap bitmap, float threshold, Point leftTopPoint, Point rightBottomPoint)
     {
-        for (var i = 0; i < bitmap.Width; i++)
+        for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
         {
-            for (var j = 0; j < bitmap.Height; j++)
+            for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
             {
                 var fc = bitmap.GetPixel(i, j).FirstComponent > threshold ? 255 : 0;
                 var sc = bitmap.GetPixel(i, j).SecondComponent > threshold ? 255 : 0;

@@ -1,0 +1,45 @@
+﻿<Canvas xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="RedPixel.Ui.Views.Utilities.Selection"
+        xmlns:uvm="using:RedPixel.Ui.ViewModels.UtilitiesViewModels">
+
+    <Design.DataContext>
+        <uvm:SelectionViewModel />
+    </Design.DataContext>
+
+    <Line
+        Stroke="Black"
+        IsVisible="{Binding IsSelecting}"
+        StrokeDashArray="3,3"
+        StrokeThickness="3"
+        IsHitTestVisible="False"
+        StartPoint="{Binding SelectionFirstPoint}"
+        EndPoint="{Binding SelectionSecondPoint}" />
+    <Line
+        Stroke="Black"
+        IsVisible="{Binding IsSelecting}"
+        StrokeDashArray="3,3"
+        StrokeThickness="3"
+        IsHitTestVisible="False"
+        StartPoint="{Binding SelectionSecondPoint}"
+        EndPoint="{Binding SelectionThirdPoint}" />
+    <Line
+        Stroke="Black"
+        IsVisible="{Binding IsSelecting}"
+        StrokeDashArray="3,3"
+        StrokeThickness="3"
+        IsHitTestVisible="False"
+        StartPoint="{Binding SelectionThirdPoint}"
+        EndPoint="{Binding SelectionFourthPoint}" />
+    <Line
+        IsVisible="{Binding IsSelecting}"
+        Stroke="Black"
+        StrokeDashArray="3,3"
+        StrokeThickness="3"
+        IsHitTestVisible="False"
+        StartPoint="{Binding SelectionFourthPoint}"
+        EndPoint="{Binding SelectionFirstPoint}" />
+</Canvas>

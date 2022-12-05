@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
         xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
+        xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
         ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
@@ -156,6 +157,7 @@
                             EndPoint="{Binding EndPoint}"
                             IsVisible="{Binding DrawingInProgress}"
                             DataContext="{Binding LineDrawingToolViewModel}" />
+                        <utilities:Selection DataContext="{Binding SelectionViewModel}"/>
                     </Canvas>
 
                 </ZoomBorder>

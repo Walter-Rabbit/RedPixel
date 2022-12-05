@@ -115,6 +115,15 @@
                     <tools:UtilitiesTool
                         DataContext="{Binding UtilitiesToolViewModel }" />
                 </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <Image ToolTip.Tip="Filtering"
+                               Classes="tool"
+                               Source="../Assets/utilities.png" />
+                    </TabItem.Header>
+                    <tools:FilteringTool
+                        DataContext="{Binding FilteringToolViewModel }" />
+                </TabItem>
             </TabControl>
             <StackPanel Orientation="Horizontal">
                 <Grid Height="900" Width="200" Background="#2b2d30" />

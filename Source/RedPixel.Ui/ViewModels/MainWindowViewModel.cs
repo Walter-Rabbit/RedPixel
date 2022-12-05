@@ -30,6 +30,7 @@ namespace RedPixel.Ui.ViewModels
             LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
             DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
+            FilteringToolViewModel = new FilteringToolViewModel(_view.FilteringTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -55,6 +56,7 @@ namespace RedPixel.Ui.ViewModels
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
+        public FilteringToolViewModel FilteringToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
         {

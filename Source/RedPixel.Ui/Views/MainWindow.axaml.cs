@@ -8,12 +8,6 @@ namespace RedPixel.Ui.Views
 {
     public partial class MainWindow : Window
     {
-        public ColorSpaceTool ColorSpaceTool { get; }
-        public GammaCorrectionTool GammaCorrectionTool { get; }
-        public DitheringTool DitheringTool { get; }
-        public UtilitiesTool UtilitiesTool { get; }
-        public LineDrawingTool LineDrawingTool { get; }
-
         public MainWindow()
         {
             DataContext = new MainWindowViewModel(this);
@@ -22,9 +16,17 @@ namespace RedPixel.Ui.Views
             ColorSpaceTool = new ColorSpaceTool();
             GammaCorrectionTool = new GammaCorrectionTool();
             LineDrawingTool = new LineDrawingTool();
+            FilteringTool = new FilteringTool();
             DataContext = new MainWindowViewModel(this);
             InitializeComponent();
         }
+
+        public ColorSpaceTool ColorSpaceTool { get; }
+        public GammaCorrectionTool GammaCorrectionTool { get; }
+        public DitheringTool DitheringTool { get; }
+        public UtilitiesTool UtilitiesTool { get; }
+        public LineDrawingTool LineDrawingTool { get; }
+        public FilteringTool FilteringTool { get; }
 
         private void InputElement_OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
@@ -36,7 +38,8 @@ namespace RedPixel.Ui.Views
 
             var previewPosition = e.GetPosition((IVisual)e.Source.InteractiveParent);
 
-            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount, previewPosition);
+            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount,
+                previewPosition);
         }
     }
 }

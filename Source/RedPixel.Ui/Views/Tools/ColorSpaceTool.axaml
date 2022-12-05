@@ -55,6 +55,6 @@
         </Grid>
         <Rectangle Grid.Row="3"
                    Height="1"
-                   Fill="#1e1f22" />
+                   Fill="#3c3f41" />
     </Grid>
 </UserControl>

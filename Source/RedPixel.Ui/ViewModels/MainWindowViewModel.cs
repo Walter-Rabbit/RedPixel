@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using ReactiveUI;
@@ -41,17 +42,18 @@ namespace RedPixel.Ui.ViewModels
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
+
+            ExtendClientAreaToDecorationsHint = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         [Reactive] public Bitmap Image { get; set; }
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
-        [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
+        [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
-
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
@@ -113,56 +115,6 @@ namespace RedPixel.Ui.ViewModels
                     ColorSpaceToolViewModel.ColorComponents);
 
             return Unit.Default;
-        }
-
-        private Unit SwitchColorSpaces()
-        {
-            ColorSpaceToolViewModel.IsVisible = !ColorSpaceToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchGammaCorrection()
-        {
-            GammaConversionToolViewModel.IsVisible = !GammaConversionToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchLineDrawing()
-        {
-            LineDrawingToolViewModel.IsVisible = !LineDrawingToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchDithering()
-        {
-            DitheringToolViewModel.IsVisible = !DitheringToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private Unit SwitchUtilities()
-        {
-            UtilitiesToolViewModel.IsVisible = !UtilitiesToolViewModel.IsVisible;
-            SwitchToolPanel();
-
-            return Unit.Default;
-        }
-
-        private void SwitchToolPanel()
-        {
-            ToolPanelIsVisible =
-                ColorSpaceToolViewModel.IsVisible ||
-                GammaConversionToolViewModel.IsVisible ||
-                UtilitiesToolViewModel.IsVisible ||
-                DitheringToolViewModel.IsVisible ||
-                LineDrawingToolViewModel.IsVisible;
         }
     }
 }

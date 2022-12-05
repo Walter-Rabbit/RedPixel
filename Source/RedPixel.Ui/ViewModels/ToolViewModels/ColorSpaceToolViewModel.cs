@@ -55,7 +55,6 @@ public class ColorSpaceToolViewModel : BaseViewModel
     [Reactive] public ColorComponents ColorComponents { get; set; } = ColorComponents.All;
     [Reactive] public ColorSpaces SelectedColorSpace { get; set; }
     [Reactive] public bool[] EnabledComponents { get; set; }
-    [Reactive] public bool IsVisible { get; set; } = false;
 
     public IEnumerable<ColorSpaces> AllColorSpaces { get; set; } = ColorSpaces.AllSpaces.Value;
 

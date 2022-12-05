@@ -24,7 +24,6 @@ public class LineDrawingToolViewModel : BaseViewModel
     [Reactive] public AvaloniaColor SelectedColor { get; set; } = Colors.Red;
     [Reactive] public bool DrawingInProgress { get; set; } = false;
     [Reactive] public int Thickness { get; set; } = 1;
-    [Reactive] public bool IsVisible { get; set; } = false;
     [Reactive] public Point StartPoint1 { get; set; }
     [Reactive] public Point StartPoint2 { get; set; }
     [Reactive] public Point EndPoint1 { get; set; }

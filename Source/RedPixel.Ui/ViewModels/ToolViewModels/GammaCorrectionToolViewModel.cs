@@ -24,7 +24,6 @@ public class GammaCorrectionToolViewModel : BaseViewModel
     [Reactive] public string GammaValueString { get; set; } = "1";
     [Reactive] public float GammaValue { get; set; } = 1;
     [Reactive] public string ConvertGammaMessage { get; set; } = "Convert γ";
-    [Reactive] public bool IsVisible { get; set; } = false;
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 

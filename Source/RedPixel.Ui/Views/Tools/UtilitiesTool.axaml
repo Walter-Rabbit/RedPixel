@@ -11,7 +11,7 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,80,40,40,2">
-        <TextBlock Grid.Row="0" Text="GenerateGradient:"
+        <TextBlock Grid.Row="0" Text="Generate Gradient:"
                    HorizontalAlignment="Left"
                    Margin="10, 10, 0, 0" />
 
@@ -68,6 +68,6 @@
 
         <Rectangle Grid.Row="4"
                    Height="1"
-                   Fill="#1e1f22" />
+                   Fill="#3c3f41" />
     </Grid>
 </UserControl>

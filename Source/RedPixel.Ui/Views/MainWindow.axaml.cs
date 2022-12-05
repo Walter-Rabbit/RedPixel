@@ -8,12 +8,6 @@ namespace RedPixel.Ui.Views
 {
     public partial class MainWindow : Window
     {
-        public ColorSpaceTool ColorSpaceTool { get; }
-        public GammaCorrectionTool GammaCorrectionTool { get; }
-        public DitheringTool DitheringTool { get; }
-        public UtilitiesTool UtilitiesTool { get; }
-        public LineDrawingTool LineDrawingTool { get; }
-
         public MainWindow()
         {
             DataContext = new MainWindowViewModel(this);

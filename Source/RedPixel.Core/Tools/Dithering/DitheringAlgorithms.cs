@@ -2,7 +2,7 @@
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
 
-namespace RedPixel.Core.Dithering;
+namespace RedPixel.Core.Tools.Dithering;
 
 public class DitheringAlgorithms
 {

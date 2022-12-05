@@ -48,7 +48,6 @@ namespace RedPixel.Ui.ViewModels
 
         [Reactive] public Bitmap Image { get; set; }
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
-        [Reactive] public bool ToolPanelIsVisible { get; set; } = false;
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }

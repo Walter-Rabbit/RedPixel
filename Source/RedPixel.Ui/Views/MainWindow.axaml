@@ -130,6 +130,7 @@
                     <Canvas>
                         <Image
                             PointerPressed="InputElement_OnPointerPressed"
+                            PointerMoved="InputElement_OnPointerMoved"
                             UseLayoutRounding="False"
                             Margin="30"
                             VerticalAlignment="Center"
@@ -138,17 +139,11 @@
                             Stretch="Uniform"
                             RenderOptions.BitmapInterpolationMode="Default" />
                         <Line
-                            Stroke="Red"
-                            StrokeThickness="4"
-                            StartPoint="{Binding StartPoint1}"
-                            EndPoint="{Binding EndPoint1}"
-                            IsVisible="{Binding DrawingInProgress}"
-                            DataContext="{Binding LineDrawingToolViewModel}" />
-                        <Line
-                            Stroke="Red"
-                            StrokeThickness="4"
-                            StartPoint="{Binding StartPoint2}"
-                            EndPoint="{Binding EndPoint2}"
+                            Stroke="{Binding AvaloniaColor}"
+                            StrokeThickness="{Binding Thickness}"
+                            IsHitTestVisible="False"
+                            StartPoint="{Binding StartPoint}"
+                            EndPoint="{Binding EndPoint}"
                             IsVisible="{Binding DrawingInProgress}"
                             DataContext="{Binding LineDrawingToolViewModel}" />
                     </Canvas>

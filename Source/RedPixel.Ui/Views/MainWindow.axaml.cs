@@ -36,7 +36,14 @@ namespace RedPixel.Ui.Views
 
             var previewPosition = e.GetPosition((IVisual)e.Source.InteractiveParent);
 
-            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount, previewPosition);
+            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount,
+                previewPosition);
+        }
+
+        private void InputElement_OnPointerMoved(object sender, PointerEventArgs e)
+        {
+            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.PointerMoved(
+                e.GetPosition((IVisual)e.Source.InteractiveParent));
         }
     }
 }

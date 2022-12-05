@@ -7,7 +7,7 @@ using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Dithering;
+using RedPixel.Core.Tools.Dithering;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.Views.Tools;
 

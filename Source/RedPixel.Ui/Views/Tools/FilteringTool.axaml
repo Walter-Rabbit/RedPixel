@@ -40,7 +40,7 @@
                     Height="30"
                     Width="65"
                     HorizontalAlignment="Right"
-                    Maximum="255"
+                    Maximum="{Binding MaxParameter}"
                     Minimum="0"
                     Value="0"
                     ShowButtonSpinner="False"

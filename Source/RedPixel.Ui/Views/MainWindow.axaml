@@ -109,21 +109,21 @@
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
-                        <Image ToolTip.Tip="Utilities"
-                               Classes="tool"
-                               Source="../Assets/utilities.png" />
-                    </TabItem.Header>
-                    <tools:UtilitiesTool
-                        DataContext="{Binding UtilitiesToolViewModel }" />
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
                         <Image ToolTip.Tip="Filtering"
                                Classes="tool"
                                Source="../Assets/filtering.png" />
                     </TabItem.Header>
                     <tools:FilteringTool
                         DataContext="{Binding FilteringToolViewModel }" />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <Image ToolTip.Tip="Utilities"
+                               Classes="tool"
+                               Source="../Assets/utilities.png" />
+                    </TabItem.Header>
+                    <tools:UtilitiesTool
+                        DataContext="{Binding UtilitiesToolViewModel }" />
                 </TabItem>
             </TabControl>
             <StackPanel Orientation="Horizontal">

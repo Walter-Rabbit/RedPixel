@@ -25,6 +25,7 @@ public class FilteringToolViewModel : BaseViewModel
         SelectedFilteringAlgorithm = FilteringAlgorithms.Threshold;
         ParameterName = FilteringAlgorithms.Threshold.ParameterName;
         IsParameterVisible = true;
+        MaxParameter = FilteringAlgorithms.Threshold.MaxParameter;
 
         this.WhenAnyValue(x => x.SelectedFilteringAlgorithm)
             .Subscribe(x =>
@@ -35,6 +36,7 @@ public class FilteringToolViewModel : BaseViewModel
                 SelectedFilteringAlgorithm = x;
                 ParameterName = x.ParameterName + ":";
                 IsParameterVisible = x.ParameterName != "";
+                MaxParameter = x.MaxParameter;
 
                 File.AppendAllText(
                     "log.txt",
@@ -44,9 +46,10 @@ public class FilteringToolViewModel : BaseViewModel
     }
 
     [Reactive] public FilteringAlgorithms SelectedFilteringAlgorithm { get; set; }
-    [Reactive] public float Parameter { get; set; } = 0;
+    [Reactive] public string Parameter { get; set; } = "0";
     [Reactive] public string ParameterName { get; set; }
     [Reactive] public bool IsParameterVisible { get; set; }
+    [Reactive] public string MaxParameter { get; set; }
 
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 
@@ -55,7 +58,9 @@ public class FilteringToolViewModel : BaseViewModel
 
     public Unit ApplyFiltering()
     {
-        SelectedFilteringAlgorithm.ApplyFiltering(_parentViewModel.Image, Parameter);
+        var parameter = Convert.ToSingle(Parameter);
+        
+        _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(_parentViewModel.Image, parameter);
         _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;

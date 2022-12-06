@@ -59,7 +59,7 @@ public class FilteringToolViewModel : BaseViewModel
 
     public Unit ApplyFiltering()
     {
-        var parameter = Convert.ToSingle(Parameter);
+        var parameter = Convert.ToSingle(Parameter, CultureInfo.InvariantCulture);
 
         if (_parentViewModel.SelectionViewModel.IsSelected)
         {

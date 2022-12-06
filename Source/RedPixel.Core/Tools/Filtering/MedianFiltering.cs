@@ -24,7 +24,7 @@ public class MedianFiltering : IFiltering
         {
             for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
             {
-                IFiltering.GetAreaPixels(bitmap, i, j, radius, areaPixels);
+                IFiltering.GetAreaPixels(bitmap, i, j, radius, areaPixels, leftTopPoint, rightBottomPoint);
 
                 Array.Sort(areaPixels[0]);
                 Array.Sort(areaPixels[1]);

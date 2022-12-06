@@ -7,8 +7,15 @@ namespace RedPixel.Core.Tools.Filtering;
 public interface IFiltering
 {
     static abstract Bitmap ApplyFiltering(Bitmap bitmap, float parameter, Point leftTopPoint, Point rightBottomPoint);
-    
-    protected static void GetAreaPixels(Bitmap bitmap, int x, int y, int radius, List<float[]> areaPixels)
+
+    protected static void GetAreaPixels(
+        Bitmap bitmap,
+        int x,
+        int y,
+        int radius,
+        List<float[]> areaPixels,
+        Point leftTopPoint,
+        Point rightBottomPoint)
     {
         var leftX = x - radius;
         var leftY = y - radius;
@@ -20,7 +27,7 @@ public interface IFiltering
         {
             for (int j = leftY, ky = 0; j <= rightY; j++, ky++)
             {
-                var pixel = GetClosestPixel(bitmap, i, j);
+                var pixel = GetClosestPixel(bitmap, i, j, leftTopPoint, rightBottomPoint);
                 var index = 2 * radius * kx + ky;
                 areaPixels[0][index] = pixel.FirstComponent;
                 areaPixels[1][index] = pixel.SecondComponent;
@@ -28,25 +35,25 @@ public interface IFiltering
             }
         }
     }
-    
-    protected static Color GetClosestPixel(Bitmap bitmap, int x, int y)
+
+    protected static Color GetClosestPixel(Bitmap bitmap, int x, int y, Point leftTopPoint, Point rightBottomPoint)
     {
-        if (x < 0)
+        if (x < leftTopPoint.X)
         {
-            x = 0;
+            x = leftTopPoint.X;
         }
-        else if (x >= bitmap.Width)
+        else if (x > rightBottomPoint.X)
         {
-            x = bitmap.Width - 1;
+            x = rightBottomPoint.X;
         }
 
-        if (y < 0)
+        if (y < leftTopPoint.Y)
         {
-            y = 0;
+            y = leftTopPoint.Y;
         }
-        else if (y >= bitmap.Height)
+        else if (y > rightBottomPoint.Y)
         {
-            y = bitmap.Height - 1;
+            y = rightBottomPoint.Y;
         }
 
         return bitmap.GetPixel(x, y);

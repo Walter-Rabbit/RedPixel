@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using Bitmap = RedPixel.Core.Models.Bitmap;
-using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Tools.Filtering;
 
@@ -8,71 +7,42 @@ public class GaussianFiltering : IFiltering
 {
     public static Bitmap ApplyFiltering(Bitmap bitmap, float sigma, Point leftTopPoint, Point rightBottomPoint)
     {
-        var coreRadius = (int)Math.Round(3 * sigma);
-        var capacity = (2 * coreRadius + 1) * (2 * coreRadius + 1);
-        var areaPixels = new List<float[]>
-        {
-            new float[capacity],
-            new float[capacity],
-            new float[capacity],
-        };
-        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
-        newBitmap.Matrix = bitmap.Matrix.Clone() as Color[,];
+        var kernel = CalculateGaussianKernel(sigma);
 
-        for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
-        {
-            for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
-            {
-                GetAreaPixels(bitmap, i, j, coreRadius, sigma, areaPixels, leftTopPoint, rightBottomPoint);
-
-                var fc = areaPixels[0].Sum();
-                var sc = areaPixels[1].Sum();
-                var tc = areaPixels[2].Sum();
-
-                newBitmap.SetPixel(i, j, new Color(fc, sc, tc));
-            }
-        }
-
-        return newBitmap;
+        return IFiltering.Convolution(bitmap, kernel);
     }
 
-    private static void GetAreaPixels(
-        Bitmap bitmap,
-        int x,
-        int y,
-        int radius,
-        float sigma,
-        List<float[]> areaPixels,
-        Point leftTopPoint,
-        Point rightBottomPoint)
+    private static float[,] CalculateGaussianKernel(float sigma)
     {
-        var leftX = x - radius;
-        var leftY = y - radius;
+        var coreRadius = (int)Math.Round(3 * sigma);
+        var kernelWidth = 2 * coreRadius + 1;
 
-        var rightX = x + radius;
-        var rightY = y + radius;
+        var kernel = new float[kernelWidth, kernelWidth];
+        var kernelSum = 0f;
 
-        var coefficient1 = 1f / (2f * Math.PI * sigma * sigma);
-        var coefficient3 = 2 * sigma * sigma;
-
-        for (int i = leftX, kx = 0; i <= rightX; i++, kx++)
+        for (var i = -coreRadius; i <= coreRadius; i++)
         {
-            for (int j = leftY, ky = 0; j <= rightY; j++, ky++)
+            for (var j = -coreRadius; j <= coreRadius; j++)
             {
-                var pixel = IFiltering.GetClosestPixel(bitmap, i, j, leftTopPoint, rightBottomPoint);
+                var exponentNumerator = -(i * i + j * j);
+                var exponentDenominator = 2 * sigma * sigma;
 
-                var d = Math.Sqrt(Math.Pow(i - x, 2) + Math.Pow(j - y, 2));
-                var coefficient = coefficient1 * Math.Pow(Math.E, -(d * d) / coefficient3);
+                var eExpression = Math.Pow(Math.E, exponentNumerator / exponentDenominator);
+                var value = (float)(eExpression / (2 * Math.PI * sigma * sigma));
 
-                var fc = (int)Math.Round(pixel.FirstComponent * coefficient);
-                var sc = (int)Math.Round(pixel.SecondComponent * coefficient);
-                var tc = (int)Math.Round(pixel.ThirdComponent * coefficient);
-
-                var index = 2 * radius * kx + ky;
-                areaPixels[0][index] = fc;
-                areaPixels[1][index] = sc;
-                areaPixels[2][index] = tc;
+                kernel[i + coreRadius, j + coreRadius] = value;
+                kernelSum += value;
             }
         }
+
+        for (var i = 0; i < kernelWidth; i++)
+        {
+            for (var j = 0; j < kernelWidth; j++)
+            {
+                kernel[i, j] /= kernelSum;
+            }
+        }
+
+        return kernel;
     }
 }

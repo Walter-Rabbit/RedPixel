@@ -58,4 +58,64 @@ public interface IFiltering
 
         return bitmap.GetPixel(x, y);
     }
+
+    protected static Bitmap Convolution(Bitmap bitmap, float[,] kernel)
+    {
+        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
+
+        var kernelWidth = kernel.GetLength(0);
+        var kernelHeight = kernel.GetLength(1);
+
+        for (var x = 0; x < bitmap.Width; x++)
+        {
+            for (var y = 0; y < bitmap.Height; y++)
+            {
+                float fcSum = 0, scSum = 0, tcSum = 0, kSum = 0;
+
+                for (var i = 0; i < kernelWidth; i++)
+                {
+                    for (var j = 0; j < kernelHeight; j++)
+                    {
+                        var pixelPosX = x + (i - kernelWidth / 2);
+                        var pixelPosY = y + (j - kernelHeight / 2);
+                        if (pixelPosX < 0 || pixelPosX >= bitmap.Width || pixelPosY < 0 || pixelPosY >= bitmap.Height)
+                        {
+                            continue;
+                        }
+
+                        var pixel = bitmap.GetPixel(pixelPosX, pixelPosY);
+                        var kernelVal = kernel[i, j];
+
+                        fcSum += pixel.FirstComponent * kernelVal;
+                        scSum += pixel.SecondComponent * kernelVal;
+                        tcSum += pixel.ThirdComponent * kernelVal;
+
+                        kSum += kernelVal;
+                    }
+                }
+
+                if (kSum <= 0)
+                {
+                    kSum = 1;
+                }
+
+                fcSum /= kSum;
+                fcSum = fcSum < 0 ? 0 : fcSum;
+                fcSum = fcSum > 255 ? 255 : fcSum;
+                
+                scSum /= kSum;
+                scSum = scSum < 0 ? 0 : scSum;
+                scSum = scSum > 255 ? 255 : scSum;
+                
+                tcSum /= kSum;
+                tcSum = tcSum < 0 ? 0 : tcSum;
+                tcSum = tcSum > 255 ? 255 : tcSum;
+                
+                var newPixel = new Color(fcSum, scSum, tcSum);
+                newBitmap.SetPixel(x, y, newPixel);
+            }
+        }
+
+        return newBitmap;
+    }
 }

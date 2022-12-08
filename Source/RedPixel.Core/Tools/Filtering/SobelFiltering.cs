@@ -21,23 +21,26 @@ public class SobelFiltering : IFiltering
             { -1f, 0f, 1f }
         };
 
-        var horizontalBitmap = IFiltering.Convolution(bitmap, horizontalKernel);
-        var verticalBitmap = IFiltering.Convolution(bitmap, verticalKernel);
-        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
-
-        for (var x = 0; x < newBitmap.Width; x++)
+        var horizontalBitmap = IFiltering.Convolution(bitmap, horizontalKernel, leftTopPoint, rightBottomPoint);
+        var verticalBitmap = IFiltering.Convolution(bitmap, verticalKernel, leftTopPoint, rightBottomPoint);
+        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace)
         {
-            for (var y = 0; y < newBitmap.Height; y++)
+            Matrix = bitmap.Matrix.Clone() as Color[,]
+        };
+
+        for (var x = leftTopPoint.X; x < rightBottomPoint.X; x++)
+        {
+            for (var y = leftTopPoint.Y; y < rightBottomPoint.Y; y++)
             {
-                var fc = (float)Math.Sqrt(
+                var fc = (float) Math.Sqrt(
                     Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
                     Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
 
-                var sc = (float)Math.Sqrt(
+                var sc = (float) Math.Sqrt(
                     Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
                     Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
 
-                var tc = (float)Math.Sqrt(
+                var tc = (float) Math.Sqrt(
                     Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
                     Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
 

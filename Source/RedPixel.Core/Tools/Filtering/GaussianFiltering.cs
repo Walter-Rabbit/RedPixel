@@ -9,7 +9,7 @@ public class GaussianFiltering : IFiltering
     {
         var kernel = CalculateGaussianKernel(sigma);
 
-        return IFiltering.Convolution(bitmap, kernel);
+        return IFiltering.Convolution(bitmap, kernel, leftTopPoint, rightBottomPoint);
     }
 
     private static float[,] CalculateGaussianKernel(float sigma)

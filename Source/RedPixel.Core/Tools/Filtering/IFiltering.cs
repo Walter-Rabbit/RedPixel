@@ -59,16 +59,19 @@ public interface IFiltering
         return bitmap.GetPixel(x, y);
     }
 
-    protected static Bitmap Convolution(Bitmap bitmap, float[,] kernel)
+    protected static Bitmap Convolution(Bitmap bitmap, float[,] kernel, Point leftTopPoint, Point rightBottomPoint)
     {
-        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
+        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace)
+        {
+            Matrix = bitmap.Matrix.Clone() as Color[,]
+        };
 
         var kernelWidth = kernel.GetLength(0);
         var kernelHeight = kernel.GetLength(1);
 
-        for (var x = 0; x < bitmap.Width; x++)
+        for (var x = leftTopPoint.X; x <= rightBottomPoint.X; x++)
         {
-            for (var y = 0; y < bitmap.Height; y++)
+            for (var y = leftTopPoint.Y; y <= rightBottomPoint.Y; y++)
             {
                 float fcSum = 0, scSum = 0, tcSum = 0, kSum = 0;
 
@@ -102,15 +105,15 @@ public interface IFiltering
                 fcSum /= kSum;
                 fcSum = fcSum < 0 ? 0 : fcSum;
                 fcSum = fcSum > 255 ? 255 : fcSum;
-                
+
                 scSum /= kSum;
                 scSum = scSum < 0 ? 0 : scSum;
                 scSum = scSum > 255 ? 255 : scSum;
-                
+
                 tcSum /= kSum;
                 tcSum = tcSum < 0 ? 0 : tcSum;
                 tcSum = tcSum > 255 ? 255 : tcSum;
-                
+
                 var newPixel = new Color(fcSum, scSum, tcSum);
                 newBitmap.SetPixel(x, y, newPixel);
             }

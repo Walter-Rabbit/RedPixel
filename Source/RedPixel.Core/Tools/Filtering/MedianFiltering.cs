@@ -8,7 +8,7 @@ public class MedianFiltering : IFiltering
 {
     public static Bitmap ApplyFiltering(Bitmap bitmap, float coreRadius, Point leftTopPoint, Point rightBottomPoint)
     {
-        var radius = (int)Math.Round(coreRadius);
+        var radius = (int) Math.Round(coreRadius);
         var capacity = (2 * radius + 1) * (2 * radius + 1);
         var areaPixels = new List<float[]>
         {
@@ -16,8 +16,10 @@ public class MedianFiltering : IFiltering
             new float[capacity],
             new float[capacity],
         };
-        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace);
-        newBitmap.Matrix = bitmap.Matrix.Clone() as Color[,];
+        var newBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.BytesForColor, bitmap.ColorSpace)
+        {
+            Matrix = bitmap.Matrix.Clone() as Color[,]
+        };
 
         for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
         {

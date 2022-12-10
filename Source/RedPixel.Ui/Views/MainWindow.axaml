@@ -62,8 +62,9 @@
                     Command="{Binding SaveImageAsync}" />
             </MenuItem>
         </Menu>
-        <StackPanel DockPanel.Dock="Right">
+        <Grid RowDefinitions="Auto, *, Auto" ColumnDefinitions="200,40" DockPanel.Dock="Right">
             <TabControl
+                Grid.ColumnSpan="2"
                 Classes="tools"
                 Width="240"
                 BorderThickness="0"
@@ -117,11 +118,10 @@
                         DataContext="{Binding UtilitiesToolViewModel }" />
                 </TabItem>
             </TabControl>
-            <StackPanel Orientation="Horizontal">
-                <Grid Height="900" Width="200" Background="#2b2d30" />
-                <Grid Height="900" Width="40" Background="#3c3f41" />
-            </StackPanel>
-        </StackPanel>
+            <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#2b2d30" />
+                <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40" Background="#3c3f41" />
+            <tools:UtilitiesTool Background="#2b2d30" Grid.Column="0" Grid.Row="2" DataContext="{Binding UtilitiesToolViewModel }" />
+        </Grid>
         <Grid Classes="main"
               ZIndex="20">
             <ScrollViewer>

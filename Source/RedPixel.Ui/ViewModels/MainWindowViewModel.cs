@@ -30,6 +30,7 @@ namespace RedPixel.Ui.ViewModels
             LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
             DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
+            HistogramToolViewModel = new HistogramToolViewModel(_view.HistogramTool, this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -41,6 +42,15 @@ namespace RedPixel.Ui.ViewModels
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                });
+
+            this.WhenAnyValue(x => x.Image)
+                .Subscribe(x =>
+                {
+                    if (x is null)
+                        return;
+
+                    HistogramToolViewModel.HistogramValues = Image.GetHistogram(0, Image.Width, 0, Image.Height);
                 });
 
             ExtendClientAreaToDecorationsHint = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -55,6 +65,7 @@ namespace RedPixel.Ui.ViewModels
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
+        public HistogramToolViewModel HistogramToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
         {

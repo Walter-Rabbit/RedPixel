@@ -13,15 +13,16 @@ namespace RedPixel.Ui.Views
         public DitheringTool DitheringTool { get; }
         public UtilitiesTool UtilitiesTool { get; }
         public LineDrawingTool LineDrawingTool { get; }
+        public HistogramTool HistogramTool { get; set; }
 
         public MainWindow()
         {
-            DataContext = new MainWindowViewModel(this);
             DitheringTool = new DitheringTool();
             UtilitiesTool = new UtilitiesTool();
             ColorSpaceTool = new ColorSpaceTool();
             GammaCorrectionTool = new GammaCorrectionTool();
             LineDrawingTool = new LineDrawingTool();
+            HistogramTool = new HistogramTool();
             DataContext = new MainWindowViewModel(this);
             InitializeComponent();
         }

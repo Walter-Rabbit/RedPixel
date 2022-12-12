@@ -10,36 +10,53 @@
         <uvm:SelectionViewModel />
     </Design.DataContext>
 
+    <Canvas.Styles>
+        <Style Selector="Line.inner">
+            <Setter Property="Stroke" Value="Black" />
+            <Setter Property="IsVisible" Value="{Binding IsSelecting}" />
+            <Setter Property="StrokeDashArray" Value="3,3" />
+            <Setter Property="StrokeThickness" Value="3" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style Selector="Line.outer">
+            <Setter Property="Stroke" Value="White" />
+            <Setter Property="IsVisible" Value="{Binding IsSelecting}" />
+            <Setter Property="StrokeDashArray" Value="2.25,2.25" />
+            <Setter Property="StrokeThickness" Value="4" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+    </Canvas.Styles>
+    
     <Line
-        Stroke="Black"
-        IsVisible="{Binding IsSelecting}"
-        StrokeDashArray="3,3"
-        StrokeThickness="3"
-        IsHitTestVisible="False"
+        Classes="outer"
         StartPoint="{Binding SelectionFirstPoint}"
         EndPoint="{Binding SelectionSecondPoint}" />
     <Line
-        Stroke="Black"
-        IsVisible="{Binding IsSelecting}"
-        StrokeDashArray="3,3"
-        StrokeThickness="3"
-        IsHitTestVisible="False"
+        Classes="outer"
         StartPoint="{Binding SelectionSecondPoint}"
         EndPoint="{Binding SelectionThirdPoint}" />
     <Line
-        Stroke="Black"
-        IsVisible="{Binding IsSelecting}"
-        StrokeDashArray="3,3"
-        StrokeThickness="3"
-        IsHitTestVisible="False"
+        Classes="outer"
         StartPoint="{Binding SelectionThirdPoint}"
         EndPoint="{Binding SelectionFourthPoint}" />
     <Line
-        IsVisible="{Binding IsSelecting}"
-        Stroke="Black"
-        StrokeDashArray="3,3"
-        StrokeThickness="3"
-        IsHitTestVisible="False"
+        Classes="outer"
+        StartPoint="{Binding SelectionFourthPoint}"
+        EndPoint="{Binding SelectionFirstPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionFirstPoint}"
+        EndPoint="{Binding SelectionSecondPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionSecondPoint}"
+        EndPoint="{Binding SelectionThirdPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionThirdPoint}"
+        EndPoint="{Binding SelectionFourthPoint}" />
+    <Line
+        Classes="inner"
         StartPoint="{Binding SelectionFourthPoint}"
         EndPoint="{Binding SelectionFirstPoint}" />
 </Canvas>

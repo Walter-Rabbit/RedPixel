@@ -36,6 +36,10 @@ public class ImageFormat
         HeaderMatchFuncFactory.Create(new byte[] { 66, 77 }),
         "dib", "rle");
 
+    public static readonly ImageFormat Png = new ImageFormat(
+        "png",
+        HeaderMatchFuncFactory.Create(new byte[] {137, 80, 78, 71, 13, 10, 26, 10}));
+
     public static ImageFormat Parse(string fileExtension)
     {
         foreach (var format in AllFormats.Value)

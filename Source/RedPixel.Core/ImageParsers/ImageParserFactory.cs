@@ -9,7 +9,8 @@ public static class ImageParserFactory
         Parsers = new List<IImageParser>()
         {
             new PnmImageParser(),
-            new BmpImageParser()
+            new BmpImageParser(),
+            new PngImageParser()
         };
     }
 

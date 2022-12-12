@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using ReactiveUI;
@@ -31,8 +30,7 @@ public class LineDrawingToolViewModel : BaseViewModel
                 var sw = new Stopwatch();
                 sw.Start();
                 File.AppendAllText("log.txt", $"Color is changing{Environment.NewLine}");
-                AvaloniaColor =
-                    $"{(char.IsDigit(SelectedColor.ToString().Last()) ? SelectedColor.ToString().Remove(1, 2) : SelectedColor.ToString())}";
+                AvaloniaColor = SelectedColor.ToString();
                 File.AppendAllText(
                     "log.txt",
                     $"Color changed: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");

@@ -54,96 +54,44 @@ public class CasFiltering : IFiltering
                 var blb = IFiltering.GetClosestPixel(bitmap, i, j + 2, leftTopPoint, rightBottomPoint);
                 var llb = IFiltering.GetClosestPixel(bitmap, i - 1, j + 1, leftTopPoint, rightBottomPoint);
 
-                var ltCoefficientFinal = ltCoefficient / (1f / 32f + (ltMax[0] - ltMin[0]));
-                var rtCoefficientFinal = rtCoefficient / (1f / 32f + (rtMax[0] - rtMin[0]));
-                var rbCoefficientFinal = rbCoefficient / (1f / 32f + (rbMax[0] - rbMin[0]));
-                var lbCoefficientFinal = lbCoefficient / (1f / 32f + (lbMax[0] - lbMin[0]));
+                var components = new float[3];
 
-                var ltWeightsFinal = ltWeights.Select(w => w * ltCoefficientFinal).ToArray();
-                var rtWeightsFinal = rtWeights.Select(w => w * rtCoefficientFinal).ToArray();
-                var rbWeightsFinal = rbWeights.Select(w => w * rbCoefficientFinal).ToArray();
-                var lbWeightsFinal = lbWeights.Select(w => w * lbCoefficientFinal).ToArray();
+                for (var k = 0; k < 3; k++)
+                {
+                    var ltCoefficientFinal = ltCoefficient / (1f / 32f + (ltMax[k] - ltMin[k]));
+                    var rtCoefficientFinal = rtCoefficient / (1f / 32f + (rtMax[k] - rtMin[k]));
+                    var rbCoefficientFinal = rbCoefficient / (1f / 32f + (rbMax[k] - rbMin[k]));
+                    var lbCoefficientFinal = lbCoefficient / (1f / 32f + (lbMax[k] - lbMin[k]));
 
-                var fc = (ltWeightsFinal[0] * tlt.FirstComponent +
-                          rtWeightsFinal[0] * trt.FirstComponent +
-                          rtWeightsFinal[0] * rrt.FirstComponent +
-                          rbWeightsFinal[0] * rrb.FirstComponent +
-                          rbWeightsFinal[0] * brb.FirstComponent +
-                          lbWeightsFinal[0] * blb.FirstComponent +
-                          lbWeightsFinal[0] * llb.FirstComponent +
-                          ltWeightsFinal[0] * llt.FirstComponent +
-                          (rtWeightsFinal[0] + lbWeightsFinal[0] + ltCoefficientFinal) * lt.FirstComponent +
-                          (ltWeightsFinal[0] + rbWeightsFinal[0] + rtCoefficientFinal) * rt.FirstComponent +
-                          (rtWeightsFinal[0] + lbWeightsFinal[0] + rbCoefficientFinal) * rb.FirstComponent +
-                          (ltWeightsFinal[0] + rbWeightsFinal[0] + lbCoefficientFinal) * lb.FirstComponent) /
-                         (2f * (ltWeightsFinal[0] + rtWeightsFinal[0] + rbWeightsFinal[0] + lbWeightsFinal[0]) +
-                          (rtWeightsFinal[0] + lbWeightsFinal[0] + ltCoefficientFinal) +
-                          (ltWeightsFinal[0] + rbWeightsFinal[0] + rtCoefficientFinal) +
-                          (rtWeightsFinal[0] + lbWeightsFinal[0] + rbCoefficientFinal) +
-                          (ltWeightsFinal[0] + rbWeightsFinal[0] + lbCoefficientFinal));
+                    var ltWeightsFinal = ltWeights.Select(w => w * ltCoefficientFinal).ToArray();
+                    var rtWeightsFinal = rtWeights.Select(w => w * rtCoefficientFinal).ToArray();
+                    var rbWeightsFinal = rbWeights.Select(w => w * rbCoefficientFinal).ToArray();
+                    var lbWeightsFinal = lbWeights.Select(w => w * lbCoefficientFinal).ToArray();
 
-
-                ltCoefficientFinal = ltCoefficient / (1f / 32f + (ltMax[1] - ltMin[1]));
-                rtCoefficientFinal = rtCoefficient / (1f / 32f + (rtMax[1] - rtMin[1]));
-                rbCoefficientFinal = rbCoefficient / (1f / 32f + (rbMax[1] - rbMin[1]));
-                lbCoefficientFinal = lbCoefficient / (1f / 32f + (lbMax[1] - lbMin[1]));
-
-                ltWeightsFinal = ltWeights.Select(w => w * ltCoefficientFinal).ToArray();
-                rtWeightsFinal = rtWeights.Select(w => w * rtCoefficientFinal).ToArray();
-                rbWeightsFinal = rbWeights.Select(w => w * rbCoefficientFinal).ToArray();
-                lbWeightsFinal = lbWeights.Select(w => w * lbCoefficientFinal).ToArray();
-
-                var sc = (ltWeightsFinal[1] * tlt.SecondComponent +
-                          rtWeightsFinal[1] * trt.SecondComponent +
-                          rtWeightsFinal[1] * rrt.SecondComponent +
-                          rbWeightsFinal[1] * rrb.SecondComponent +
-                          rbWeightsFinal[1] * brb.SecondComponent +
-                          lbWeightsFinal[1] * blb.SecondComponent +
-                          lbWeightsFinal[1] * llb.SecondComponent +
-                          ltWeightsFinal[1] * llt.SecondComponent +
-                          (rtWeightsFinal[1] + lbWeightsFinal[1] + ltCoefficientFinal) * lt.SecondComponent +
-                          (ltWeightsFinal[1] + rbWeightsFinal[1] + rtCoefficientFinal) * rt.SecondComponent +
-                          (rtWeightsFinal[1] + lbWeightsFinal[1] + rbCoefficientFinal) * rb.SecondComponent +
-                          (ltWeightsFinal[1] + rbWeightsFinal[1] + lbCoefficientFinal) * lb.SecondComponent) /
-                         (2f * (ltWeightsFinal[1] + rtWeightsFinal[1] + rbWeightsFinal[1] + lbWeightsFinal[1]) +
-                          (rtWeightsFinal[1] + lbWeightsFinal[1] + ltCoefficientFinal) +
-                          (ltWeightsFinal[1] + rbWeightsFinal[1] + rtCoefficientFinal) +
-                          (rtWeightsFinal[1] + lbWeightsFinal[1] + rbCoefficientFinal) +
-                          (ltWeightsFinal[1] + rbWeightsFinal[1] + lbCoefficientFinal));
-
-
-                ltCoefficientFinal = ltCoefficient / (1f / 32f + (ltMax[2] - ltMin[2]));
-                rtCoefficientFinal = rtCoefficient / (1f / 32f + (rtMax[2] - rtMin[2]));
-                rbCoefficientFinal = rbCoefficient / (1f / 32f + (rbMax[2] - rbMin[2]));
-                lbCoefficientFinal = lbCoefficient / (1f / 32f + (lbMax[2] - lbMin[2]));
-
-                ltWeightsFinal = ltWeights.Select(w => w * ltCoefficientFinal).ToArray();
-                rtWeightsFinal = rtWeights.Select(w => w * rtCoefficientFinal).ToArray();
-                rbWeightsFinal = rbWeights.Select(w => w * rbCoefficientFinal).ToArray();
-                lbWeightsFinal = lbWeights.Select(w => w * lbCoefficientFinal).ToArray();
-
-                var tc = (ltWeightsFinal[2] * tlt.ThirdComponent +
-                          rtWeightsFinal[2] * trt.ThirdComponent +
-                          rtWeightsFinal[2] * rrt.ThirdComponent +
-                          rbWeightsFinal[2] * rrb.ThirdComponent +
-                          rbWeightsFinal[2] * brb.ThirdComponent +
-                          lbWeightsFinal[2] * blb.ThirdComponent +
-                          lbWeightsFinal[2] * llb.ThirdComponent +
-                          ltWeightsFinal[2] * llt.ThirdComponent +
-                          (rtWeightsFinal[2] + lbWeightsFinal[2] + ltCoefficientFinal) * lt.ThirdComponent +
-                          (ltWeightsFinal[2] + rbWeightsFinal[2] + rtCoefficientFinal) * rt.ThirdComponent +
-                          (rtWeightsFinal[2] + lbWeightsFinal[2] + rbCoefficientFinal) * rb.ThirdComponent +
-                          (ltWeightsFinal[2] + rbWeightsFinal[2] + lbCoefficientFinal) * lb.ThirdComponent) /
-                         (2f * (ltWeightsFinal[2] + rtWeightsFinal[2] + rbWeightsFinal[2] + lbWeightsFinal[2]) +
-                          (rtWeightsFinal[2] + lbWeightsFinal[2] + ltCoefficientFinal) +
-                          (ltWeightsFinal[2] + rbWeightsFinal[2] + rtCoefficientFinal) +
-                          (rtWeightsFinal[2] + lbWeightsFinal[2] + rbCoefficientFinal) +
-                          (ltWeightsFinal[2] + rbWeightsFinal[2] + lbCoefficientFinal));
+                    components[k] = (ltWeightsFinal[k] * tlt[k] +
+                                     rtWeightsFinal[k] * trt[k] +
+                                     rtWeightsFinal[k] * rrt[k] +
+                                     rbWeightsFinal[k] * rrb[k] +
+                                     rbWeightsFinal[k] * brb[k] +
+                                     lbWeightsFinal[k] * blb[k] +
+                                     lbWeightsFinal[k] * llb[k] +
+                                     ltWeightsFinal[k] * llt[k] +
+                                     (rtWeightsFinal[k] + lbWeightsFinal[k] + ltCoefficientFinal) * lt[k] +
+                                     (ltWeightsFinal[k] + rbWeightsFinal[k] + rtCoefficientFinal) * rt[k] +
+                                     (rtWeightsFinal[k] + lbWeightsFinal[k] + rbCoefficientFinal) * rb[k] +
+                                     (ltWeightsFinal[k] + rbWeightsFinal[k] + lbCoefficientFinal) * lb[k]) /
+                                    (2f * (ltWeightsFinal[k] + rtWeightsFinal[k] + rbWeightsFinal[k] +
+                                           lbWeightsFinal[k]) +
+                                     (rtWeightsFinal[k] + lbWeightsFinal[k] + ltCoefficientFinal) +
+                                     (ltWeightsFinal[k] + rbWeightsFinal[k] + rtCoefficientFinal) +
+                                     (rtWeightsFinal[k] + lbWeightsFinal[k] + rbCoefficientFinal) +
+                                     (ltWeightsFinal[k] + rbWeightsFinal[k] + lbCoefficientFinal));
+                }
 
                 newBitmap.SetPixel(i, j, new Color(
-                    Math.Max(0f, Math.Min(255f, fc)),
-                    Math.Max(0f, Math.Min(255f, sc)),
-                    Math.Max(0f, Math.Min(255f, tc))));
+                    Math.Max(0f, Math.Min(255f, components[0])),
+                    Math.Max(0f, Math.Min(255f, components[1])),
+                    Math.Max(0f, Math.Min(255f, components[2]))));
             }
         }
 

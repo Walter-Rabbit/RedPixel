@@ -47,7 +47,7 @@ public class FilteringAlgorithms
     public static readonly FilteringAlgorithms Cas = new(
         "CAS",
         "Sharpness",
-        "255",
+        "1",
         CasFiltering.ApplyFiltering);
 
     public FilteringAlgorithms(

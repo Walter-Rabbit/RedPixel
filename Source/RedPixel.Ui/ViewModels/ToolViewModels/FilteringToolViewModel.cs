@@ -33,15 +33,16 @@ public class FilteringToolViewModel : BaseViewModel
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                File.AppendAllText("log.txt", $"ApplyFiltering started{Environment.NewLine}");
+                File.AppendAllText("log.txt", $"Filtering algorithm changing {Environment.NewLine}");
                 SelectedFilteringAlgorithm = x;
                 ParameterName = x.ParameterName + ":";
                 IsParameterVisible = x.ParameterName != "";
                 MaxParameter = x.MaxParameter;
+                Parameter = x.MaxParameter;
 
                 File.AppendAllText(
                     "log.txt",
-                    $"ConvertToAvaloniaBitmap (ApplyFiltering finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                    $"ConvertToAvaloniaBitmap (Filtering algorithm changing finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 sw.Stop();
             });
     }

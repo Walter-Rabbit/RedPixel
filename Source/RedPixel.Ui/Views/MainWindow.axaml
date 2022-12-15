@@ -121,6 +121,7 @@
                                Source="../Assets/filtering.png" />
                     </TabItem.Header>
                     <tools:FilteringTool
+                        Name="Filtering"
                         DataContext="{Binding FilteringToolViewModel }" />
                 </TabItem>
                 <TabItem>
@@ -160,7 +161,7 @@
                         EndPoint="{Binding EndPoint}"
                         IsVisible="{Binding DrawingInProgress}"
                         DataContext="{Binding LineDrawingToolViewModel}" />
-                    <utilities:Selection DataContext="{Binding SelectionViewModel}" />
+                    <utilities:Selection Name="Selection" DataContext="{Binding SelectionViewModel}" />
                 </Canvas>
 
             </ZoomBorder>

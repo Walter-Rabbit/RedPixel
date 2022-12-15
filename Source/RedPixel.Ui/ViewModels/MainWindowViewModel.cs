@@ -17,6 +17,7 @@ using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
 using RedPixel.Ui.Views.Tools;
+using RedPixel.Ui.Views.Utilities;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -33,6 +34,8 @@ namespace RedPixel.Ui.ViewModels
             DitheringToolViewModel = new DitheringToolViewModel(_view.Get<DitheringTool>("Dithering"), this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.Get<UtilitiesTool>("Utilities"), this);
             HistogramToolViewModel = new HistogramToolViewModel(_view.Get<HistogramTool>("Histogram"), this);
+            SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
+            FilteringToolViewModel = new FilteringToolViewModel(_view.Get<FilteringTool>("Filtering"), this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>

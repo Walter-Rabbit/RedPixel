@@ -25,6 +25,8 @@ public class GammaCorrectionToolViewModel : BaseViewModel
     [Reactive] public float GammaValue { get; set; } = 1;
     [Reactive] public string ConvertGammaMessage { get; set; } = "Convert γ";
 
+    [Reactive] public float IgnorePixelsPart { get; set; } = 0;
+
     public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 
     public Unit AssignGamma()
@@ -69,6 +71,14 @@ public class GammaCorrectionToolViewModel : BaseViewModel
         {
             File.AppendAllText("log.txt", $"{e.Message}");
         }
+
+        return Unit.Default;
+    }
+
+    private Unit AdjustContrast()
+    {
+        _parentViewModel.Image.ApplyContrastAdjustment(IgnorePixelsPart);
+        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel.ColorComponents);
 
         return Unit.Default;
     }

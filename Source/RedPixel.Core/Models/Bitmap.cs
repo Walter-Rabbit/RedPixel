@@ -82,4 +82,52 @@ public class Bitmap
 
         return histogramValues;
     }
+
+    public void ApplyContrastAdjustment(float ignorePart)
+    {
+        var histogramValues = GetHistogram(0, Width, 0, Height);
+
+        int ignorePixelsCount = (int)(Width * Height * ignorePart);
+        int[] ignoredPixels = new int[3];
+
+        int minColor = 0;
+        for (int c = 0; c < histogramValues[0].Length; c++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ignoredPixels[i] += (int)histogramValues[i][c];
+            }
+
+            if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
+            minColor = c;
+            break;
+        }
+
+        ignoredPixels = new int[3];
+        int maxColor = 255;
+        for (int c = histogramValues[0].Length - 1; c >= 0; c--)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ignoredPixels[i] += (int)histogramValues[i][c];
+            }
+
+            if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
+            maxColor = c;
+            break;
+        }
+
+        var multCoefficient = 255f / (maxColor - minColor);
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                var fc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].FirstComponent - minColor) * multCoefficient));
+                var sc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].SecondComponent - minColor) * multCoefficient));
+                var tc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].ThirdComponent - minColor) * multCoefficient));
+                Matrix[y, x] = new Color(fc, sc, tc);
+            }
+        }
+    }
 }

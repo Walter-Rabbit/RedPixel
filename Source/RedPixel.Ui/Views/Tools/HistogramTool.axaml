@@ -10,8 +10,14 @@
         <toolViewModels:HistogramToolViewModel />
     </Design.DataContext>
     <StackPanel>
-        <avalonia:AvaPlot LeftClicked="Histogram1_OnLeftClicked" IsVisible="{Binding MainWindowViewModel.ColorSpaceToolViewModel.EnabledComponents[0]}" Name="Histogram1" Width="300" Height="150" />
-        <avalonia:AvaPlot IsVisible="{Binding MainWindowViewModel.ColorSpaceToolViewModel.EnabledComponents[1]}"  Name="Histogram2" Width="300" Height="150" />
-        <avalonia:AvaPlot IsVisible="{Binding MainWindowViewModel.ColorSpaceToolViewModel.EnabledComponents[2]}"  Name="Histogram3" Width="300" Height="150" />
+        <StackPanel IsVisible="{Binding FirstHistogramVisible}">
+            <avalonia:AvaPlot  Name="Histogram1" Width="300" Height="150" />
+        </StackPanel>
+        <StackPanel IsVisible="{Binding SecondHistogramVisible}">
+            <avalonia:AvaPlot  Name="Histogram2" Width="300" Height="150" />
+        </StackPanel>
+        <StackPanel IsVisible="{Binding ThirdHistogramVisible}">
+            <avalonia:AvaPlot Name="Histogram3" Width="300" Height="150" />
+        </StackPanel>
     </StackPanel>
 </UserControl>

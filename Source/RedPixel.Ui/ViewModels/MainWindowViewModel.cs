@@ -15,6 +15,7 @@ using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
 using RedPixel.Ui.Views;
+using RedPixel.Ui.Views.Tools;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -25,12 +26,12 @@ namespace RedPixel.Ui.ViewModels
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
-            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
-            GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
-            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
-            DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
-            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
-            HistogramToolViewModel = new HistogramToolViewModel(_view.HistogramTool, this);
+            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.Get<ColorSpaceTool>("ColorSpace"), this);
+            GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.Get<GammaCorrectionTool>("GammaCorrection"), this);
+            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.Get<LineDrawingTool>("LineDrawing"), this);
+            DitheringToolViewModel = new DitheringToolViewModel(_view.Get<DitheringTool>("Dithering"), this);
+            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.Get<UtilitiesTool>("Utilities"), this);
+            HistogramToolViewModel = new HistogramToolViewModel(_view.Get<HistogramTool>("Histogram"), this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -44,7 +45,7 @@ namespace RedPixel.Ui.ViewModels
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
                 });
 
-            this.WhenAnyValue(x => x.Image)
+            this.WhenAnyValue(x => x.Bitmap)
                 .Subscribe(x =>
                 {
                     if (x is null)

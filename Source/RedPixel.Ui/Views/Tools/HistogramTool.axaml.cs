@@ -15,11 +15,9 @@ namespace RedPixel.Ui.Views.Tools;
 
 public partial class HistogramTool : UserControl
 {
-    private Guid _id = Guid.NewGuid();
     private AvaPlot _histogram1;
     private AvaPlot _histogram2;
     private AvaPlot _histogram3;
-    private int Amogus = 0;
 
     public HistogramTool()
     {
@@ -45,61 +43,52 @@ public partial class HistogramTool : UserControl
         _histogram3.Configuration.LockHorizontalAxis = true;
         _histogram3.Configuration.LockVerticalAxis = true;
 
-        // Random rand = new(0);
-        // double[] values = DataGen.RandomNormal(rand, pointCount: 1234, mean: 178.4, stdDev: 7.6);
-        //
-        // (double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: 140, max: 220, binSize: 1);
-        // double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
-        //
-        // var bar = avaPlot1.Plot.AddBar(values: counts, positions: leftEdges);
-        // bar.BarWidth = 1;
-        //
-        // avaPlot1.Plot.SetAxisLimits(yMin: 0);
-        // avaPlot1.Plot.Frameless();
-        // avaPlot1.Configuration.Zoom = false;
-        // avaPlot1.Configuration.LockHorizontalAxis = true;
-        // avaPlot1.Configuration.LockVerticalAxis = true;
-        // avaPlot1.Plot.Style(new PlotStyle());
-        // avaPlot1.Refresh();
-    }
+        _histogram1.Plot.Style(new PlotStyle());
+        _histogram2.Plot.Style(new PlotStyle());
+        _histogram3.Plot.Style(new PlotStyle());
 
-    public void UpdateHistograms(double[][] histograms, ColorComponents selectedComponents)
-    {
-        // _histogram1.Plot.Clear();
-        // _histogram2.Plot.Clear();
-        // _histogram3.Plot.Clear();
-        //
-        // _histogram1.Plot.AddBar(histograms[0]);
-        // _histogram2.Plot.AddBar(histograms[1]);
-        // _histogram3.Plot.AddBar(histograms[2]);
-        //
-        // _histogram1.Plot.Frameless();
-        // _histogram2.Plot.Frameless();
-        // _histogram3.Plot.Frameless();
-        //
-        // _histogram1.Plot.Style(new PlotStyle());
-        // _histogram2.Plot.Style(new PlotStyle());
-        // _histogram3.Plot.Style(new PlotStyle());
-        //
-        // _histogram1.Refresh();
-        // _histogram2.Refresh();
-        // _histogram3.Refresh();
-
-        var bar = _histogram1.Plot.AddBar(histograms[0]);
-        bar.BarWidth = 1;
-        _histogram1.Plot.SetAxisLimits(yMin: 0);
-        _histogram1.Plot.Frameless();
         _histogram1.Configuration.Zoom = false;
         _histogram1.Configuration.LockHorizontalAxis = true;
         _histogram1.Configuration.LockVerticalAxis = true;
-        _histogram1.Plot.Style(new PlotStyle());
+
+        _histogram2.Configuration.Zoom = false;
+        _histogram2.Configuration.LockHorizontalAxis = true;
+        _histogram2.Configuration.LockVerticalAxis = true;
+
+        _histogram3.Configuration.Zoom = false;
+        _histogram3.Configuration.LockHorizontalAxis = true;
+        _histogram3.Configuration.LockVerticalAxis = true;
+
         _histogram1.Refresh();
-        Amogus++;
+        _histogram2.Refresh();
+        _histogram3.Refresh();
     }
 
-    private void Histogram1_OnLeftClicked(object sender, EventArgs e)
+    public void UpdateHistograms(double[][] histograms)
     {
-        Amogus++;
+        _histogram1.Plot.Clear();
+        _histogram2.Plot.Clear();
+        _histogram3.Plot.Clear();
+
+        _histogram1.Plot.AddBar(histograms[0], Color.Red).BorderColor = Color.Red;
+        _histogram2.Plot.AddBar(histograms[1], Color.Green).BorderColor = Color.Green;
+        _histogram3.Plot.AddBar(histograms[2], Color.Blue).BorderColor = Color.Blue;
+
+        _histogram1.Plot.SetAxisLimits(yMin: 0, xMax: histograms[0].Length, xMin:0);
+        _histogram2.Plot.SetAxisLimits(yMin: 0, xMax: histograms[1].Length, xMin:0);
+        _histogram3.Plot.SetAxisLimits(yMin: 0, xMax: histograms[2].Length, xMin:0);
+
+        _histogram1.Plot.Style(new PlotStyle());
+        _histogram2.Plot.Style(new PlotStyle());
+        _histogram3.Plot.Style(new PlotStyle());
+
+        _histogram1.Plot.Frameless();
+        _histogram2.Plot.Frameless();
+        _histogram3.Plot.Frameless();
+
+        _histogram1.Refresh();
+        _histogram2.Refresh();
+        _histogram3.Refresh();
     }
 }
 

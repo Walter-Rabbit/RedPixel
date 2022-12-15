@@ -8,23 +8,10 @@ namespace RedPixel.Ui.Views
 {
     public partial class MainWindow : Window
     {
-        public ColorSpaceTool ColorSpaceTool { get; }
-        public GammaCorrectionTool GammaCorrectionTool { get; }
-        public DitheringTool DitheringTool { get; }
-        public UtilitiesTool UtilitiesTool { get; }
-        public LineDrawingTool LineDrawingTool { get; }
-        public HistogramTool HistogramTool { get; set; }
-
         public MainWindow()
         {
-            DitheringTool = new DitheringTool();
-            UtilitiesTool = new UtilitiesTool();
-            ColorSpaceTool = new ColorSpaceTool();
-            GammaCorrectionTool = new GammaCorrectionTool();
-            LineDrawingTool = new LineDrawingTool();
-            HistogramTool = new HistogramTool();
-            DataContext = new MainWindowViewModel(this);
             InitializeComponent();
+            DataContext = new MainWindowViewModel(this);
         }
 
         private void InputElement_OnPointerPressed(object sender, PointerPressedEventArgs e)

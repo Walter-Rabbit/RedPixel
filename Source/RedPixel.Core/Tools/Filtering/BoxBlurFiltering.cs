@@ -1,5 +1,4 @@
-﻿
-using System.Drawing;
+﻿using System.Drawing;
 using Bitmap = RedPixel.Core.Models.Bitmap;
 using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
@@ -21,7 +20,7 @@ public class BoxBlurFiltering : IFiltering
         newBitmap.Matrix = bitmap.Matrix.Clone() as Color[,];
 
         var coefficient = 1f / capacity;
-        
+
         for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
         {
             for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
@@ -32,7 +31,10 @@ public class BoxBlurFiltering : IFiltering
                 var sc = areaPixels[1].Sum() * coefficient;
                 var tc = areaPixels[2].Sum() * coefficient;
 
-                newBitmap.SetPixel(i, j, new Color(fc, sc, tc));
+                newBitmap.SetPixel(i, j, new Color(
+                    Math.Max(0, Math.Min(255f, fc)),
+                    Math.Max(0, Math.Min(255f, sc)),
+                    Math.Max(0, Math.Min(255f, tc))));
             }
         }
 

@@ -44,7 +44,10 @@ public class SobelFiltering : IFiltering
                     Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
                     Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
 
-                var pixel = new Color(fc, sc, tc);
+                var pixel = new Color(
+                    Math.Max(0, Math.Min(255f, fc)),
+                    Math.Max(0, Math.Min(255f, sc)),
+                    Math.Max(0, Math.Min(255f, tc)));
                 newBitmap.SetPixel(x, y, pixel);
             }
         }

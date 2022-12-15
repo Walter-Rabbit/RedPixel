@@ -17,7 +17,7 @@ public class FilteringAlgorithms
     public static readonly FilteringAlgorithms Otsu = new(
         "Otsu",
         "",
-        "0",
+        "",
         OtsuFiltering.ApplyFiltering);
 
     public static readonly FilteringAlgorithms Median = new(
@@ -41,7 +41,7 @@ public class FilteringAlgorithms
     public static readonly FilteringAlgorithms Sobel = new(
         "Sobel",
         "",
-        "0",
+        "",
         SobelFiltering.ApplyFiltering);
 
     public static readonly FilteringAlgorithms Cas = new(

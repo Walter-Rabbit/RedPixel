@@ -86,6 +86,11 @@ public class CasFiltering : IFiltering
                                      (ltWeightsFinal[k] + rbWeightsFinal[k] + rtCoefficientFinal) +
                                      (rtWeightsFinal[k] + lbWeightsFinal[k] + rbCoefficientFinal) +
                                      (ltWeightsFinal[k] + rbWeightsFinal[k] + lbCoefficientFinal));
+
+                    if (components[k] is float.NaN)
+                    {
+                        components[k] = 0;
+                    }
                 }
 
                 newBitmap.SetPixel(i, j, new Color(

@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
         xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
+        xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
         ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
         ExtendClientAreaTitleBarHeightHint="40"
         Background="#3c3f41"
         Icon="/Assets/avalonia-logo.ico"
-        Title="RedPixel.Ui">
+        Title="RedPixel.Ui"
+        KeyDown="InputElement_OnKeyDown">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -50,7 +52,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               HorizontalAlignment="Left"
-              Width="110"
+              Width="60"
               Height="30">
             <MenuItem Header="File">
                 <MenuItem
@@ -114,6 +116,15 @@
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
+                        <Image ToolTip.Tip="Filtering"
+                               Classes="tool"
+                               Source="../Assets/filtering.png" />
+                    </TabItem.Header>
+                    <tools:FilteringTool
+                        DataContext="{Binding FilteringToolViewModel }" />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
                         <Image ToolTip.Tip="Utilities"
                                Classes="tool"
                                Source="../Assets/utilities.png" />
@@ -127,38 +138,32 @@
                 <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40" Background="#3c3f41" />
             <tools:HistogramTool Name="Histogram" Background="#2b2d30" Grid.Column="0" Grid.Row="2" DataContext="{Binding HistogramToolViewModel }" />
         </Grid>
-        <Grid Classes="main"
-              ZIndex="20">
-            <ScrollViewer>
-                <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                            MinZoomX="0.05" MinZoomY="0.05">
-                    <Canvas>
-                        <Image
-                            PointerPressed="InputElement_OnPointerPressed"
-                            UseLayoutRounding="False"
-                            Margin="30"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Source="{Binding Bitmap}"
-                            Stretch="UniformToFill"
-                            RenderOptions.BitmapInterpolationMode="Default" />
-                        <Line
-                            Stroke="Red"
-                            StrokeThickness="4"
-                            StartPoint="{Binding StartPoint1}"
-                            EndPoint="{Binding EndPoint1}"
-                            IsVisible="{Binding DrawingInProgress}"
-                            DataContext="{Binding LineDrawingToolViewModel}" />
-                        <Line
-                            Stroke="Red"
-                            StrokeThickness="4"
-                            StartPoint="{Binding StartPoint2}"
-                            EndPoint="{Binding EndPoint2}"
-                            IsVisible="{Binding DrawingInProgress}"
-                            DataContext="{Binding LineDrawingToolViewModel}" />
-                    </Canvas>
-                </ZoomBorder>
-            </ScrollViewer>
+        <Grid Classes="main">
+            <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
+                        MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
+                <Canvas>
+                    <Image
+                        PointerPressed="InputElement_OnPointerPressed"
+                        PointerMoved="InputElement_OnPointerMoved"
+                        UseLayoutRounding="False"
+                        Margin="30"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Source="{Binding Bitmap}"
+                        Stretch="Uniform"
+                        RenderOptions.BitmapInterpolationMode="Default" />
+                    <Line
+                        Stroke="{Binding AvaloniaColor}"
+                        StrokeThickness="{Binding Thickness}"
+                        IsHitTestVisible="False"
+                        StartPoint="{Binding StartPoint}"
+                        EndPoint="{Binding EndPoint}"
+                        IsVisible="{Binding DrawingInProgress}"
+                        DataContext="{Binding LineDrawingToolViewModel}" />
+                    <utilities:Selection DataContext="{Binding SelectionViewModel}" />
+                </Canvas>
+
+            </ZoomBorder>
         </Grid>
     </DockPanel>
 </Window>

@@ -1,5 +1,9 @@
-﻿using Avalonia;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using Avalonia;
 using Avalonia.Media;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Tools;
 using RedPixel.Ui.Utility;
@@ -19,15 +23,27 @@ public class LineDrawingToolViewModel : BaseViewModel
     {
         _view = view;
         _parentViewModel = parentViewModel;
+
+        this.WhenAnyValue(x => x.SelectedColor)
+            .Subscribe(x =>
+            {
+                var sw = new Stopwatch();
+                sw.Start();
+                File.AppendAllText("log.txt", $"Color is changing{Environment.NewLine}");
+                AvaloniaColor = SelectedColor.ToString();
+                File.AppendAllText(
+                    "log.txt",
+                    $"Color changed: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                sw.Stop();
+            });
     }
 
     [Reactive] public AvaloniaColor SelectedColor { get; set; } = Colors.Red;
+    [Reactive] public string AvaloniaColor { get; set; } = "Red";
     [Reactive] public bool DrawingInProgress { get; set; } = false;
     [Reactive] public int Thickness { get; set; } = 1;
-    [Reactive] public Point StartPoint1 { get; set; }
-    [Reactive] public Point StartPoint2 { get; set; }
-    [Reactive] public Point EndPoint1 { get; set; }
-    [Reactive] public Point EndPoint2 { get; set; }
+    [Reactive] public Point StartPoint { get; set; }
+    [Reactive] public Point EndPoint { get; set; }
 
     public void ImageClicked(int x, int y, int clickCount, Point previewPosition)
     {
@@ -54,11 +70,22 @@ public class LineDrawingToolViewModel : BaseViewModel
             DrawingInProgress = true;
             _startPoint = new Point(x, y);
 
-            StartPoint1 = new Point(previewPosition.X - 5, previewPosition.Y - 5);
-            EndPoint1 = new Point(previewPosition.X + 5, previewPosition.Y + 5);
-            StartPoint2 = new Point(previewPosition.X - 5, previewPosition.Y + 5);
-            EndPoint2 = new Point(previewPosition.X + 5, previewPosition.Y - 5);
+            StartPoint = previewPosition;
+            EndPoint = previewPosition;
         }
+    }
+
+    public void PointerMoved(Point previewPosition)
+    {
+        if (DrawingInProgress)
+        {
+            EndPoint = previewPosition;
+        }
+    }
+
+    public void DrawingCanceled()
+    {
+        DrawingInProgress = false;
     }
 
     public void ColorChanged(AvaloniaColor color)

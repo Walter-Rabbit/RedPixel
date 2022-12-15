@@ -40,22 +40,26 @@
       <ProjectReference Include="..\RedPixel.Core\RedPixel.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
-        <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
-        <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\DitheringTool.axaml.cs">
-        <DependentUpon>DitheringTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
-        <DependentUpon>Utilities.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
+            <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
+            <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\DitheringTool.axaml.cs">
+            <DependentUpon>DitheringTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
+            <DependentUpon>Utilities.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\FilteringTool.axaml.cs">
+            <DependentUpon>FilteringTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Egorozh.ColorPicker.Avalonia.Dialog">

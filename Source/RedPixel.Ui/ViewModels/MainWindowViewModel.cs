@@ -14,6 +14,7 @@ using RedPixel.Core.ImageParsers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
+using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
 using RedPixel.Ui.Views.Tools;
 
@@ -66,6 +67,8 @@ namespace RedPixel.Ui.ViewModels
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
+        public FilteringToolViewModel FilteringToolViewModel { get; set; }
+        public SelectionViewModel SelectionViewModel { get; set; }
         public HistogramToolViewModel HistogramToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()

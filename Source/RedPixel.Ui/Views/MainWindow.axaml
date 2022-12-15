@@ -52,7 +52,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               HorizontalAlignment="Left"
-              Width="110"
+              Width="60"
               Height="30">
             <MenuItem Header="File">
                 <MenuItem
@@ -129,39 +129,39 @@
                         DataContext="{Binding UtilitiesToolViewModel }" />
                 </TabItem>
             </TabControl>
-            <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#2b2d30" />
-                <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40" Background="#3c3f41" />
-            <tools:HistogramTool Background="#2b2d30" Grid.Column="0" Grid.Row="2" DataContext="{Binding HistogramToolViewModel }" />
+            <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                  Background="#2b2d30" />
+            <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40"
+                  Background="#3c3f41" />
+            <tools:HistogramTool Background="#2b2d30" Grid.Column="0" Grid.Row="2"
+                                 DataContext="{Binding HistogramToolViewModel }" />
         </Grid>
-        <Grid Classes="main"
-              ZIndex="20">
-            <ScrollViewer>
-                <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                            MinZoomX="0.05" MinZoomY="0.05">
-                    <Canvas>
-                        <Image
-                            PointerPressed="InputElement_OnPointerPressed"
-                            PointerMoved="InputElement_OnPointerMoved"
-                            UseLayoutRounding="False"
-                            Margin="30"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Source="{Binding Bitmap}"
-                            Stretch="Uniform"
-                            RenderOptions.BitmapInterpolationMode="Default" />
-                        <Line
-                            Stroke="{Binding AvaloniaColor}"
-                            StrokeThickness="{Binding Thickness}"
-                            IsHitTestVisible="False"
-                            StartPoint="{Binding StartPoint}"
-                            EndPoint="{Binding EndPoint}"
-                            IsVisible="{Binding DrawingInProgress}"
-                            DataContext="{Binding LineDrawingToolViewModel}" />
-                        <utilities:Selection DataContext="{Binding SelectionViewModel}"/>
-                    </Canvas>
+        <Grid Classes="main">
+            <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
+                        MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
+                <Canvas>
+                    <Image
+                        PointerPressed="InputElement_OnPointerPressed"
+                        PointerMoved="InputElement_OnPointerMoved"
+                        UseLayoutRounding="False"
+                        Margin="30"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Source="{Binding Bitmap}"
+                        Stretch="Uniform"
+                        RenderOptions.BitmapInterpolationMode="Default" />
+                    <Line
+                        Stroke="{Binding AvaloniaColor}"
+                        StrokeThickness="{Binding Thickness}"
+                        IsHitTestVisible="False"
+                        StartPoint="{Binding StartPoint}"
+                        EndPoint="{Binding EndPoint}"
+                        IsVisible="{Binding DrawingInProgress}"
+                        DataContext="{Binding LineDrawingToolViewModel}" />
+                    <utilities:Selection DataContext="{Binding SelectionViewModel}" />
+                </Canvas>
 
-                </ZoomBorder>
-            </ScrollViewer>
+            </ZoomBorder>
         </Grid>
     </DockPanel>
 </Window>

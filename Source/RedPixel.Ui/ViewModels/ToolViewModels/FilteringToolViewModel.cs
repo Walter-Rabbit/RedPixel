@@ -26,6 +26,7 @@ public class FilteringToolViewModel : BaseViewModel
         SelectedFilteringAlgorithm = FilteringAlgorithms.Threshold;
         ParameterName = FilteringAlgorithms.Threshold.ParameterName;
         IsParameterVisible = true;
+        Parameter = "1";
         MaxParameter = FilteringAlgorithms.Threshold.MaxParameter;
 
         this.WhenAnyValue(x => x.SelectedFilteringAlgorithm)
@@ -38,7 +39,7 @@ public class FilteringToolViewModel : BaseViewModel
                 ParameterName = x.ParameterName + ":";
                 IsParameterVisible = x.ParameterName != "";
                 MaxParameter = x.MaxParameter;
-                Parameter = x.MaxParameter;
+                Parameter = "1";
 
                 File.AppendAllText(
                     "log.txt",
@@ -48,7 +49,7 @@ public class FilteringToolViewModel : BaseViewModel
     }
 
     [Reactive] public FilteringAlgorithms SelectedFilteringAlgorithm { get; set; }
-    [Reactive] public string Parameter { get; set; } = "0";
+    [Reactive] public string Parameter { get; set; }
     [Reactive] public string ParameterName { get; set; }
     [Reactive] public bool IsParameterVisible { get; set; }
     [Reactive] public string MaxParameter { get; set; }

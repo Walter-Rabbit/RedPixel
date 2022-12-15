@@ -15,9 +15,6 @@ public class CasFiltering : IFiltering
             Matrix = bitmap.Matrix.Clone() as Color[,]
         };
 
-        var width = rightBottomPoint.X - leftTopPoint.X + 1f;
-        var height = rightBottomPoint.Y - leftTopPoint.Y + 1f;
-
         for (var i = leftTopPoint.X; i <= rightBottomPoint.X; i++)
         {
             for (var j = leftTopPoint.Y; j <= rightBottomPoint.Y; j++)
@@ -31,8 +28,8 @@ public class CasFiltering : IFiltering
                 var (rbWeights, rbMin, rbMax) =
                     GetPixelWeights(i + 1, j + 1, bitmap, sharpness, leftTopPoint, rightBottomPoint);
 
-                var fractionalPositionX = i / width;
-                var fractionalPositionY = j / height;
+                var fractionalPositionX = i / bitmap.Width;
+                var fractionalPositionY = j / bitmap.Height;
                 var ltCoefficient = (1f - fractionalPositionX) * (1f - fractionalPositionY);
                 var rtCoefficient = fractionalPositionX * (1f - fractionalPositionY);
                 var lbCoefficient = (1f - fractionalPositionX) * fractionalPositionY;

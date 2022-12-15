@@ -11,8 +11,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,40,40,1">
-        <TextBlock Grid.Row="0" Text="Gamma correction:"
-                   HorizontalAlignment="Left"
+        <TextBlock Grid.Row="0" Text="Gamma correction"
+                   HorizontalAlignment="Center"
                    Margin="10, 10, 0, 0" />
         <Grid Grid.Row="1" ColumnDefinitions="75,100" HorizontalAlignment="Center">
             <NumericUpDown Grid.Column="0"

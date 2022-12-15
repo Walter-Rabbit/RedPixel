@@ -9,20 +9,6 @@ namespace RedPixel.Ui.Views
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            DataContext = new MainWindowViewModel(this);
-            DitheringTool = new DitheringTool();
-            UtilitiesTool = new UtilitiesTool();
-            ColorSpaceTool = new ColorSpaceTool();
-            GammaCorrectionTool = new GammaCorrectionTool();
-            LineDrawingTool = new LineDrawingTool();
-            FilteringTool = new FilteringTool();
-            Selection = new Selection();
-            DataContext = new MainWindowViewModel(this);
-            InitializeComponent();
-        }
-
         public ColorSpaceTool ColorSpaceTool { get; }
         public GammaCorrectionTool GammaCorrectionTool { get; }
         public DitheringTool DitheringTool { get; }
@@ -30,6 +16,21 @@ namespace RedPixel.Ui.Views
         public LineDrawingTool LineDrawingTool { get; }
         public FilteringTool FilteringTool { get; }
         public Selection Selection { get; }
+        public HistogramTool HistogramTool { get; set; }
+
+        public MainWindow()
+        {
+            DitheringTool = new DitheringTool();
+            UtilitiesTool = new UtilitiesTool();
+            ColorSpaceTool = new ColorSpaceTool();
+            GammaCorrectionTool = new GammaCorrectionTool();
+            LineDrawingTool = new LineDrawingTool();
+            FilteringTool = new FilteringTool();
+            Selection = new Selection();
+            HistogramTool = new HistogramTool();
+            DataContext = new MainWindowViewModel(this);
+            InitializeComponent();
+        }
 
         private void InputElement_OnPointerPressed(object sender, PointerPressedEventArgs e)
         {

@@ -11,8 +11,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,80,40,40,2">
-        <TextBlock Grid.Row="0" Text="Generate Gradient:"
-                   HorizontalAlignment="Left"
+        <TextBlock Grid.Row="0" Text="Generate Gradient"
+                   HorizontalAlignment="Center"
                    Margin="10, 10, 0, 0" />
 
         <Grid Grid.Row="1" RowDefinitions="40,40" HorizontalAlignment="Center">

@@ -1,4 +1,5 @@
-﻿using RedPixel.Core.Colors;
+﻿using System.Buffers;
+using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Tools;
 
@@ -56,5 +57,29 @@ public class Bitmap
 
         Gamma = targetGammaValue;
         return this;
+    }
+
+    public double[][] GetHistogram(int fromX, int toX, int fromY, int toY)
+    {
+        var histogramValues = new double[3][];
+
+        for (int i = 0; i < 3; i++)
+        {
+            histogramValues[i] = new double[BytesForColor*256];
+            histogramValues[i].AsSpan().Fill(0);
+        }
+
+
+        for (int y = fromY; y < toY; y++)
+        {
+            for (int x = fromX; x < toX; x++)
+            {
+                histogramValues[0][(int)Matrix[y, x].FirstComponent]++;
+                histogramValues[1][(int)Matrix[y, x].SecondComponent]++;
+                histogramValues[2][(int)Matrix[y, x].ThirdComponent]++;
+            }
+        }
+
+        return histogramValues;
     }
 }

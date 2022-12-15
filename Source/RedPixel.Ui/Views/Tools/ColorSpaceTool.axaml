@@ -11,8 +11,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,50,40,1">
-        <TextBlock Grid.Row="0" Text="Color spaces:"
-                   HorizontalAlignment="Left"
+        <TextBlock Grid.Row="0" Text="Color spaces"
+                   HorizontalAlignment="Center"
                    Margin="10, 10, 0, 0" />
         <ComboBox Grid.Row="1" HorizontalAlignment="Center"
                   Height="30"

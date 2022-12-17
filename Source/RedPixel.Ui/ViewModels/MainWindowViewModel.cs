@@ -14,7 +14,10 @@ using RedPixel.Core.ImageParsers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
 using RedPixel.Ui.ViewModels.ToolViewModels;
+using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
+using RedPixel.Ui.Views.Tools;
+using RedPixel.Ui.Views.Utilities;
 
 namespace RedPixel.Ui.ViewModels
 {
@@ -25,11 +28,14 @@ namespace RedPixel.Ui.ViewModels
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
-            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.ColorSpaceTool, this);
-            GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.GammaCorrectionTool, this);
-            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.LineDrawingTool, this);
-            DitheringToolViewModel = new DitheringToolViewModel(_view.DitheringTool, this);
-            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.UtilitiesTool, this);
+            ColorSpaceToolViewModel = new ColorSpaceToolViewModel(_view.Get<ColorSpaceTool>("ColorSpace"), this);
+            GammaConversionToolViewModel = new GammaCorrectionToolViewModel(_view.Get<GammaCorrectionTool>("GammaCorrection"), this);
+            LineDrawingToolViewModel = new LineDrawingToolViewModel(_view.Get<LineDrawingTool>("LineDrawing"), this);
+            DitheringToolViewModel = new DitheringToolViewModel(_view.Get<DitheringTool>("Dithering"), this);
+            UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.Get<UtilitiesTool>("Utilities"), this);
+            HistogramToolViewModel = new HistogramToolViewModel(_view.Get<HistogramTool>("Histogram"), this);
+            SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
+            FilteringToolViewModel = new FilteringToolViewModel(_view.Get<FilteringTool>("Filtering"), this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -41,6 +47,15 @@ namespace RedPixel.Ui.ViewModels
                     File.AppendAllText(
                         "log.txt",
                         $"ConvertToAvaloniaBitmap: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
+                });
+
+            this.WhenAnyValue(x => x.Bitmap)
+                .Subscribe(x =>
+                {
+                    if (x is null)
+                        return;
+
+                    HistogramToolViewModel.HistogramValues = Image.GetHistogram(0, Image.Width, 0, Image.Height);
                 });
 
             ExtendClientAreaToDecorationsHint = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -55,6 +70,9 @@ namespace RedPixel.Ui.ViewModels
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
+        public FilteringToolViewModel FilteringToolViewModel { get; set; }
+        public SelectionViewModel SelectionViewModel { get; set; }
+        public HistogramToolViewModel HistogramToolViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
         {

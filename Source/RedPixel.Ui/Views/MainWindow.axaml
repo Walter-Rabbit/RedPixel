@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
         xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
+        xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
         ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
@@ -51,7 +52,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               HorizontalAlignment="Left"
-              Width="110"
+              Width="60"
               Height="30">
             <MenuItem Header="File">
                 <MenuItem
@@ -63,10 +64,11 @@
                     Command="{Binding SaveImageAsync}" />
             </MenuItem>
         </Menu>
-        <StackPanel DockPanel.Dock="Right">
+        <Grid RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40" DockPanel.Dock="Right">
             <TabControl
+                Grid.ColumnSpan="2"
                 Classes="tools"
-                Width="240"
+                HorizontalAlignment="Stretch"
                 BorderThickness="0"
                 Margin="0"
                 Padding="0"
@@ -78,6 +80,7 @@
                                Source="../Assets/color-space.png" />
                     </TabItem.Header>
                     <tools:ColorSpaceTool
+                        Name="ColorSpace"
                         DataContext="{Binding ColorSpaceToolViewModel}" />
                 </TabItem>
                 <TabItem>
@@ -87,6 +90,7 @@
                                Source="../Assets/gamma-correction.png" />
                     </TabItem.Header>
                     <tools:GammaCorrectionTool
+                        Name="GammaCorrection"
                         DataContext="{Binding GammaConversionToolViewModel }" />
                 </TabItem>
                 <TabItem>
@@ -96,6 +100,7 @@
                                Source="../Assets/line-drawing.png" />
                     </TabItem.Header>
                     <tools:LineDrawingTool
+                        Name="LineDrawing"
                         DataContext="{Binding LineDrawingToolViewModel }" />
                 </TabItem>
                 <TabItem>
@@ -106,7 +111,18 @@
                                RenderOptions.BitmapInterpolationMode="HighQuality" />
                     </TabItem.Header>
                     <tools:DitheringTool
+                        Name="Dithering"
                         DataContext="{Binding DitheringToolViewModel }" />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <Image ToolTip.Tip="Filtering"
+                               Classes="tool"
+                               Source="../Assets/filtering.png" />
+                    </TabItem.Header>
+                    <tools:FilteringTool
+                        Name="Filtering"
+                        DataContext="{Binding FilteringToolViewModel }" />
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
@@ -115,42 +131,40 @@
                                Source="../Assets/utilities.png" />
                     </TabItem.Header>
                     <tools:UtilitiesTool
+                        Name="Utilities"
                         DataContext="{Binding UtilitiesToolViewModel }" />
                 </TabItem>
             </TabControl>
-            <StackPanel Orientation="Horizontal">
-                <Grid Height="900" Width="200" Background="#2b2d30" />
-                <Grid Height="900" Width="40" Background="#3c3f41" />
-            </StackPanel>
-        </StackPanel>
-        <Grid Classes="main"
-              ZIndex="20">
-            <ScrollViewer>
-                <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                            MinZoomX="0.05" MinZoomY="0.05">
-                    <Canvas>
-                        <Image
-                            PointerPressed="InputElement_OnPointerPressed"
-                            PointerMoved="InputElement_OnPointerMoved"
-                            UseLayoutRounding="False"
-                            Margin="30"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Source="{Binding Bitmap}"
-                            Stretch="Uniform"
-                            RenderOptions.BitmapInterpolationMode="Default" />
-                        <Line
-                            Stroke="{Binding AvaloniaColor}"
-                            StrokeThickness="{Binding Thickness}"
-                            IsHitTestVisible="False"
-                            StartPoint="{Binding StartPoint}"
-                            EndPoint="{Binding EndPoint}"
-                            IsVisible="{Binding DrawingInProgress}"
-                            DataContext="{Binding LineDrawingToolViewModel}" />
-                    </Canvas>
+            <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#2b2d30" />
+                <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40" Background="#3c3f41" />
+            <tools:HistogramTool Name="Histogram" Background="#2b2d30" Grid.Column="0" Grid.Row="2" DataContext="{Binding HistogramToolViewModel }" />
+        </Grid>
+        <Grid Classes="main">
+            <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
+                        MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
+                <Canvas>
+                    <Image
+                        PointerPressed="InputElement_OnPointerPressed"
+                        PointerMoved="InputElement_OnPointerMoved"
+                        UseLayoutRounding="False"
+                        Margin="30"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Source="{Binding Bitmap}"
+                        Stretch="Uniform"
+                        RenderOptions.BitmapInterpolationMode="Default" />
+                    <Line
+                        Stroke="{Binding AvaloniaColor}"
+                        StrokeThickness="{Binding Thickness}"
+                        IsHitTestVisible="False"
+                        StartPoint="{Binding StartPoint}"
+                        EndPoint="{Binding EndPoint}"
+                        IsVisible="{Binding DrawingInProgress}"
+                        DataContext="{Binding LineDrawingToolViewModel}" />
+                    <utilities:Selection Name="Selection" DataContext="{Binding SelectionViewModel}" />
+                </Canvas>
 
-                </ZoomBorder>
-            </ScrollViewer>
+            </ZoomBorder>
         </Grid>
     </DockPanel>
 </Window>

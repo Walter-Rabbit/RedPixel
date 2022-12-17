@@ -12,8 +12,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="25,40,20,50,2">
-        <TextBlock Grid.Row="0" Text="Line Drawing:"
-                   HorizontalAlignment="Left"
+        <TextBlock Grid.Row="0" Text="Line Drawing"
+                   HorizontalAlignment="Center"
                    Margin="10, 10, 0, 0" />
 
         <dialog:ColorPickerButton Grid.Row="1"
@@ -24,7 +24,7 @@
                                   PropertyChanged="ColorPicker_OnPropertyChanged" />
 
         <TextBlock Grid.Row="2"
-                   Text="{Binding Thickness, 
+                   Text="{Binding Thickness,
                    StringFormat='Thickness: {0}'}"
                    Margin="10, 10, 0, 0" />
 

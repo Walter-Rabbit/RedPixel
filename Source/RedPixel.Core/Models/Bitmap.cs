@@ -1,4 +1,5 @@
-﻿using RedPixel.Core.Colors;
+﻿using System.Buffers;
+using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Tools;
 
@@ -13,7 +14,7 @@ public class Bitmap
         Matrix = new Color[height, width];
     }
 
-    public Color[,] Matrix { get; }
+    public Color[,] Matrix { get; set; }
 
     public ColorSpaces ColorSpace { get; private set; }
 
@@ -56,5 +57,77 @@ public class Bitmap
 
         Gamma = targetGammaValue;
         return this;
+    }
+
+    public double[][] GetHistogram(int fromX, int toX, int fromY, int toY)
+    {
+        var histogramValues = new double[3][];
+
+        for (int i = 0; i < 3; i++)
+        {
+            histogramValues[i] = new double[BytesForColor*256];
+            histogramValues[i].AsSpan().Fill(0);
+        }
+
+
+        for (int y = fromY; y < toY; y++)
+        {
+            for (int x = fromX; x < toX; x++)
+            {
+                histogramValues[0][(int)Matrix[y, x].FirstComponent]++;
+                histogramValues[1][(int)Matrix[y, x].SecondComponent]++;
+                histogramValues[2][(int)Matrix[y, x].ThirdComponent]++;
+            }
+        }
+
+        return histogramValues;
+    }
+
+    public void ApplyContrastAdjustment(float ignorePart)
+    {
+        var histogramValues = GetHistogram(0, Width, 0, Height);
+
+        int ignorePixelsCount = (int)(Width * Height * ignorePart);
+        int[] ignoredPixels = new int[3];
+
+        int minColor = 0;
+        for (int c = 0; c < histogramValues[0].Length; c++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ignoredPixels[i] += (int)histogramValues[i][c];
+            }
+
+            if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
+            minColor = c;
+            break;
+        }
+
+        ignoredPixels = new int[3];
+        int maxColor = 255;
+        for (int c = histogramValues[0].Length - 1; c >= 0; c--)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                ignoredPixels[i] += (int)histogramValues[i][c];
+            }
+
+            if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
+            maxColor = c;
+            break;
+        }
+
+        var multCoefficient = 255f / (maxColor - minColor);
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                var fc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].FirstComponent - minColor) * multCoefficient));
+                var sc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].SecondComponent - minColor) * multCoefficient));
+                var tc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].ThirdComponent - minColor) * multCoefficient));
+                Matrix[y, x] = new Color(fc, sc, tc);
+            }
+        }
     }
 }

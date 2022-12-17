@@ -1,0 +1,62 @@
+﻿<Canvas xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="RedPixel.Ui.Views.Utilities.Selection"
+        xmlns:uvm="using:RedPixel.Ui.ViewModels.UtilitiesViewModels">
+
+    <Design.DataContext>
+        <uvm:SelectionViewModel />
+    </Design.DataContext>
+
+    <Canvas.Styles>
+        <Style Selector="Line.inner">
+            <Setter Property="Stroke" Value="Black" />
+            <Setter Property="IsVisible" Value="{Binding IsSelecting}" />
+            <Setter Property="StrokeDashArray" Value="3,3" />
+            <Setter Property="StrokeThickness" Value="3" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style Selector="Line.outer">
+            <Setter Property="Stroke" Value="White" />
+            <Setter Property="IsVisible" Value="{Binding IsSelecting}" />
+            <Setter Property="StrokeDashArray" Value="2.25,2.25" />
+            <Setter Property="StrokeThickness" Value="4" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+    </Canvas.Styles>
+    
+    <Line
+        Classes="outer"
+        StartPoint="{Binding SelectionFirstPoint}"
+        EndPoint="{Binding SelectionSecondPoint}" />
+    <Line
+        Classes="outer"
+        StartPoint="{Binding SelectionSecondPoint}"
+        EndPoint="{Binding SelectionThirdPoint}" />
+    <Line
+        Classes="outer"
+        StartPoint="{Binding SelectionThirdPoint}"
+        EndPoint="{Binding SelectionFourthPoint}" />
+    <Line
+        Classes="outer"
+        StartPoint="{Binding SelectionFourthPoint}"
+        EndPoint="{Binding SelectionFirstPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionFirstPoint}"
+        EndPoint="{Binding SelectionSecondPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionSecondPoint}"
+        EndPoint="{Binding SelectionThirdPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionThirdPoint}"
+        EndPoint="{Binding SelectionFourthPoint}" />
+    <Line
+        Classes="inner"
+        StartPoint="{Binding SelectionFourthPoint}"
+        EndPoint="{Binding SelectionFirstPoint}" />
+</Canvas>

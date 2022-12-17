@@ -32,29 +32,34 @@
         <PackageReference Include="Egorozh.ColorPicker.Avalonia.Dialog" Version="0.10.17" />
         <PackageReference Include="PanAndZoom" Version="2.3.4" />
         <PackageReference Include="ReactiveUI.Fody" Version="18.3.1" />
-        <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+        <PackageReference Include="ScottPlot.Avalonia" Version="4.1.59" />
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\RedPixel.Core\RedPixel.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
-        <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
-        <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\DitheringTool.axaml.cs">
-        <DependentUpon>DitheringTool.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
-        <DependentUpon>Utilities.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
+            <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
+            <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\DitheringTool.axaml.cs">
+            <DependentUpon>DitheringTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
+            <DependentUpon>Utilities.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Tools\FilteringTool.axaml.cs">
+            <DependentUpon>FilteringTool.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Egorozh.ColorPicker.Avalonia.Dialog">

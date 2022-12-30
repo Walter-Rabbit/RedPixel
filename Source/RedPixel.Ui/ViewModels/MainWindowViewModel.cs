@@ -67,6 +67,8 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
         [Reactive] public double ImageWidth { get; set; }
         [Reactive] public double ImageHeight { get; set; }
+        [Reactive] public double LeftImageMargin { get; set; }
+        [Reactive] public double TopImageMargin { get; set; }
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
@@ -111,11 +113,13 @@ namespace RedPixel.Ui.ViewModels
             Image = img;
 
             var coefficient = Image.Width > Image.Height
-                ? (_view.Width - 400) / Image.Width
-                : (_view.Height - 70) / Image.Height;
+                ? (_view.Width - 360) / Image.Width
+                : (_view.Height - 90) / Image.Height;
 
             ImageWidth = Image.Width * coefficient;
             ImageHeight = Image.Height * coefficient;
+            LeftImageMargin = (_view.Width - 340 - ImageWidth) / 2;
+            TopImageMargin = (_view.Height - 70 - ImageHeight) / 2 + 15;
 
             return Unit.Default;
         }

@@ -147,12 +147,14 @@
                         PointerPressed="InputElement_OnPointerPressed"
                         PointerMoved="InputElement_OnPointerMoved"
                         UseLayoutRounding="False"
-                        Margin="30"
+                        Margin="20"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default" />
+                        RenderOptions.BitmapInterpolationMode="Default" 
+                        Width="{Binding ImageWidth}"
+                        Height="{Binding ImageHeight}"/>
                     <Line
                         Stroke="{Binding AvaloniaColor}"
                         StrokeThickness="{Binding Thickness}"

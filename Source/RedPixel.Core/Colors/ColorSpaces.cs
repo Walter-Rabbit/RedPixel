@@ -11,33 +11,6 @@ public class ColorSpaces
 
     public delegate Color InFunc<TFirst, TSecond>(in TFirst arg, TSecond secondArg);
 
-    public string Name { get; }
-    public string[] Components { get; }
-
-    public InFunc<Color, ColorComponents> ColorToRgb { get; }
-
-    public InFunc<Color> ColorFromRgb { get; }
-
-    public Action<Bitmap, ColorComponents> BitmapToRgb { get; }
-
-    public Action<Bitmap> BitmapFromRgb { get; }
-
-    public ColorSpaces(
-        string name,
-        string[] components,
-        InFunc<Color, ColorComponents> colorToRgb,
-        InFunc<Color> colorFromRgb,
-        Action<Bitmap, ColorComponents> bitmapToRgb,
-        Action<Bitmap> bitmapFromRgb)
-    {
-        Name = name;
-        Components = components;
-        ColorToRgb = colorToRgb;
-        ColorFromRgb = colorFromRgb;
-        BitmapToRgb = bitmapToRgb;
-        BitmapFromRgb = bitmapFromRgb;
-    }
-
     public static ColorSpaces Rgb = new(
         "RGB",
         new[] { "R", "G", "B" },
@@ -93,6 +66,33 @@ public class ColorSpaces
         YCbCr709ColorSpace.FromRgb,
         YCbCr709ColorSpace.ToRgb,
         YCbCr709ColorSpace.FromRgb);
+
+    public ColorSpaces(
+        string name,
+        string[] components,
+        InFunc<Color, ColorComponents> colorToRgb,
+        InFunc<Color> colorFromRgb,
+        Action<Bitmap, ColorComponents> bitmapToRgb,
+        Action<Bitmap> bitmapFromRgb)
+    {
+        Name = name;
+        Components = components;
+        ColorToRgb = colorToRgb;
+        ColorFromRgb = colorFromRgb;
+        BitmapToRgb = bitmapToRgb;
+        BitmapFromRgb = bitmapFromRgb;
+    }
+
+    public string Name { get; }
+    public string[] Components { get; }
+
+    public InFunc<Color, ColorComponents> ColorToRgb { get; }
+
+    public InFunc<Color> ColorFromRgb { get; }
+
+    public Action<Bitmap, ColorComponents> BitmapToRgb { get; }
+
+    public Action<Bitmap> BitmapFromRgb { get; }
 
     public static Lazy<IEnumerable<ColorSpaces>> AllSpaces => new(
         () => typeof(ColorSpaces)

@@ -42,16 +42,70 @@ public class PnmImageParser : IImageParser
 
         var bitmap = new RedPixelBitmap(width, height, bytesForColor, colorSpace);
 
-        for (int y = 0; y < height; y++)
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
         {
-            for (int x = 0; x < width; x++)
-            {
-                var color = ReadColor(content, format, bytesForColor);
-                bitmap.SetPixel(x, y, color);
-            }
+            var color = ReadColor(content, format, bytesForColor);
+            bitmap.SetPixel(x, y, color);
         }
 
         return bitmap;
+    }
+
+    public void SerializeToStream(
+        RedPixelBitmap image,
+        Stream stream,
+        ColorSpaces colorSpace,
+        ColorComponents components)
+    {
+        var isGrayScale = IsGrayScale(image, components);
+
+        var format = isGrayScale ? "P5\n" : "P6\n";
+        stream.Write(Encoding.ASCII.GetBytes(format));
+        stream.Write(Encoding.ASCII.GetBytes("# Created by RedPixel\n"));
+
+        stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
+
+        var maxValue = 255 * image.BytesForColor;
+        stream.Write(Encoding.ASCII.GetBytes($"{maxValue}\n"));
+
+        for (var y = 0; y < image.Height; y++)
+        for (var x = 0; x < image.Width; x++)
+        {
+            var pixel = image.Matrix[y, x];
+            if (colorSpace != image.ColorSpace)
+            {
+                pixel = image.ColorSpace.ColorToRgb(in pixel, components);
+                pixel = colorSpace.ColorFromRgb(in pixel);
+            }
+
+            if (!isGrayScale)
+            {
+                stream.Write((components & ColorComponents.First) != 0
+                    ? pixel.FirstComponent.ToBytes(image.BytesForColor)
+                    : new byte[image.BytesForColor]);
+                stream.Write((components & ColorComponents.Second) != 0
+                    ? pixel.SecondComponent.ToBytes(image.BytesForColor)
+                    : new byte[image.BytesForColor]);
+                stream.Write((components & ColorComponents.Third) != 0
+                    ? pixel.ThirdComponent.ToBytes(image.BytesForColor)
+                    : new byte[image.BytesForColor]);
+            }
+            else
+            {
+                byte[] value;
+                if ((components & ColorComponents.First) != 0)
+                    value = pixel.FirstComponent.ToBytes(image.BytesForColor);
+                else if ((components & ColorComponents.Second) != 0)
+                    value = pixel.SecondComponent.ToBytes(image.BytesForColor);
+                else if ((components & ColorComponents.Third) != 0)
+                    value = pixel.ThirdComponent.ToBytes(image.BytesForColor);
+                else
+                    value = new byte[image.BytesForColor];
+
+                stream.Write(value);
+            }
+        }
     }
 
     private void SkipSpaces(Stream content)
@@ -131,86 +185,18 @@ public class PnmImageParser : IImageParser
         };
     }
 
-    public void SerializeToStream(
-        RedPixelBitmap image,
-        Stream stream,
-        ColorSpaces colorSpace,
-        ColorComponents components)
-    {
-        var isGrayScale = IsGrayScale(image, components);
-
-        var format = isGrayScale ? "P5\n" : "P6\n";
-        stream.Write(Encoding.ASCII.GetBytes(format));
-        stream.Write(Encoding.ASCII.GetBytes("# Created by RedPixel\n"));
-
-        stream.Write(Encoding.ASCII.GetBytes($"{image.Width} {image.Height}\n"));
-
-        var maxValue = 255 * image.BytesForColor;
-        stream.Write(Encoding.ASCII.GetBytes($"{maxValue}\n"));
-
-        for (int y = 0; y < image.Height; y++)
-        {
-            for (int x = 0; x < image.Width; x++)
-            {
-                var pixel = image.Matrix[y, x];
-                if (colorSpace != image.ColorSpace)
-                {
-                    pixel = image.ColorSpace.ColorToRgb(in pixel, components);
-                    pixel = colorSpace.ColorFromRgb(in pixel);
-                }
-
-                if (!isGrayScale)
-                {
-                    stream.Write((components & ColorComponents.First) != 0
-                        ? pixel.FirstComponent.ToBytes(image.BytesForColor)
-                        : new byte[image.BytesForColor]);
-                    stream.Write((components & ColorComponents.Second) != 0
-                        ? pixel.SecondComponent.ToBytes(image.BytesForColor)
-                        : new byte[image.BytesForColor]);
-                    stream.Write((components & ColorComponents.Third) != 0
-                        ? pixel.ThirdComponent.ToBytes(image.BytesForColor)
-                        : new byte[image.BytesForColor]);
-                }
-                else
-                {
-                    byte[] value;
-                    if ((components & ColorComponents.First) != 0)
-                    {
-                        value = pixel.FirstComponent.ToBytes(image.BytesForColor);
-                    }
-                    else if ((components & ColorComponents.Second) != 0)
-                    {
-                        value = pixel.SecondComponent.ToBytes(image.BytesForColor);
-                    }
-                    else if ((components & ColorComponents.Third) != 0)
-                    {
-                        value = pixel.ThirdComponent.ToBytes(image.BytesForColor);
-                    }
-                    else
-                    {
-                        value = new byte[image.BytesForColor];
-                    }
-
-                    stream.Write(value);
-                }
-            }
-        }
-    }
-
     private bool IsGrayScale(RedPixelBitmap image, ColorComponents components)
     {
         if ((int)components == 1 || (int)components == 2 || (int)components == 4)
             return true;
 
-        for (int y = 0; y < image.Height; y++)
+        for (var y = 0; y < image.Height; y++)
+        for (var x = 0; x < image.Width; x++)
         {
-            for (int x = 0; x < image.Width; x++)
-            {
-                var color = image.GetPixel(x, y);
-                if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent ||
-                    color.SecondComponent != color.ThirdComponent)
-                    return false;
-            }
+            var color = image.GetPixel(x, y);
+            if (color.FirstComponent != color.SecondComponent || color.FirstComponent != color.ThirdComponent ||
+                color.SecondComponent != color.ThirdComponent)
+                return false;
         }
 
         return true;

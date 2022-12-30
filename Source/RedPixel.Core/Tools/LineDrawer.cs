@@ -24,18 +24,17 @@ public static class LineDrawer
         bitmap.Matrix[y, x] = newColor;
     }
 
-    private static int IntPart(float number) => (int)number;
+    private static int IntPart(float number)
+    {
+        return (int)number;
+    }
 
     private static void Plot(Bitmap bitmap, int x, int y, float alpha, Color color, bool steep)
     {
         if (steep)
-        {
             DrawPoint(bitmap, y, x, alpha, color);
-        }
         else
-        {
             DrawPoint(bitmap, x, y, alpha, color);
-        }
     }
 
     private static float Distance(int x0, int y0, int x1, int y1)
@@ -72,9 +71,9 @@ public static class LineDrawer
         var gradient = (float)dy / dx;
         float y = yStart;
 
-        for (int x = xStart; x <= xEnd; x++)
+        for (var x = xStart; x <= xEnd; x++)
         {
-            for (int plotY = IntPart(y - (thickness - 1) / 2);
+            for (var plotY = IntPart(y - (thickness - 1) / 2);
                  plotY <= IntPart(y - (thickness - 1) / 2 + thickness);
                  plotY++)
             {
@@ -85,10 +84,10 @@ public static class LineDrawer
             y += gradient;
         }
 
-        for (int plotX = xStart - thickness / 2; plotX < xStart; plotX++)
+        for (var plotX = xStart - thickness / 2; plotX < xStart; plotX++)
         {
             y = yStart + gradient * (plotX - xStart);
-            for (int plotY = (int)(y - (thickness - 1) / 2.0);
+            for (var plotY = (int)(y - (thickness - 1) / 2.0);
                  plotY <= (int)(y - (thickness - 1) / 2.0 + thickness);
                  plotY++)
             {

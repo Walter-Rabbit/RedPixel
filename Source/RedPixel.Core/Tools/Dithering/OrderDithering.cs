@@ -5,7 +5,7 @@ namespace RedPixel.Core.Tools.Dithering;
 
 public class OrderDithering : ADitheringAlgo, IDitheringAlgo
 {
-    private static int[][] pattern =
+    private static readonly int[][] pattern =
     {
         new[] { 0, 32, 8, 40, 2, 34, 10, 42 },
         new[] { 48, 16, 56, 24, 50, 18, 58, 26 },
@@ -20,25 +20,23 @@ public class OrderDithering : ADitheringAlgo, IDitheringAlgo
     public static void ApplyDithering(Bitmap bitmap, ColorDepth depth)
     {
         for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
         {
-            for (var x = 0; x < bitmap.Width; x++)
-            {
-                var patternY = y % 8;
-                var patternX = x % 8;
+            var patternY = y % 8;
+            var patternX = x % 8;
 
-                var oldPixel = bitmap.GetPixel(x, y);
-                var r = 255f / depth.FirstComponent;
+            var oldPixel = bitmap.GetPixel(x, y);
+            var r = 255f / depth.FirstComponent;
 
-                var firstComponent = oldPixel.FirstComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
-                var secondComponent =
-                    oldPixel.SecondComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
-                var thirdComponent = oldPixel.ThirdComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
+            var firstComponent = oldPixel.FirstComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
+            var secondComponent =
+                oldPixel.SecondComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
+            var thirdComponent = oldPixel.ThirdComponent + r * ((float)pattern[patternY][patternX] / 64 - 1f / 2f);
 
 
-                bitmap.SetPixel(x, y, Normalize(FindClosestPaletteColor(
-                    new Color(firstComponent, secondComponent, thirdComponent), depth
-                )));
-            }
+            bitmap.SetPixel(x, y, Normalize(FindClosestPaletteColor(
+                new Color(firstComponent, secondComponent, thirdComponent), depth
+            )));
         }
     }
 }

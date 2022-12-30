@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <LangVersion>preview</LangVersion>
@@ -9,8 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SkiaSharp" Version="2.88.3" />
-      <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+        <PackageReference Include="LibDeflate.NET" Version="1.9.1" />
+        <PackageReference Include="SkiaSharp" Version="2.88.3" />
+        <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
-using Color = RedPixel.Core.Colors.ValueObjects.Color;
 
 namespace RedPixel.Core.Colors;
 
@@ -28,23 +27,15 @@ public class CmyColorSpace : IColorSpace
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
     {
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
     }
 
     public static void FromRgb(Bitmap bitmap)
     {
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
     }
 }

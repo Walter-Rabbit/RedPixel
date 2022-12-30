@@ -6,10 +6,11 @@ public static class ImageParserFactory
 
     static ImageParserFactory()
     {
-        Parsers = new List<IImageParser>()
+        Parsers = new List<IImageParser>
         {
             new PnmImageParser(),
-            new BmpImageParser()
+            new BmpImageParser(),
+            new PngImageParser()
         };
     }
 

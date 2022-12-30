@@ -152,9 +152,9 @@
         <Grid Classes="main">
             <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                         MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
-                <Image
-
-                    PointerPressed="InputElement_OnPointerPressed"
+                <Canvas>
+                    <Image
+                        PointerPressed="InputElement_OnPointerPressed"
                         PointerMoved="InputElement_OnPointerMoved"
                         UseLayoutRounding="False"
                         Margin="0"
@@ -162,11 +162,11 @@
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default" 
+                        RenderOptions.BitmapInterpolationMode="Default"
                         Width="{Binding ImageWidth}"
                         Height="{Binding ImageHeight}"
                         Canvas.Left="{Binding LeftImageMargin}"
-                        Canvas.Top="{Binding TopImageMargin}"/>
+                        Canvas.Top="{Binding TopImageMargin}" />
                     <Line
                         Stroke="{Binding AvaloniaColor}"
                         StrokeThickness="{Binding Thickness}"
@@ -177,7 +177,6 @@
                         DataContext="{Binding LineDrawingToolViewModel}" />
                     <utilities:Selection Name="Selection" DataContext="{Binding SelectionViewModel}" />
                 </Canvas>
-
             </ZoomBorder>
         </Grid>
     </DockPanel>

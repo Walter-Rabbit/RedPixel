@@ -126,6 +126,16 @@
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
+                        <Image ToolTip.Tip="Scaling"
+                               Classes="tool"
+                               Source="../Assets/scaler.png" />
+                    </TabItem.Header>
+                    <tools:ScalingTool
+                        Name="Scaling"
+                        DataContext="{Binding ScalingToolViewModel }" />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
                         <Image ToolTip.Tip="Utilities"
                                Classes="tool"
                                Source="../Assets/utilities.png" />
@@ -142,9 +152,9 @@
         <Grid Classes="main">
             <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
                         MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
-                <Canvas>
-                    <Image
-                        PointerPressed="InputElement_OnPointerPressed"
+                <Image
+
+                    PointerPressed="InputElement_OnPointerPressed"
                         PointerMoved="InputElement_OnPointerMoved"
                         UseLayoutRounding="False"
                         Margin="30"
@@ -153,17 +163,6 @@
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
                         RenderOptions.BitmapInterpolationMode="Default" />
-                    <Line
-                        Stroke="{Binding AvaloniaColor}"
-                        StrokeThickness="{Binding Thickness}"
-                        IsHitTestVisible="False"
-                        StartPoint="{Binding StartPoint}"
-                        EndPoint="{Binding EndPoint}"
-                        IsVisible="{Binding DrawingInProgress}"
-                        DataContext="{Binding LineDrawingToolViewModel}" />
-                    <utilities:Selection Name="Selection" DataContext="{Binding SelectionViewModel}" />
-                </Canvas>
-
             </ZoomBorder>
         </Grid>
     </DockPanel>

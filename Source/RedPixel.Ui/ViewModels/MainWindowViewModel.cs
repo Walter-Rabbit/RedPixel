@@ -34,8 +34,9 @@ namespace RedPixel.Ui.ViewModels
             DitheringToolViewModel = new DitheringToolViewModel(_view.Get<DitheringTool>("Dithering"), this);
             UtilitiesToolViewModel = new UtilitiesToolViewModel(_view.Get<UtilitiesTool>("Utilities"), this);
             HistogramToolViewModel = new HistogramToolViewModel(_view.Get<HistogramTool>("Histogram"), this);
-            SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
+            // SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
             FilteringToolViewModel = new FilteringToolViewModel(_view.Get<FilteringTool>("Filtering"), this);
+            ScalingToolViewModel = new ScalingToolViewModel(_view.Get<ScalingTool>("Scaling"), this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -69,6 +70,7 @@ namespace RedPixel.Ui.ViewModels
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
         public UtilitiesToolViewModel UtilitiesToolViewModel { get; set; }
+        public ScalingToolViewModel ScalingToolViewModel { get; set; }
         public LineDrawingToolViewModel LineDrawingToolViewModel { get; set; }
         public FilteringToolViewModel FilteringToolViewModel { get; set; }
         public SelectionViewModel SelectionViewModel { get; set; }

@@ -60,6 +60,9 @@
             <DependentUpon>FilteringTool.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Tools\ScalingTool.axaml.cs">
+          <DependentUpon>ScalingTool.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Egorozh.ColorPicker.Avalonia.Dialog">

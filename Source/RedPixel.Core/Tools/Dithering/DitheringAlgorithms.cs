@@ -8,23 +8,23 @@ public class DitheringAlgorithms
 {
     public delegate void InFunc<TF, TS>(TF first, TS second);
 
-    public static DitheringAlgorithms RawConversion = new DitheringAlgorithms(
+    public static DitheringAlgorithms RawConversion = new(
         "Raw Conversion",
         RawConversionDithering.ApplyDithering);
 
-    public static DitheringAlgorithms RandomConversion = new DitheringAlgorithms(
+    public static DitheringAlgorithms RandomConversion = new(
         "Random",
         RandomDithering.ApplyDithering);
 
-    public static DitheringAlgorithms FloydSteinbergConversion = new DitheringAlgorithms(
+    public static DitheringAlgorithms FloydSteinbergConversion = new(
         "Floyd Steinberg",
         FloydSteinbergDithering.ApplyDithering);
 
-    public static DitheringAlgorithms AtkinsonConversion = new DitheringAlgorithms(
+    public static DitheringAlgorithms AtkinsonConversion = new(
         "Atkinson",
         AtkinsonDithering.ApplyDithering);
 
-    public static DitheringAlgorithms OrderConversion = new DitheringAlgorithms(
+    public static DitheringAlgorithms OrderConversion = new(
         "Order",
         OrderDithering.ApplyDithering);
 

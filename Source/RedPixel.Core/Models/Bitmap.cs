@@ -46,13 +46,9 @@ public class Bitmap
 
     public Bitmap ConvertToGamma(float targetGammaValue)
     {
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                Matrix[y, x] = Matrix[y, x].ConvertToGamma(Gamma, targetGammaValue);
-            }
-        }
+        for (var y = 0; y < Height; y++)
+        for (var x = 0; x < Width; x++)
+            Matrix[y, x] = Matrix[y, x].ConvertToGamma(Gamma, targetGammaValue);
 
         Gamma = targetGammaValue;
         return this;

@@ -7,5 +7,5 @@ public enum ColorComponents
     First = 1,
     Second = 2,
     Third = 4,
-    All = First | Second | Third,
+    All = First | Second | Third
 }

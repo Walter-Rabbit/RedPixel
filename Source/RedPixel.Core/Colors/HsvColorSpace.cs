@@ -52,28 +52,15 @@ public class HsvColorSpace : IColorSpace
 
         var h = 0;
 
-        if (Math.Abs(max - min) < tolerance)
-        {
-            return new Color(h, s, v);
-        }
+        if (Math.Abs(max - min) < tolerance) return new Color(h, s, v);
 
         if (Math.Abs(max - r) < tolerance)
-        {
             h = (int)((g - b) / (max - min) * 60);
-        }
         else if (Math.Abs(max - g) < tolerance)
-        {
             h = (int)((b - r) / (max - min) * 60 + 120);
-        }
-        else if (Math.Abs(max - b) < tolerance)
-        {
-            h = (int)((r - g) / (max - min) * 60 + 240);
-        }
+        else if (Math.Abs(max - b) < tolerance) h = (int)((r - g) / (max - min) * 60 + 240);
 
-        if (h < 0)
-        {
-            h += 360;
-        }
+        if (h < 0) h += 360;
 
         return new Color(h, s, v);
     }
@@ -82,25 +69,17 @@ public class HsvColorSpace : IColorSpace
     {
         bitmap.BytesForColor -= 1;
 
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
     }
 
     public static void FromRgb(Bitmap bitmap)
     {
         bitmap.BytesForColor += 1;
 
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
     }
 }

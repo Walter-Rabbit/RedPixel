@@ -40,12 +40,8 @@ public class YCoCgColorSpace : IColorSpace
         bitmap.BytesForColor -= 1;
 
         for (var y = 0; y < bitmap.Height; y++)
-        {
-            for (var x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
-            }
-        }
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
     }
 
     public static void FromRgb(Bitmap bitmap)
@@ -53,11 +49,7 @@ public class YCoCgColorSpace : IColorSpace
         bitmap.BytesForColor += 1;
 
         for (var y = 0; y < bitmap.Height; y++)
-        {
-            for (var x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
-            }
-        }
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = FromRgb(in bitmap.Matrix[y, x]);
     }
 }

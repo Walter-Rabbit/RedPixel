@@ -4,7 +4,7 @@ public static class HeaderMatchFuncFactory
 {
     public static Func<Stream, bool> Create(params byte[][] headers)
     {
-        return (content) =>
+        return content =>
         {
             return headers.Any(header =>
             {

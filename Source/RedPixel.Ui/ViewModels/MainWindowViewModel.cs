@@ -61,7 +61,7 @@ namespace RedPixel.Ui.ViewModels
             var dialog = new OpenFileDialog();
             dialog.Filters.AddRange(ImageFormat.AllFormats.Value.Select(x => new FileDialogFilter()
             {
-                Name = $"Image",
+                Name = $"{x.Value}",
                 Extensions = new[] { x.Value }.Concat(x.Alternatives).ToList()
             }));
 
@@ -94,12 +94,13 @@ namespace RedPixel.Ui.ViewModels
         private async Task<Unit> SaveImageAsync()
         {
             var dialog = new SaveFileDialog();
-            dialog.Filters.Add(new FileDialogFilter()
+            
+            dialog.Filters.AddRange(ImageFormat.AllFormats.Value.Select(x => new FileDialogFilter()
             {
-                Name = "Images",
-                Extensions = ImageFormat.AllFormats.Value.Select(x => x.Value).ToList()
-            });
-
+                Name = $"{x.Value}",
+                Extensions = new[] { x.Value }.Concat(x.Alternatives).ToList()
+            }));
+            
             var result = await dialog.ShowAsync(_view);
 
             if (result is null) return Unit.Default;

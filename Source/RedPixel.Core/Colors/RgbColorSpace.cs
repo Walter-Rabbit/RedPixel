@@ -1,13 +1,15 @@
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Models;
+using Color = System.Drawing.Color;
 
 namespace RedPixel.Core.Colors;
 
-using SystemColor = System.Drawing.Color;
+using SystemColor = Color;
 
 public class RgbColorSpace : IColorSpace
 {
-    public static Color ToRgb(in Color color, ColorComponents components = ColorComponents.All)
+    public static ValueObjects.Color ToRgb(in ValueObjects.Color color,
+        ColorComponents components = ColorComponents.All)
     {
         if (components == ColorComponents.All)
             return color;
@@ -16,10 +18,10 @@ public class RgbColorSpace : IColorSpace
         var sc = (components & ColorComponents.Second) != 0 ? color.SecondComponent : 0;
         var tc = (components & ColorComponents.Third) != 0 ? color.ThirdComponent : 0;
 
-        return new Color(fc, sc, tc);
+        return new ValueObjects.Color(fc, sc, tc);
     }
 
-    public static Color FromRgb(in Color color)
+    public static ValueObjects.Color FromRgb(in ValueObjects.Color color)
     {
         return color;
     }
@@ -29,13 +31,9 @@ public class RgbColorSpace : IColorSpace
         if (components == ColorComponents.All)
             return;
 
-        for (int x = 0; x < bitmap.Width; x++)
-        {
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
-            }
-        }
+        for (var x = 0; x < bitmap.Width; x++)
+        for (var y = 0; y < bitmap.Height; y++)
+            bitmap.Matrix[y, x] = ToRgb(in bitmap.Matrix[y, x], components);
     }
 
     public static void FromRgb(Bitmap bitmap)

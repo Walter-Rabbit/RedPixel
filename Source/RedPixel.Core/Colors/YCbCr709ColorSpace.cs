@@ -24,7 +24,7 @@ public class YCbCr709ColorSpace : IColorSpace
         var B = cb + y;
         var R = cr + y;
         var G = (y - a * R - c * B) / b;
-        
+
         return new Color(
             Math.Max(0, Math.Min(255, R)),
             Math.Max(0, Math.Min(255, G)),
@@ -49,23 +49,15 @@ public class YCbCr709ColorSpace : IColorSpace
 
     public static void ToRgb(Bitmap bitmap, ColorComponents components = ColorComponents.All)
     {
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = ToRgb(bitmap.Matrix[y, x], components);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = ToRgb(bitmap.Matrix[y, x], components);
     }
 
     public static void FromRgb(Bitmap bitmap)
     {
-        for (int y = 0; y < bitmap.Height; y++)
-        {
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                bitmap.Matrix[y, x] = FromRgb(bitmap.Matrix[y, x]);
-            }
-        }
+        for (var y = 0; y < bitmap.Height; y++)
+        for (var x = 0; x < bitmap.Width; x++)
+            bitmap.Matrix[y, x] = FromRgb(bitmap.Matrix[y, x]);
     }
 }

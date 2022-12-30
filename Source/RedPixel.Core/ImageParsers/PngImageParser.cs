@@ -114,7 +114,7 @@ public class PngImageParser : IImageParser
     {
         stream.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
         SerializeIhdr(stream, image.Width, image.Height, ColorTypes.Rgb);
-        SerializeGama(stream, 0f);
+        SerializeGama(stream, image.Gamma);
         
         SerializeIdat(stream, image, ColorTypes.Rgb);
         
@@ -240,7 +240,7 @@ public class PngImageParser : IImageParser
         stream.Write(BitConverter.GetBytes(BinaryPrimitives.ReverseEndianness(4)));
         stream.Write("gAMA"u8);
 
-        if (Math.Abs(gamma) >= 2 * float.Epsilon)
+        if (Math.Abs(gamma - 1) >= 2 * float.Epsilon)
         {
             var exactGamma = (uint)(float.Abs(gamma + 1) < float.Epsilon ? 45455 : gamma * 100000);
             var parsedGamma = BitConverter.GetBytes(BinaryPrimitives.ReverseEndianness(exactGamma));

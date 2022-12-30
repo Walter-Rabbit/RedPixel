@@ -157,12 +157,27 @@
                     PointerPressed="InputElement_OnPointerPressed"
                         PointerMoved="InputElement_OnPointerMoved"
                         UseLayoutRounding="False"
-                        Margin="30"
+                        Margin="0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default" />
+                        RenderOptions.BitmapInterpolationMode="Default" 
+                        Width="{Binding ImageWidth}"
+                        Height="{Binding ImageHeight}"
+                        Canvas.Left="{Binding LeftImageMargin}"
+                        Canvas.Top="{Binding TopImageMargin}"/>
+                    <Line
+                        Stroke="{Binding AvaloniaColor}"
+                        StrokeThickness="{Binding Thickness}"
+                        IsHitTestVisible="False"
+                        StartPoint="{Binding StartPoint}"
+                        EndPoint="{Binding EndPoint}"
+                        IsVisible="{Binding DrawingInProgress}"
+                        DataContext="{Binding LineDrawingToolViewModel}" />
+                    <utilities:Selection Name="Selection" DataContext="{Binding SelectionViewModel}" />
+                </Canvas>
+
             </ZoomBorder>
         </Grid>
     </DockPanel>

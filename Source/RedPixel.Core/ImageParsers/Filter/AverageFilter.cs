@@ -20,6 +20,6 @@ public class AverageFilter : IFilter
     
     private static float CalculateDelta(float a, float b)
     {
-        return float.Floor((a + b) / 2);
+        return (float)Math.Floor((a + b) / 2);
     }
 }

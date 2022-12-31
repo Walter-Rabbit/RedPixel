@@ -242,7 +242,7 @@ public class PngImageParser : IImageParser
 
         if (Math.Abs(gamma - 1) >= 2 * float.Epsilon)
         {
-            var exactGamma = (uint)(float.Abs(gamma + 1) < float.Epsilon ? 45455 : gamma * 100000);
+            var exactGamma = (uint)(Math.Abs(gamma + 1) < float.Epsilon ? 45455 : gamma * 100000);
             var parsedGamma = BitConverter.GetBytes(BinaryPrimitives.ReverseEndianness(exactGamma));
 
             stream.Write(parsedGamma, 0, parsedGamma.Length);

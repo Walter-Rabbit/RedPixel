@@ -2,8 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using RedPixel.Ui.ViewModels;
-using RedPixel.Ui.Views.Tools;
-using RedPixel.Ui.Views.Utilities;
 
 namespace RedPixel.Ui.Views
 {
@@ -40,9 +38,8 @@ namespace RedPixel.Ui.Views
         {
             (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.PointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
-
-            // (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
-            //     e.GetPosition((IVisual)e.Source.InteractiveParent));
+            (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
+                e.GetPosition((IVisual)e.Source.InteractiveParent));
         }
 
         private void InputElement_OnKeyDown(object sender, KeyEventArgs e)
@@ -50,7 +47,7 @@ namespace RedPixel.Ui.Views
             if (e.Key == Key.Escape)
             {
                 (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.DrawingCanceled();
-                // (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
+                (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
             }
         }
     }

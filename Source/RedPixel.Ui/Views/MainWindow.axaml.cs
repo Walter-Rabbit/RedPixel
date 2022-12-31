@@ -18,7 +18,7 @@ namespace RedPixel.Ui.Views
         private void InputElement_OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
             var previewPosition = e.GetPosition((IVisual)e.Source.InteractiveParent);
-            
+
             var position = e.GetPosition((IVisual)e.Source);
             var imageBounds = (sender as Image).Bounds;
             var sourceSize = (sender as Image).Source.Size;
@@ -41,8 +41,8 @@ namespace RedPixel.Ui.Views
             (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.PointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
 
-            (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
-                e.GetPosition((IVisual)e.Source.InteractiveParent));
+            // (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
+            //     e.GetPosition((IVisual)e.Source.InteractiveParent));
         }
 
         private void InputElement_OnKeyDown(object sender, KeyEventArgs e)
@@ -50,7 +50,7 @@ namespace RedPixel.Ui.Views
             if (e.Key == Key.Escape)
             {
                 (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.DrawingCanceled();
-                (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
+                // (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
             }
         }
     }

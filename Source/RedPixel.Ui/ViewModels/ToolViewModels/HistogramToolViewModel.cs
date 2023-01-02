@@ -11,6 +11,7 @@ public class HistogramToolViewModel : BaseViewModel
     [Reactive] public bool FirstHistogramVisible { get; set; } = true;
     [Reactive] public bool SecondHistogramVisible { get; set; } = true;
     [Reactive] public bool ThirdHistogramVisible { get; set; } = true;
+    [Reactive] public bool IsVisible { get; set; } = false;
 
     [Reactive] public MainWindowViewModel MainWindowViewModel { get; set; }
     [Reactive] public double[][] HistogramValues { get; set; }

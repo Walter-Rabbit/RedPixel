@@ -70,6 +70,7 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public double ImageHeight { get; set; }
         [Reactive] public double LeftImageMargin { get; set; }
         [Reactive] public double TopImageMargin { get; set; }
+        [Reactive] public string HistogramsVisibilityString { get; set; } = "Histograms";
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
@@ -150,6 +151,14 @@ namespace RedPixel.Ui.ViewModels
                 .SerializeToStream(Image, fileStream, ColorSpaceToolViewModel.SelectedColorSpace,
                     ColorSpaceToolViewModel.ColorComponents);
 
+            return Unit.Default;
+        }
+
+        private Unit ChangeHistogramsVisibility()
+        {
+            HistogramToolViewModel.IsVisible = !HistogramToolViewModel.IsVisible;
+            HistogramsVisibilityString = HistogramToolViewModel.IsVisible ? "Histograms ✓" : "Histograms  ";
+            
             return Unit.Default;
         }
     }

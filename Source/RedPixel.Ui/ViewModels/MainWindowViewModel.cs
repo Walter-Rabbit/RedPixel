@@ -166,6 +166,11 @@ namespace RedPixel.Ui.ViewModels
 
         private void ApplyDefaultZoom()
         {
+            if (Image is null)
+            {
+                return;
+            }
+
             var coefficient = Image.Width > Image.Height
                 ? (_view.Width - 360) / Image.Width
                 : (_view.Height - 90) / Image.Height;

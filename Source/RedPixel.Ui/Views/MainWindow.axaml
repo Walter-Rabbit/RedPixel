@@ -169,7 +169,8 @@
                 MinZoomX="0.05"
                 MinZoomY="0.05"
                 MaxZoomX="2000"
-                MaxZoomY="2000">
+                MaxZoomY="2000" 
+                Stretch="None">
                 <Canvas>
                     <Image
                         PointerPressed="InputElement_OnPointerPressed"

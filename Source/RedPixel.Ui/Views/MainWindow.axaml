@@ -67,6 +67,9 @@
                 <MenuItem
                     Header="{Binding HistogramsVisibilityString}"
                     Command="{Binding ChangeHistogramsVisibility}" />
+                <MenuItem
+                    Header="{Binding CoordinatesVisibilityString}"
+                    Command="{Binding ChangeCoordinatesVisibility}"/>
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Right" RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40">
@@ -176,8 +179,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
-                        Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default" />
+                        RenderOptions.BitmapInterpolationMode="Default"/>
                     <Line
                         Stroke="{Binding AvaloniaColor}"
                         StrokeThickness="{Binding Thickness}"

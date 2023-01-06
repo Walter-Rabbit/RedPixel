@@ -13,8 +13,9 @@ public class CoordinatesViewModel : BaseViewModel
         _view = view;
         _parentViewModel = parentViewModel;
     }
-    
+
     [Reactive] public string Coordinates { get; set; }
+    [Reactive] public bool IsVisible { get; set; } = true;
 
     public void PointerMoved(int x, int y)
     {

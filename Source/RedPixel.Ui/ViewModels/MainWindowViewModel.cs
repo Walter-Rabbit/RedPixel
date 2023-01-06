@@ -69,6 +69,7 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
         [Reactive] public string HistogramsVisibilityString { get; set; } = "Histograms";
+        [Reactive] public string CoordinatesVisibilityString { get; set; } = "Cursor Coordinates ✓";
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
@@ -115,7 +116,7 @@ namespace RedPixel.Ui.ViewModels
             Image = img;
 
             ApplyDefaultZoom();
-            
+
             return Unit.Default;
         }
 
@@ -150,6 +151,15 @@ namespace RedPixel.Ui.ViewModels
         {
             HistogramToolViewModel.IsVisible = !HistogramToolViewModel.IsVisible;
             HistogramsVisibilityString = HistogramToolViewModel.IsVisible ? "Histograms ✓" : "Histograms  ";
+
+            return Unit.Default;
+        }
+
+        private Unit ChangeCoordinatesVisibility()
+        {
+            CoordinatesViewModel.IsVisible = !CoordinatesViewModel.IsVisible;
+            CoordinatesVisibilityString =
+                CoordinatesViewModel.IsVisible ? "Cursor Coordinates ✓" : "Cursor Coordinates  ";
 
             return Unit.Default;
         }

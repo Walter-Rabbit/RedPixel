@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.PanAndZoom;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core;
@@ -38,6 +39,7 @@ namespace RedPixel.Ui.ViewModels
             SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
             FilteringToolViewModel = new FilteringToolViewModel(_view.Get<FilteringTool>("Filtering"), this);
             ScalingToolViewModel = new ScalingToolViewModel(_view.Get<ScalingTool>("Scaling"), this);
+            CoordinatesViewModel = new CoordinatesViewModel(_view.Get<Coordinates>("Coordinates"), this);
 
             this.WhenAnyValue(x => x.Image)
                 .Subscribe(x =>
@@ -66,11 +68,8 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public Bitmap Image { get; set; }
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
-        [Reactive] public double ImageWidth { get; set; }
-        [Reactive] public double ImageHeight { get; set; }
-        [Reactive] public double LeftImageMargin { get; set; }
-        [Reactive] public double TopImageMargin { get; set; }
         [Reactive] public string HistogramsVisibilityString { get; set; } = "Histograms";
+        [Reactive] public string CoordinatesVisibilityString { get; set; } = "Cursor Coordinates ✓";
 
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
@@ -81,6 +80,7 @@ namespace RedPixel.Ui.ViewModels
         public FilteringToolViewModel FilteringToolViewModel { get; set; }
         public SelectionViewModel SelectionViewModel { get; set; }
         public HistogramToolViewModel HistogramToolViewModel { get; set; }
+        public CoordinatesViewModel CoordinatesViewModel { get; set; }
 
         private async Task<Unit> OpenImageAsync()
         {
@@ -115,14 +115,7 @@ namespace RedPixel.Ui.ViewModels
             File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
             Image = img;
 
-            var coefficient = Image.Width > Image.Height
-                ? (_view.Width - 360) / Image.Width
-                : (_view.Height - 90) / Image.Height;
-
-            ImageWidth = Image.Width * coefficient;
-            ImageHeight = Image.Height * coefficient;
-            LeftImageMargin = (_view.Width - 340 - ImageWidth) / 2;
-            TopImageMargin = (_view.Height - 70 - ImageHeight) / 2 + 15;
+            ApplyDefaultZoom();
 
             return Unit.Default;
         }
@@ -130,13 +123,13 @@ namespace RedPixel.Ui.ViewModels
         private async Task<Unit> SaveImageAsync()
         {
             var dialog = new SaveFileDialog();
-            
+
             dialog.Filters.AddRange(ImageFormat.AllFormats.Value.Select(x => new FileDialogFilter()
             {
                 Name = $"{x.Value}",
                 Extensions = new[] { x.Value }.Concat(x.Alternatives).ToList()
             }));
-            
+
             var result = await dialog.ShowAsync(_view);
 
             if (result is null) return Unit.Default;
@@ -158,8 +151,38 @@ namespace RedPixel.Ui.ViewModels
         {
             HistogramToolViewModel.IsVisible = !HistogramToolViewModel.IsVisible;
             HistogramsVisibilityString = HistogramToolViewModel.IsVisible ? "Histograms ✓" : "Histograms  ";
-            
+
             return Unit.Default;
+        }
+
+        private Unit ChangeCoordinatesVisibility()
+        {
+            CoordinatesViewModel.IsVisible = !CoordinatesViewModel.IsVisible;
+            CoordinatesVisibilityString =
+                CoordinatesViewModel.IsVisible ? "Cursor Coordinates ✓" : "Cursor Coordinates  ";
+
+            return Unit.Default;
+        }
+
+        private void ApplyDefaultZoom()
+        {
+            if (Image is null)
+            {
+                return;
+            }
+
+            var coefficient = Image.Width > Image.Height
+                ? (_view.Width - 360) / Image.Width
+                : (_view.Height - 90) / Image.Height;
+
+            var imageWidth = Image.Width * coefficient;
+            var imageHeight = Image.Height * coefficient;
+            var leftMargin = (_view.Width - 340 - imageWidth) / 2;
+            var topMargin = (_view.Height - 70 - imageHeight) / 2 + 15;
+
+            var zoomBorder = _view.Get<ZoomBorder>("ZoomBorder");
+            zoomBorder.Zoom(coefficient, _view.Width / 2, _view.Height / 2);
+            zoomBorder.Pan(leftMargin, topMargin);
         }
     }
 }

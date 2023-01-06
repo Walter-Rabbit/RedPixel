@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -40,6 +41,16 @@ namespace RedPixel.Ui.Views
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
             (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
+
+            var position = e.GetPosition((IVisual)e.Source);
+            var imageBounds = (sender as Image).Bounds;
+            var sourceSize = (sender as Image).Source.Size;
+            var x = (int)(position.X / (imageBounds.Width / sourceSize.Width)) + 1;
+            var y = (int)(position.Y / (imageBounds.Height / sourceSize.Height)) + 1;
+
+            x = Math.Max(0, Math.Min((int)sourceSize.Width, x));
+            y = Math.Max(0, Math.Min((int)sourceSize.Height, y));
+            (DataContext as MainWindowViewModel)?.CoordinatesViewModel.PointerMoved(x, y);
         }
 
         private void InputElement_OnKeyDown(object sender, KeyEventArgs e)

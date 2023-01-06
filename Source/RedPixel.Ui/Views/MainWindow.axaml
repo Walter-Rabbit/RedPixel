@@ -69,7 +69,7 @@
                     Command="{Binding ChangeHistogramsVisibility}" />
             </MenuItem>
         </Menu>
-        <Grid RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40" DockPanel.Dock="Right">
+        <Grid DockPanel.Dock="Right" RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40">
             <TabControl
                 Grid.ColumnSpan="2"
                 Classes="tools"
@@ -157,9 +157,16 @@
             <tools:HistogramTool Name="Histogram" Background="#2b2d30" Grid.Column="0" Grid.Row="2"
                                  DataContext="{Binding HistogramToolViewModel }" />
         </Grid>
+        <StackPanel DockPanel.Dock="Bottom" Background="#2b2d30" Orientation="Horizontal" Height="20">
+            <utilities:Coordinates Name="Coordinates" DataContext="{Binding CoordinatesViewModel}" />
+        </StackPanel>
         <Grid Classes="main">
-            <ZoomBorder Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left"
-                        MinZoomX="0.05" MinZoomY="0.05" ClipToBounds="True">
+            <ZoomBorder
+                Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left" ClipToBounds="True"
+                MinZoomX="0.05"
+                MinZoomY="0.05"
+                MaxZoomX="2000"
+                MaxZoomY="2000">
                 <Canvas>
                     <Image
                         PointerPressed="InputElement_OnPointerPressed"
@@ -170,11 +177,7 @@
                         HorizontalAlignment="Center"
                         Source="{Binding Bitmap}"
                         Stretch="Uniform"
-                        RenderOptions.BitmapInterpolationMode="Default"
-                        Width="{Binding ImageWidth}"
-                        Height="{Binding ImageHeight}"
-                        Canvas.Left="{Binding LeftImageMargin}"
-                        Canvas.Top="{Binding TopImageMargin}" />
+                        RenderOptions.BitmapInterpolationMode="Default" />
                     <Line
                         Stroke="{Binding AvaloniaColor}"
                         StrokeThickness="{Binding Thickness}"

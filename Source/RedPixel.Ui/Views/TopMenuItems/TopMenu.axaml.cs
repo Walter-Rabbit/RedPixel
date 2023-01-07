@@ -2,7 +2,7 @@
 
 namespace RedPixel.Ui.Views.TopMenuItems;
 
-public partial class TopMenu : Menu
+public partial class TopMenu : UserControl
 {
     public TopMenu()
     {

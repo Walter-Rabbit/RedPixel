@@ -30,14 +30,15 @@ namespace RedPixel.Ui.Views
             }
             else
             {
-                (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.ImageClicked(x, y, e.ClickCount,
+                (DataContext as MainWindowViewModel)?.ToolsMenuViewModel.LineDrawingToolViewModel.ImageClicked(x, y,
+                    e.ClickCount,
                     previewPosition);
             }
         }
 
         private void InputElement_OnPointerMoved(object sender, PointerEventArgs e)
         {
-            (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.PointerMoved(
+            (DataContext as MainWindowViewModel)?.ToolsMenuViewModel.LineDrawingToolViewModel.PointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
             (DataContext as MainWindowViewModel)?.SelectionViewModel.ImagePointerMoved(
                 e.GetPosition((IVisual)e.Source.InteractiveParent));
@@ -57,7 +58,7 @@ namespace RedPixel.Ui.Views
         {
             if (e.Key == Key.Escape)
             {
-                (DataContext as MainWindowViewModel)?.LineDrawingToolViewModel.DrawingCanceled();
+                (DataContext as MainWindowViewModel)?.ToolsMenuViewModel.LineDrawingToolViewModel.DrawingCanceled();
                 (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
             }
         }

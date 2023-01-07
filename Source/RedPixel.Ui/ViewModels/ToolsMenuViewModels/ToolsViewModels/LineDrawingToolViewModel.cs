@@ -15,11 +15,11 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class LineDrawingToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private readonly LineDrawingTool _view;
     private Point _startPoint;
 
-    public LineDrawingToolViewModel(LineDrawingTool view, MainWindowViewModel parentViewModel)
+    public LineDrawingToolViewModel(LineDrawingTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
@@ -55,14 +55,14 @@ public class LineDrawingToolViewModel : BaseViewModel
                     new RedPixelColor(color.R, color.G, color.B));
 
 
-            _parentViewModel.Image.DrawLine(
+            _parentViewModel.ParentViewModel.Image.DrawLine(
                 (int)_startPoint.X,
                 (int)_startPoint.Y,
                 x, y,
                 color.A / 255f,
                 colorInCurrentColorSpace,
                 Thickness);
-            _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap();
+            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap();
             DrawingInProgress = false;
         }
         else if (clickCount == 2)

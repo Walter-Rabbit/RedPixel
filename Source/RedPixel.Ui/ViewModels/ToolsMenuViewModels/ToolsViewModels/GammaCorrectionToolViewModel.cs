@@ -12,10 +12,10 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class GammaCorrectionToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private readonly GammaCorrectionTool _view;
 
-    public GammaCorrectionToolViewModel(GammaCorrectionTool view, MainWindowViewModel parentViewModel)
+    public GammaCorrectionToolViewModel(GammaCorrectionTool view, ToolsMenuViewModel parentViewModel)
     {
         _parentViewModel = parentViewModel;
         _view = view;
@@ -36,9 +36,9 @@ public class GammaCorrectionToolViewModel : BaseViewModel
             var sw = new Stopwatch();
             sw.Start();
             GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-            _parentViewModel.Image.Gamma = GammaValue;
-            _parentViewModel.Bitmap =
-                _parentViewModel.Image?.ConvertToAvaloniaBitmap(
+            _parentViewModel.ParentViewModel.Image.Gamma = GammaValue;
+            _parentViewModel.ParentViewModel.Bitmap =
+                _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(
                     _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
             sw.Stop();
             File.AppendAllText(
@@ -60,7 +60,7 @@ public class GammaCorrectionToolViewModel : BaseViewModel
             var sw = new Stopwatch();
             sw.Start();
             GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-            _parentViewModel.Bitmap = _parentViewModel.Image?.ConvertToGamma(GammaValue)
+            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image?.ConvertToGamma(GammaValue)
                 .ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel.ColorComponents);
             sw.Stop();
             File.AppendAllText(
@@ -77,8 +77,10 @@ public class GammaCorrectionToolViewModel : BaseViewModel
 
     private Unit AdjustContrast()
     {
-        _parentViewModel.Image.ApplyContrastAdjustment(IgnorePixelsPart);
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+        _parentViewModel.ParentViewModel.Image.ApplyContrastAdjustment(IgnorePixelsPart);
+        _parentViewModel.ParentViewModel.Bitmap =
+            _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel
+                .ColorComponents);
 
         return Unit.Default;
     }

@@ -15,10 +15,10 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class DitheringToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private readonly DitheringTool _view;
 
-    public DitheringToolViewModel(DitheringTool view, MainWindowViewModel parentViewModel)
+    public DitheringToolViewModel(DitheringTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
@@ -52,8 +52,8 @@ public class DitheringToolViewModel : BaseViewModel
     {
         var depth = new ColorDepth(int.Parse(RString), int.Parse(GString), int.Parse(BString));
 
-        SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.Image, depth);
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+        SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.ParentViewModel.Image, depth);
+        _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;
     }

@@ -14,10 +14,10 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class ColorSpaceToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private readonly ColorSpaceTool _view;
 
-    public ColorSpaceToolViewModel(ColorSpaceTool view, MainWindowViewModel parentViewModel)
+    public ColorSpaceToolViewModel(ColorSpaceTool view, ToolsMenuViewModel parentViewModel)
     {
         EnabledComponents = new bool[] { true, true, true };
         SelectedColorSpace = ColorSpaces.Rgb;
@@ -30,7 +30,8 @@ public class ColorSpaceToolViewModel : BaseViewModel
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                _parentViewModel.Bitmap = _parentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                _parentViewModel.ParentViewModel.Bitmap =
+                    _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -43,8 +44,9 @@ public class ColorSpaceToolViewModel : BaseViewModel
                 var sw = new Stopwatch();
                 sw.Start();
                 File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
-                _parentViewModel.Image?.ToColorSpace(x);
-                _parentViewModel.Bitmap = _parentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                _parentViewModel.ParentViewModel.Image?.ToColorSpace(x);
+                _parentViewModel.ParentViewModel.Bitmap =
+                    _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 File.AppendAllText(
                     "log.txt",
                     $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");

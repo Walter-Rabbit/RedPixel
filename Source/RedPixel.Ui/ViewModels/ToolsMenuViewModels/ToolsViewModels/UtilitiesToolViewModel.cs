@@ -10,10 +10,10 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class UtilitiesToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private UtilitiesTool _view;
 
-    public UtilitiesToolViewModel(UtilitiesTool view, MainWindowViewModel parentViewModel)
+    public UtilitiesToolViewModel(UtilitiesTool view, ToolsMenuViewModel parentViewModel)
     {
         _parentViewModel = parentViewModel;
         _view = view;
@@ -26,17 +26,17 @@ public class UtilitiesToolViewModel : BaseViewModel
 
     public Unit GenerateGradient()
     {
-        var bytesForColor = _parentViewModel.Image?.BytesForColor ?? 1;
-        var colorSpace = _parentViewModel.Image?.ColorSpace ?? ColorSpaces.Rgb;
+        var bytesForColor = _parentViewModel.ParentViewModel.Image?.BytesForColor ?? 1;
+        var colorSpace = _parentViewModel.ParentViewModel.Image?.ColorSpace ?? ColorSpaces.Rgb;
 
         if (_parentViewModel == null) return Unit.Default;
-        _parentViewModel.Image = GradientGenerator.Generate(
+        _parentViewModel.ParentViewModel.Image = GradientGenerator.Generate(
             int.Parse(HeightString),
             int.Parse(WidthString),
             bytesForColor,
             colorSpace);
 
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+        _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
 
         return Unit.Default;
@@ -44,8 +44,8 @@ public class UtilitiesToolViewModel : BaseViewModel
 
     public Unit ConvertToBlackWhite()
     {
-        BwConverter.ConvertToBlackAndWhite(_parentViewModel.Image);
-        _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+        BwConverter.ConvertToBlackAndWhite(_parentViewModel.ParentViewModel.Image);
+        _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;
     }

@@ -54,8 +54,8 @@ public class TopMenuViewModel : BaseViewModel
         var sw = new Stopwatch();
         sw.Start();
         var img = ImageParserFactory.CreateParser(format)
-            .Parse(fileStream, _parentViewModel.ColorSpaceToolViewModel.SelectedColorSpace);
-        img.Gamma = _parentViewModel.GammaConversionToolViewModel.GammaValue;
+            .Parse(fileStream, _parentViewModel.ToolsMenuViewModel.ColorSpaceToolViewModel.SelectedColorSpace);
+        img.Gamma = _parentViewModel.ToolsMenuViewModel.GammaConversionToolViewModel.GammaValue;
 
         sw.Stop();
         File.AppendAllText("log.txt", $"Parse: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
@@ -88,8 +88,8 @@ public class TopMenuViewModel : BaseViewModel
         await using var fileStream = File.OpenWrite(result);
         ImageParserFactory.CreateParser(format)
             .SerializeToStream(_parentViewModel.Image, fileStream,
-                _parentViewModel.ColorSpaceToolViewModel.SelectedColorSpace,
-                _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
+                _parentViewModel.ToolsMenuViewModel.ColorSpaceToolViewModel.SelectedColorSpace,
+                _parentViewModel.ToolsMenuViewModel.ColorSpaceToolViewModel.ColorComponents);
 
         return Unit.Default;
     }
@@ -117,9 +117,10 @@ public class TopMenuViewModel : BaseViewModel
 
     private Unit ChangeHistogramsVisibility()
     {
-        _parentViewModel.HistogramToolViewModel.IsVisible = !_parentViewModel.HistogramToolViewModel.IsVisible;
+        _parentViewModel.ToolsMenuViewModel.HistogramToolViewModel.IsVisible =
+            !_parentViewModel.ToolsMenuViewModel.HistogramToolViewModel.IsVisible;
         HistogramsVisibilityString =
-            _parentViewModel.HistogramToolViewModel.IsVisible ? "Histograms ✓" : "Histograms  ";
+            _parentViewModel.ToolsMenuViewModel.HistogramToolViewModel.IsVisible ? "Histograms ✓" : "Histograms  ";
 
         return Unit.Default;
     }

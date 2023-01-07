@@ -13,11 +13,11 @@ public class HistogramToolViewModel : BaseViewModel
     [Reactive] public bool ThirdHistogramVisible { get; set; } = true;
     [Reactive] public bool IsVisible { get; set; } = false;
 
-    [Reactive] public MainWindowViewModel MainWindowViewModel { get; set; }
+    [Reactive] public ToolsMenuViewModel ToolsMenuViewModel { get; set; }
     [Reactive] public double[][] HistogramValues { get; set; }
-    public HistogramToolViewModel(HistogramTool view, MainWindowViewModel parentViewModel)
+    public HistogramToolViewModel(HistogramTool view, ToolsMenuViewModel parentViewModel)
     {
-        MainWindowViewModel = parentViewModel;
+        ToolsMenuViewModel = parentViewModel;
         this.WhenAnyValue(x => x.HistogramValues)
             .Subscribe(x =>
             {
@@ -25,7 +25,7 @@ public class HistogramToolViewModel : BaseViewModel
                     view.UpdateHistograms(x);
             });
 
-        this.WhenAnyValue(x => x.MainWindowViewModel.ColorSpaceToolViewModel.ColorComponents)
+        this.WhenAnyValue(x => x.ToolsMenuViewModel.ColorSpaceToolViewModel.ColorComponents)
             .Subscribe(x =>
             {
                 FirstHistogramVisible = (x & ColorComponents.First) != 0;

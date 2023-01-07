@@ -10,12 +10,12 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class ScalingToolViewModel : BaseViewModel
 {
-    private MainWindowViewModel _mainWindowViewModel;
+    private ToolsMenuViewModel _parentViewModel;
     private ScalingTool _view;
 
-    public ScalingToolViewModel(ScalingTool view, MainWindowViewModel mainWindowViewModel)
+    public ScalingToolViewModel(ScalingTool view, ToolsMenuViewModel parentViewModel)
     {
-        _mainWindowViewModel = mainWindowViewModel;
+        _parentViewModel = parentViewModel;
         _view = view;
 
         this.WhenAnyValue(x => x.SelectedScaler)
@@ -34,11 +34,14 @@ public class ScalingToolViewModel : BaseViewModel
     {
         if (SelectedScaler.Name != "BC Splines")
         {
-            _mainWindowViewModel.Image = SelectedScaler.Scaler.Invoke(_mainWindowViewModel.Image, Width, Height, null);
+            _parentViewModel.ParentViewModel.Image =
+                SelectedScaler.Scaler.Invoke(_parentViewModel.ParentViewModel.Image, Width, Height, null);
         }
         else
         {
-            _mainWindowViewModel.Image = SelectedScaler.Scaler.Invoke(_mainWindowViewModel.Image, Width, Height, new float[]{ B, C});
+            _parentViewModel.ParentViewModel.Image =
+                SelectedScaler.Scaler.Invoke(_parentViewModel.ParentViewModel.Image, Width, Height,
+                    new float[] { B, C });
         }
     }
 }

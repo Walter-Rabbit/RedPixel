@@ -15,10 +15,10 @@ namespace RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
 
 public class FilteringToolViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly ToolsMenuViewModel _parentViewModel;
     private readonly FilteringTool _view;
 
-    public FilteringToolViewModel(FilteringTool view, MainWindowViewModel parentViewModel)
+    public FilteringToolViewModel(FilteringTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
@@ -63,26 +63,27 @@ public class FilteringToolViewModel : BaseViewModel
     {
         var parameter = Convert.ToSingle(Parameter, CultureInfo.InvariantCulture);
 
-        if (_parentViewModel.SelectionViewModel.IsSelected)
+        if (_parentViewModel.ParentViewModel.SelectionViewModel.IsSelected)
         {
             var (leftTopPoint, rightBottomPoint) = GetCornerPoints();
 
-            _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
-                _parentViewModel.Image,
+            _parentViewModel.ParentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _parentViewModel.ParentViewModel.Image,
                 parameter,
                 leftTopPoint,
                 rightBottomPoint);
-            _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
                 _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         }
         else
         {
-            _parentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
-                _parentViewModel.Image,
+            _parentViewModel.ParentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _parentViewModel.ParentViewModel.Image,
                 parameter,
                 new Point(0, 0),
-                new Point(_parentViewModel.Image.Width - 1, _parentViewModel.Image.Height - 1));
-            _parentViewModel.Bitmap = _parentViewModel.Image.ConvertToAvaloniaBitmap(
+                new Point(_parentViewModel.ParentViewModel.Image.Width - 1,
+                    _parentViewModel.ParentViewModel.Image.Height - 1));
+            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
                 _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         }
 
@@ -93,10 +94,10 @@ public class FilteringToolViewModel : BaseViewModel
     {
         var points = new[]
         {
-            _parentViewModel.SelectionViewModel.RealFirstPoint,
-            _parentViewModel.SelectionViewModel.RealSecondPoint,
-            _parentViewModel.SelectionViewModel.RealThirdPoint,
-            _parentViewModel.SelectionViewModel.RealFourthPoint
+            _parentViewModel.ParentViewModel.SelectionViewModel.RealFirstPoint,
+            _parentViewModel.ParentViewModel.SelectionViewModel.RealSecondPoint,
+            _parentViewModel.ParentViewModel.SelectionViewModel.RealThirdPoint,
+            _parentViewModel.ParentViewModel.SelectionViewModel.RealFourthPoint
         };
 
         var leftTopPoint = new Point((int)points[0].X, (int)points[0].Y);

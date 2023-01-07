@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
-        xmlns:tools="clr-namespace:RedPixel.Ui.Views.Tools"
         xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
-        xmlns:topMenu="clr-namespace:RedPixel.Ui.Views.TopMenuItems"
+        xmlns:tools="clr-namespace:RedPixel.Ui.Views.ToolsMenu.Tools"
+        xmlns:topMenu1="clr-namespace:RedPixel.Ui.Views.TopMenu"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
         ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
@@ -51,7 +51,7 @@
     </Window.Styles>
 
     <DockPanel>
-        <topMenu:TopMenu DockPanel.Dock="Top" Name="TopMenu" DataContext="{Binding TopMenuViewModel}" />
+        <topMenu1:TopMenu DockPanel.Dock="Top" Name="TopMenu" DataContext="{Binding TopMenuViewModel}" />
         <Grid DockPanel.Dock="Right" RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40">
             <TabControl
                 Grid.ColumnSpan="2"

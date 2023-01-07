@@ -7,12 +7,12 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
-using RedPixel.Ui.ViewModels.ToolViewModels;
-using RedPixel.Ui.ViewModels.TopMenuItemsViewModels;
+using RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels;
+using RedPixel.Ui.ViewModels.TopMenuViewModels;
 using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
-using RedPixel.Ui.Views.Tools;
-using RedPixel.Ui.Views.TopMenuItems;
+using RedPixel.Ui.Views.ToolsMenu.Tools;
+using RedPixel.Ui.Views.TopMenu;
 using RedPixel.Ui.Views.Utilities;
 
 namespace RedPixel.Ui.ViewModels

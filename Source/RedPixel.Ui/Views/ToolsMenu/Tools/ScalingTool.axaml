@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolsViewModels="clr-namespace:RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="RedPixel.Ui.Views.ToolsMenu.Tools.ScalingTool">
+    <Design.DataContext>
+        <toolsViewModels:ScalingToolViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="25,40,80,Auto,40,4">
+        <TextBlock Grid.Row="0" Text="Scaling algorithm:"
+                   HorizontalAlignment="Left"
+                   Margin="10, 10, 0, 0" />
+        <ComboBox Grid.Row="1" HorizontalAlignment="Center"
+                  Height="30"
+                  Width="170"
+                  SelectedItem="{Binding SelectedScaler}"
+                  Items="{Binding AllImageScalers}" SelectedIndex="0"
+                  VerticalAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid Grid.Row="2" RowDefinitions="40,40" HorizontalAlignment="Center">
+            <Grid Grid.Row="0" ColumnDefinitions="60,80" HorizontalAlignment="Center">
+                <TextBlock Grid.Column="0" Text="Height:" Margin="10, 10, 0, 0" />
+                <NumericUpDown Grid.Column="1"
+                               Height="30"
+                               Width="65"
+                               HorizontalAlignment="Right"
+                               Minimum="1"
+                               Value="1000"
+                               ShowButtonSpinner="False"
+                               AllowSpin="False"
+                               ClipValueToMinMax="True"
+                               Text="{Binding Height}" />
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="60,80" HorizontalAlignment="Center">
+                <TextBlock Grid.Column="0" Text="Width:" Margin="10, 10, 0, 0" />
+                <NumericUpDown Grid.Column="1"
+                               Height="30"
+                               Width="65"
+                               HorizontalAlignment="Right"
+                               Minimum="1"
+                               Value="1000"
+                               ShowButtonSpinner="False"
+                               AllowSpin="False"
+                               ClipValueToMinMax="True"
+                               Text="{Binding Width}" />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="3" IsVisible="{Binding IsBcSplines}" Grid.RowDefinitions="40, 40">
+            <Grid Grid.Row="0" ColumnDefinitions="60,80" HorizontalAlignment="Center">
+                <TextBlock Grid.Column="0" Text="B:" Margin="10, 10, 0, 0" />
+                <NumericUpDown Grid.Column="1"
+                               Height="30"
+                               Width="65"
+                               HorizontalAlignment="Right"
+                               Minimum="0"
+                               Maximum="1"
+                               Value="0.333"
+                               ShowButtonSpinner="False"
+                               AllowSpin="False"
+                               ClipValueToMinMax="True"
+                               Text="{Binding B}" />
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="60,80" HorizontalAlignment="Center">
+                <TextBlock Grid.Column="0" Text="C:" Margin="10, 10, 0, 0" />
+                <NumericUpDown Grid.Column="1"
+                               Height="30"
+                               Width="65"
+                               HorizontalAlignment="Right"
+                               Minimum="0"
+                               Maximum="1"
+                               Value="0.333"
+                               ShowButtonSpinner="False"
+                               AllowSpin="False"
+                               ClipValueToMinMax="True"
+                               Text="{Binding C}" />
+            </Grid>
+        </Grid>
+        <Button Grid.Row="4"
+                Height="30"
+                Width="170"
+                Content="Scale"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding Scale}" />
+
+        <Rectangle Grid.Row="5"
+                   Height="1"
+                   Fill="#3c3f41" />
+        </Grid>
+</UserControl>

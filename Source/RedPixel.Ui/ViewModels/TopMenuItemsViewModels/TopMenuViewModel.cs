@@ -102,16 +102,16 @@ public class TopMenuViewModel : BaseViewModel
         }
 
         var coefficient = _parentViewModel.Image.Width > _parentViewModel.Image.Height
-            ? (_view.Width - 360) / _parentViewModel.Image.Width
-            : (_view.Height - 90) / _parentViewModel.Image.Height;
+            ? (_parentViewModel.Width - 360) / _parentViewModel.Image.Width
+            : (_parentViewModel.Height - 90) / _parentViewModel.Image.Height;
 
         var imageWidth = _parentViewModel.Image.Width * coefficient;
         var imageHeight = _parentViewModel.Image.Height * coefficient;
-        var leftMargin = (_view.Width - 340 - imageWidth) / 2;
-        var topMargin = (_view.Height - 70 - imageHeight) / 2 + 15;
+        var leftMargin = (_parentViewModel.Width - 340 - imageWidth) / 2;
+        var topMargin = (_parentViewModel.Height - 70 - imageHeight) / 2 + 15;
 
-        var zoomBorder = _view.Get<ZoomBorder>("ZoomBorder");
-        zoomBorder.Zoom(coefficient, _view.Width / 2, _view.Height / 2);
+        var zoomBorder = _parentViewModel.GetFromView<ZoomBorder>("ZoomBorder");
+        zoomBorder.Zoom(coefficient, _parentViewModel.Width / 2, _parentViewModel.Height / 2);
         zoomBorder.Pan(leftMargin, topMargin);
     }
 

@@ -65,6 +65,9 @@ namespace RedPixel.Ui.ViewModels
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
 
+        public double Height => _view.Height;
+        public double Width => _view.Width;
+
         public ColorSpaceToolViewModel ColorSpaceToolViewModel { get; set; }
         public GammaCorrectionToolViewModel GammaConversionToolViewModel { get; set; }
         public DitheringToolViewModel DitheringToolViewModel { get; set; }
@@ -76,5 +79,10 @@ namespace RedPixel.Ui.ViewModels
         public HistogramToolViewModel HistogramToolViewModel { get; set; }
         public CoordinatesViewModel CoordinatesViewModel { get; set; }
         public TopMenuViewModel TopMenuViewModel { get; set; }
+
+        public T GetFromView<T>(string name) where T : class
+        {
+            return _view.Get<T>(name);
+        }
     }
 }

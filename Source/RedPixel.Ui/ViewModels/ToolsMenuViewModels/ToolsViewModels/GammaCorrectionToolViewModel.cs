@@ -14,11 +14,13 @@ public class GammaCorrectionToolViewModel : BaseViewModel
 {
     private readonly ToolsMenuViewModel _parentViewModel;
     private readonly GammaCorrectionTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
 
     public GammaCorrectionToolViewModel(GammaCorrectionTool view, ToolsMenuViewModel parentViewModel)
     {
         _parentViewModel = parentViewModel;
         _view = view;
+        _imageViewModel = _parentViewModel.ParentViewModel;
     }
 
     [Reactive] public string GammaValueString { get; set; } = "1";
@@ -36,9 +38,9 @@ public class GammaCorrectionToolViewModel : BaseViewModel
             var sw = new Stopwatch();
             sw.Start();
             GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-            _parentViewModel.ParentViewModel.Image.Gamma = GammaValue;
-            _parentViewModel.ParentViewModel.Bitmap =
-                _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(
+            _imageViewModel.Image.Gamma = GammaValue;
+            _imageViewModel.Bitmap =
+                _imageViewModel.Image?.ConvertToAvaloniaBitmap(
                     _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
             sw.Stop();
             File.AppendAllText(
@@ -60,7 +62,7 @@ public class GammaCorrectionToolViewModel : BaseViewModel
             var sw = new Stopwatch();
             sw.Start();
             GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);
-            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image?.ConvertToGamma(GammaValue)
+            _imageViewModel.Bitmap = _imageViewModel.Image?.ConvertToGamma(GammaValue)
                 .ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel.ColorComponents);
             sw.Stop();
             File.AppendAllText(
@@ -77,10 +79,9 @@ public class GammaCorrectionToolViewModel : BaseViewModel
 
     private Unit AdjustContrast()
     {
-        _parentViewModel.ParentViewModel.Image.ApplyContrastAdjustment(IgnorePixelsPart);
-        _parentViewModel.ParentViewModel.Bitmap =
-            _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(_parentViewModel.ColorSpaceToolViewModel
-                .ColorComponents);
+        _imageViewModel.Image.ApplyContrastAdjustment(IgnorePixelsPart);
+        _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap(
+            _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
 
         return Unit.Default;
     }

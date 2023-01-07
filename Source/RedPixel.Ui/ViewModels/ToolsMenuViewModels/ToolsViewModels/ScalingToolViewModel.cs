@@ -12,11 +12,13 @@ public class ScalingToolViewModel : BaseViewModel
 {
     private ToolsMenuViewModel _parentViewModel;
     private ScalingTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
 
     public ScalingToolViewModel(ScalingTool view, ToolsMenuViewModel parentViewModel)
     {
         _parentViewModel = parentViewModel;
         _view = view;
+        _imageViewModel = _parentViewModel.ParentViewModel;
 
         this.WhenAnyValue(x => x.SelectedScaler)
             .Subscribe(x => { IsBcSplines = x.Name == "BC Splines"; });
@@ -34,14 +36,12 @@ public class ScalingToolViewModel : BaseViewModel
     {
         if (SelectedScaler.Name != "BC Splines")
         {
-            _parentViewModel.ParentViewModel.Image =
-                SelectedScaler.Scaler.Invoke(_parentViewModel.ParentViewModel.Image, Width, Height, null);
+            _imageViewModel.Image = SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, null);
         }
         else
         {
-            _parentViewModel.ParentViewModel.Image =
-                SelectedScaler.Scaler.Invoke(_parentViewModel.ParentViewModel.Image, Width, Height,
-                    new float[] { B, C });
+            _imageViewModel.Image =
+                SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, new float[] { B, C });
         }
     }
 }

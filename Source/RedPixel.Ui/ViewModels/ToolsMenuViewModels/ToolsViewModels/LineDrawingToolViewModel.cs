@@ -17,12 +17,14 @@ public class LineDrawingToolViewModel : BaseViewModel
 {
     private readonly ToolsMenuViewModel _parentViewModel;
     private readonly LineDrawingTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
     private Point _startPoint;
 
     public LineDrawingToolViewModel(LineDrawingTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
+        _imageViewModel = _parentViewModel.ParentViewModel;
 
         this.WhenAnyValue(x => x.SelectedColor)
             .Subscribe(x =>
@@ -55,14 +57,14 @@ public class LineDrawingToolViewModel : BaseViewModel
                     new RedPixelColor(color.R, color.G, color.B));
 
 
-            _parentViewModel.ParentViewModel.Image.DrawLine(
-                (int)_startPoint.X,
-                (int)_startPoint.Y,
+            _imageViewModel.Image.DrawLine(
+                (int) _startPoint.X,
+                (int) _startPoint.Y,
                 x, y,
                 color.A / 255f,
                 colorInCurrentColorSpace,
                 Thickness);
-            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap();
+            _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap();
             DrawingInProgress = false;
         }
         else if (clickCount == 2)

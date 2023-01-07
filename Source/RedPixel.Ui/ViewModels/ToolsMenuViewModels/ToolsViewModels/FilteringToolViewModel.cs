@@ -17,11 +17,13 @@ public class FilteringToolViewModel : BaseViewModel
 {
     private readonly ToolsMenuViewModel _parentViewModel;
     private readonly FilteringTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
 
     public FilteringToolViewModel(FilteringTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
+        _imageViewModel = _parentViewModel.ParentViewModel;
 
         SelectedFilteringAlgorithm = FilteringAlgorithms.Threshold;
         ParameterName = FilteringAlgorithms.Threshold.ParameterName;
@@ -63,27 +65,27 @@ public class FilteringToolViewModel : BaseViewModel
     {
         var parameter = Convert.ToSingle(Parameter, CultureInfo.InvariantCulture);
 
-        if (_parentViewModel.ParentViewModel.SelectionViewModel.IsSelected)
+        if (_imageViewModel.SelectionViewModel.IsSelected)
         {
             var (leftTopPoint, rightBottomPoint) = GetCornerPoints();
 
-            _parentViewModel.ParentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
-                _parentViewModel.ParentViewModel.Image,
+            _imageViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _imageViewModel.Image,
                 parameter,
                 leftTopPoint,
                 rightBottomPoint);
-            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
+            _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap(
                 _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         }
         else
         {
-            _parentViewModel.ParentViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
-                _parentViewModel.ParentViewModel.Image,
+            _imageViewModel.Image = SelectedFilteringAlgorithm.ApplyFiltering(
+                _imageViewModel.Image,
                 parameter,
                 new Point(0, 0),
-                new Point(_parentViewModel.ParentViewModel.Image.Width - 1,
-                    _parentViewModel.ParentViewModel.Image.Height - 1));
-            _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
+                new Point(_imageViewModel.Image.Width - 1,
+                    _imageViewModel.Image.Height - 1));
+            _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap(
                 _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         }
 
@@ -94,25 +96,25 @@ public class FilteringToolViewModel : BaseViewModel
     {
         var points = new[]
         {
-            _parentViewModel.ParentViewModel.SelectionViewModel.RealFirstPoint,
-            _parentViewModel.ParentViewModel.SelectionViewModel.RealSecondPoint,
-            _parentViewModel.ParentViewModel.SelectionViewModel.RealThirdPoint,
-            _parentViewModel.ParentViewModel.SelectionViewModel.RealFourthPoint
+            _imageViewModel.SelectionViewModel.RealFirstPoint,
+            _imageViewModel.SelectionViewModel.RealSecondPoint,
+            _imageViewModel.SelectionViewModel.RealThirdPoint,
+            _imageViewModel.SelectionViewModel.RealFourthPoint
         };
 
-        var leftTopPoint = new Point((int)points[0].X, (int)points[0].Y);
-        var rightBottomPoint = new Point((int)points[0].X, (int)points[0].Y);
+        var leftTopPoint = new Point((int) points[0].X, (int) points[0].Y);
+        var rightBottomPoint = new Point((int) points[0].X, (int) points[0].Y);
 
         for (var i = 0; i < 4; i++)
         {
             if (points[i].X < leftTopPoint.X && points[i].Y < leftTopPoint.Y)
             {
-                leftTopPoint = new Point((int)points[i].X, (int)points[i].Y);
+                leftTopPoint = new Point((int) points[i].X, (int) points[i].Y);
             }
 
             if (points[i].X > rightBottomPoint.X && points[i].Y > rightBottomPoint.Y)
             {
-                rightBottomPoint = new Point((int)points[i].X, (int)points[i].Y);
+                rightBottomPoint = new Point((int) points[i].X, (int) points[i].Y);
             }
         }
 

@@ -16,6 +16,7 @@ public class ColorSpaceToolViewModel : BaseViewModel
 {
     private readonly ToolsMenuViewModel _parentViewModel;
     private readonly ColorSpaceTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
 
     public ColorSpaceToolViewModel(ColorSpaceTool view, ToolsMenuViewModel parentViewModel)
     {
@@ -23,6 +24,7 @@ public class ColorSpaceToolViewModel : BaseViewModel
         SelectedColorSpace = ColorSpaces.Rgb;
         _view = view;
         _parentViewModel = parentViewModel;
+        _imageViewModel = _parentViewModel.ParentViewModel;
 
         this.WhenAnyValue(
                 x => x.ColorComponents)
@@ -30,8 +32,8 @@ public class ColorSpaceToolViewModel : BaseViewModel
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                _parentViewModel.ParentViewModel.Bitmap =
-                    _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                _imageViewModel.Bitmap =
+                    _imageViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 sw.Stop();
                 File.AppendAllText(
                     "log.txt",
@@ -44,9 +46,9 @@ public class ColorSpaceToolViewModel : BaseViewModel
                 var sw = new Stopwatch();
                 sw.Start();
                 File.AppendAllText("log.txt", $"ChangeColorSpace started{Environment.NewLine}");
-                _parentViewModel.ParentViewModel.Image?.ToColorSpace(x);
-                _parentViewModel.ParentViewModel.Bitmap =
-                    _parentViewModel.ParentViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
+                _imageViewModel.Image?.ToColorSpace(x);
+                _imageViewModel.Bitmap =
+                    _imageViewModel.Image?.ConvertToAvaloniaBitmap(ColorComponents);
                 File.AppendAllText(
                     "log.txt",
                     $"ConvertToAvaloniaBitmap (change color space finished): {sw.ElapsedMilliseconds}ms{Environment.NewLine}");

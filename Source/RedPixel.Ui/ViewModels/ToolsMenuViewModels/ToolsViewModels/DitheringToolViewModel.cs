@@ -17,11 +17,13 @@ public class DitheringToolViewModel : BaseViewModel
 {
     private readonly ToolsMenuViewModel _parentViewModel;
     private readonly DitheringTool _view;
+    private readonly MainWindowViewModel _imageViewModel;
 
     public DitheringToolViewModel(DitheringTool view, ToolsMenuViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;
+        _imageViewModel = _parentViewModel.ParentViewModel;
 
         SelectedDitheringAlgorithm = DitheringAlgorithms.RawConversion;
 
@@ -52,8 +54,8 @@ public class DitheringToolViewModel : BaseViewModel
     {
         var depth = new ColorDepth(int.Parse(RString), int.Parse(GString), int.Parse(BString));
 
-        SelectedDitheringAlgorithm.ApplyDithering(_parentViewModel.ParentViewModel.Image, depth);
-        _parentViewModel.ParentViewModel.Bitmap = _parentViewModel.ParentViewModel.Image.ConvertToAvaloniaBitmap(
+        SelectedDitheringAlgorithm.ApplyDithering(_imageViewModel.Image, depth);
+        _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);
         return Unit.Default;
     }

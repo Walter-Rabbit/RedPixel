@@ -1,0 +1,34 @@
+﻿<Menu xmlns="https://github.com/avaloniaui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:tmvm="clr-namespace:RedPixel.Ui.ViewModels.TopMenuItemsViewModels"
+      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+      x:Class="RedPixel.Ui.Views.TopMenuItems.TopMenu"
+      HorizontalAlignment="Left"
+      Width="100"
+      Height="30"
+      Background="#3c3f41">
+
+    <Design.DataContext>
+        <tmvm:TopMenuViewModel />
+    </Design.DataContext>
+
+    <MenuItem Header="File">
+        <MenuItem
+            Header="Open"
+            Command="{Binding OpenImageAsync}" />
+        <Separator />
+        <MenuItem
+            Header="Save"
+            Command="{Binding SaveImageAsync}" />
+    </MenuItem>
+    <MenuItem Header="View">
+        <MenuItem
+            Header="{Binding HistogramsVisibilityString}"
+            Command="{Binding ChangeHistogramsVisibility}" />
+        <MenuItem
+            Header="{Binding CoordinatesVisibilityString}"
+            Command="{Binding ChangeCoordinatesVisibility}" />
+    </MenuItem>
+</Menu>

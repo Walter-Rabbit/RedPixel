@@ -127,9 +127,12 @@ public class TopMenuViewModel : BaseViewModel
 
     private Unit ChangeCoordinatesVisibility()
     {
-        _parentViewModel.CoordinatesViewModel.IsVisible = !_parentViewModel.CoordinatesViewModel.IsVisible;
-        CoordinatesVisibilityString =
-            _parentViewModel.CoordinatesViewModel.IsVisible ? "Cursor Coordinates ✓" : "Cursor Coordinates  ";
+        _parentViewModel.StatusBarViewModel.CoordinatesViewModel.IsVisible =
+            !_parentViewModel.StatusBarViewModel.CoordinatesViewModel.IsVisible;
+
+        CoordinatesVisibilityString = _parentViewModel.StatusBarViewModel.CoordinatesViewModel.IsVisible
+            ? "Cursor Coordinates ✓"
+            : "Cursor Coordinates  ";
 
         return Unit.Default;
     }

@@ -1,0 +1,17 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
+             xmlns:sbvm="clr-namespace:RedPixel.Ui.ViewModels.StatusBarViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="RedPixel.Ui.Views.StatusBar.StatusBar">
+
+    <Design.DataContext>
+        <sbvm:StatusBarViewModel />
+    </Design.DataContext>
+
+    <StackPanel Background="#2b2d30" Orientation="Horizontal" Height="20">
+        <utilities:Coordinates Name="Coordinates" DataContext="{Binding CoordinatesViewModel}" />
+    </StackPanel>
+</UserControl>

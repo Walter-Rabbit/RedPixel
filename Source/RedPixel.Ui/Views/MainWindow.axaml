@@ -6,6 +6,7 @@
         xmlns:utility="clr-namespace:RedPixel.Ui.Utility"
         xmlns:utilities="clr-namespace:RedPixel.Ui.Views.Utilities"
         xmlns:toolsMenu="clr-namespace:RedPixel.Ui.Views.ToolsMenu"
+        xmlns:statusBar="clr-namespace:RedPixel.Ui.Views.StatusBar"
         xmlns:topMenu="clr-namespace:RedPixel.Ui.Views.TopMenu"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="RedPixel.Ui.Views.MainWindow"
@@ -25,43 +26,24 @@
     </Window.Resources>
 
     <Window.Styles>
-        <Style Selector="Menu">
-            <Setter Property="Background" Value="#3c3f41" />
-        </Style>
         <Style Selector="Grid.main">
             <Setter Property="Background" Value="#1e1f22" />
-        </Style>
-        <Style Selector="TabControl.tools">
-            <Setter Property="Background" Value="#2b2d30" />
         </Style>
         <Style Selector="Window[WindowState=Maximized]">
             <Setter Property="Padding" Value="8" />
         </Style>
-        <Style Selector="TabItem">
-            <Setter Property="Padding" Value="10,0,0,0" />
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="#3c3f41" />
-            <Setter Property="Width" Value="40" />
-        </Style>
-        <Style Selector="Image.tool">
-            <Setter Property="Width" Value="36" />
-            <Setter Property="Height" Value="36" />
-        </Style>
     </Window.Styles>
 
     <DockPanel>
-        <topMenu:TopMenu
-            DockPanel.Dock="Top"
-            Name="TopMenu"
-            DataContext="{Binding TopMenuViewModel}" />
-        <toolsMenu:ToolsMenu
-            DockPanel.Dock="Right"
-            Name="ToolsMenu"
-            DataContext="{Binding ToolsMenuViewModel}" />
-        <StackPanel DockPanel.Dock="Bottom" Background="#2b2d30" Orientation="Horizontal" Height="20">
-            <utilities:Coordinates Name="Coordinates" DataContext="{Binding CoordinatesViewModel}" />
-        </StackPanel>
+        <topMenu:TopMenu DockPanel.Dock="Top"
+                         Name="TopMenu"
+                         DataContext="{Binding TopMenuViewModel}" />
+        <toolsMenu:ToolsMenu DockPanel.Dock="Right"
+                             Name="ToolsMenu"
+                             DataContext="{Binding ToolsMenuViewModel}" />
+        <statusBar:StatusBar DockPanel.Dock="Bottom"
+                             Name="StatusBar"
+                             DataContext="{Binding StatusBarViewModel}" />
         <Grid Classes="main">
             <ZoomBorder
                 Name="ZoomBorder" ZoomSpeed="1.2" PanButton="Left" ClipToBounds="True"

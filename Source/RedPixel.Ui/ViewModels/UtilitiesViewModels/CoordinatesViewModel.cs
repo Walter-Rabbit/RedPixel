@@ -1,14 +1,15 @@
 ﻿using ReactiveUI.Fody.Helpers;
+using RedPixel.Ui.ViewModels.StatusBarViewModels;
 using RedPixel.Ui.Views.Utilities;
 
 namespace RedPixel.Ui.ViewModels.UtilitiesViewModels;
 
 public class CoordinatesViewModel : BaseViewModel
 {
-    private readonly MainWindowViewModel _parentViewModel;
+    private readonly StatusBarViewModel _parentViewModel;
     private readonly Coordinates _view;
 
-    public CoordinatesViewModel(Coordinates view, MainWindowViewModel parentViewModel)
+    public CoordinatesViewModel(Coordinates view, StatusBarViewModel parentViewModel)
     {
         _view = view;
         _parentViewModel = parentViewModel;

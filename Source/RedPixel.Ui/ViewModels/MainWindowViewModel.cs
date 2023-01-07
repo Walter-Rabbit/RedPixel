@@ -7,10 +7,12 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Models;
 using RedPixel.Ui.Utility;
+using RedPixel.Ui.ViewModels.StatusBarViewModels;
 using RedPixel.Ui.ViewModels.ToolsMenuViewModels;
 using RedPixel.Ui.ViewModels.TopMenuViewModels;
 using RedPixel.Ui.ViewModels.UtilitiesViewModels;
 using RedPixel.Ui.Views;
+using RedPixel.Ui.Views.StatusBar;
 using RedPixel.Ui.Views.ToolsMenu;
 using RedPixel.Ui.Views.TopMenu;
 using RedPixel.Ui.Views.Utilities;
@@ -25,8 +27,8 @@ namespace RedPixel.Ui.ViewModels
         {
             _view = view;
             SelectionViewModel = new SelectionViewModel(_view.Get<Selection>("Selection"), this);
-            CoordinatesViewModel = new CoordinatesViewModel(_view.Get<Coordinates>("Coordinates"), this);
             TopMenuViewModel = new TopMenuViewModel(_view.Get<TopMenu>("TopMenu"), this);
+            StatusBarViewModel = new StatusBarViewModel(_view.Get<StatusBar>("StatusBar"), this);
             ToolsMenuViewModel = new ToolsMenuViewModel(_view.Get<ToolsMenu>("ToolsMenu"), this);
 
             this.WhenAnyValue(x => x.Image)
@@ -63,7 +65,7 @@ namespace RedPixel.Ui.ViewModels
 
         public ToolsMenuViewModel ToolsMenuViewModel { get; set; }
         public SelectionViewModel SelectionViewModel { get; set; }
-        public CoordinatesViewModel CoordinatesViewModel { get; set; }
+        public StatusBarViewModel StatusBarViewModel { get; set; }
         public TopMenuViewModel TopMenuViewModel { get; set; }
 
         public T GetFromView<T>(string name) where T : class

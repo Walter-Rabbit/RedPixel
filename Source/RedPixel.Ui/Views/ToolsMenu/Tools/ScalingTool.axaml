@@ -37,7 +37,7 @@
                                ShowButtonSpinner="False"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
-                               Text="{Binding Height}" />
+                               Text="{Binding HeightString}" />
             </Grid>
 
             <Grid Grid.Row="1" ColumnDefinitions="60,80" HorizontalAlignment="Center">
@@ -51,7 +51,7 @@
                                ShowButtonSpinner="False"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
-                               Text="{Binding Width}" />
+                               Text="{Binding WidthString}" />
             </Grid>
         </Grid>
         <Grid Grid.Row="3" IsVisible="{Binding IsBcSplines}" Grid.RowDefinitions="40, 40">
@@ -65,9 +65,10 @@
                                Maximum="1"
                                Value="0.333"
                                ShowButtonSpinner="False"
+                               CultureInfo="{Binding CultureInfo}"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
-                               Text="{Binding B}" />
+                               Text="{Binding BString}" />
             </Grid>
 
             <Grid Grid.Row="1" ColumnDefinitions="60,80" HorizontalAlignment="Center">
@@ -82,7 +83,8 @@
                                ShowButtonSpinner="False"
                                AllowSpin="False"
                                ClipValueToMinMax="True"
-                               Text="{Binding C}" />
+                               CultureInfo="{Binding CultureInfo}"
+                               Text="{Binding CString}" />
             </Grid>
         </Grid>
         <Button Grid.Row="4"

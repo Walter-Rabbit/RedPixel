@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -26,22 +29,47 @@ public class ScalingToolViewModel : BaseViewModel
 
     public List<ImageScaler> AllImageScalers { get; set; } = ImageScaler.All.Value.ToList();
     [Reactive] public ImageScaler SelectedScaler { get; set; } = ImageScaler.All.Value.First();
+    [Reactive] public bool IsBcSplines { get; set; } = false;
+
+    public string WidthString { get; set; }
+    public string HeightString { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
+    public string BString { get; set; }
+    public string CString { get; set; }
     public float B { get; set; }
     public float C { get; set; }
-    [Reactive] public bool IsBcSplines { get; set; } = false;
+    public CultureInfo CultureInfo => CultureInfo.InvariantCulture;
 
     public void Scale()
     {
-        if (SelectedScaler.Name != "BC Splines")
+        try
         {
-            _imageViewModel.Image = SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, null);
+            var sw = new Stopwatch();
+            sw.Start();
+            Width = Convert.ToInt32(WidthString);
+            Height = Convert.ToInt32(HeightString);
+
+            if (SelectedScaler.Name != "BC Splines")
+            {
+                _imageViewModel.Image = SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, null);
+            }
+            else
+            {
+                B = Convert.ToSingle(BString, CultureInfo.InvariantCulture);
+                C = Convert.ToSingle(CString, CultureInfo.InvariantCulture);
+                _imageViewModel.Image =
+                    SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, new float[] { B, C });
+            }
+
+            sw.Stop();
+            File.AppendAllText(
+                "log.txt",
+                $"AssignGamma: {sw.ElapsedMilliseconds}ms{Environment.NewLine}");
         }
-        else
+        catch (Exception e)
         {
-            _imageViewModel.Image =
-                SelectedScaler.Scaler.Invoke(_imageViewModel.Image, Width, Height, new float[] { B, C });
+            File.AppendAllText("log.txt", $"{e.Message}");
         }
     }
 }

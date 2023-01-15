@@ -51,41 +51,9 @@ public abstract class FilterScaler : IImageScaler
                     pixel += yValue * yWeight;
                 }
 
-
-                // var x1 = (int)(x * scaleX);
-                // var x2 = x1 + 1;
-                // var y1 = (int)(y * scaleY);
-                // var y2 = y1 + 1;
-                //
-                //
-                //
-                // var x1Weight = Filter(xa, 0);
-                // var x2Weight = Filter(xa, 1);
-                //
-                // var y1Weight = Filter(ya, 0);
-                // var y2Weight = Filter(ya, 1);
-                //
-                // x2 = Math.Min(x2, image.Width - 1);
-                // y2 = Math.Min(y2, image.Height - 1);
-                //
-                // var topLeft = image.GetPixel(x1, y1);
-                // var topRight = image.GetPixel(x2, y1);
-                // var bottomLeft = image.GetPixel(x1, y2);
-                // var bottomRight = image.GetPixel(x2, y2);
-                //
-                // var top = topLeft * x1Weight + topRight * x2Weight;
-                // var bottom = bottomLeft * x1Weight + bottomRight * x2Weight;
-                // var pixel = top * y1Weight + bottom * y2Weight;
-
                 pixel = pixel.Normalize();
 
                 result.SetPixel(x, y, pixel);
-
-                if (pixel.FirstComponent > 255 || pixel.SecondComponent > 255 || pixel.ThirdComponent > 255)
-                    Console.WriteLine();
-
-                if (pixel.FirstComponent < 0 || pixel.SecondComponent < 0 || pixel.ThirdComponent < 0)
-                    Console.WriteLine();
             }
         }
 

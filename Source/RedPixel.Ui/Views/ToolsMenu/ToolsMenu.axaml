@@ -1,0 +1,119 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tmvm="using:RedPixel.Ui.ViewModels.ToolsMenuViewModels"
+             xmlns:tools="clr-namespace:RedPixel.Ui.Views.ToolsMenu.Tools"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="RedPixel.Ui.Views.ToolsMenu.ToolsMenu">
+
+    <Design.DataContext>
+        <tmvm:ToolsMenuViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TabControl.tools">
+            <Setter Property="Background" Value="#2b2d30" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="Padding" Value="10,0,0,0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="#3c3f41" />
+            <Setter Property="Width" Value="40" />
+        </Style>
+        <Style Selector="Image.tool">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="36" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *, Auto" ColumnDefinitions="300,40">
+        <TabControl
+            Grid.ColumnSpan="2"
+            Classes="tools"
+            HorizontalAlignment="Stretch"
+            BorderThickness="0"
+            Margin="0"
+            Padding="0"
+            TabStripPlacement="Right">
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Color Space"
+                           Classes="tool"
+                           Source="../../../Assets/color-space.png" />
+                </TabItem.Header>
+                <tools:ColorSpaceTool
+                    Name="ColorSpace"
+                    DataContext="{Binding ColorSpaceToolViewModel}" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Gamma Correction"
+                           Classes="tool"
+                           Source="../../../Assets/gamma-correction.png" />
+                </TabItem.Header>
+                <tools:GammaCorrectionTool
+                    Name="GammaCorrection"
+                    DataContext="{Binding GammaConversionToolViewModel }" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Line Drawing"
+                           Classes="tool"
+                           Source="../../../Assets/line-drawing.png" />
+                </TabItem.Header>
+                <tools:LineDrawingTool
+                    Name="LineDrawing"
+                    DataContext="{Binding LineDrawingToolViewModel }" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Disering"
+                           Classes="tool"
+                           Source="../../../Assets/disering.png"
+                           RenderOptions.BitmapInterpolationMode="HighQuality" />
+                </TabItem.Header>
+                <tools:DitheringTool
+                    Name="Dithering"
+                    DataContext="{Binding DitheringToolViewModel }" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Filtering"
+                           Classes="tool"
+                           Source="../../../Assets/filtering.png" />
+                </TabItem.Header>
+                <tools:FilteringTool
+                    Name="Filtering"
+                    DataContext="{Binding FilteringToolViewModel }" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Scaling"
+                           Classes="tool"
+                           Source="../../../Assets/scaler.png" />
+                </TabItem.Header>
+                <tools:ScalingTool
+                    Name="Scaling"
+                    DataContext="{Binding ScalingToolViewModel }" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Image ToolTip.Tip="Utilities"
+                           Classes="tool"
+                           Source="../../../Assets/utilities.png" />
+                </TabItem.Header>
+                <tools:UtilitiesTool
+                    Name="Utilities"
+                    DataContext="{Binding UtilitiesToolViewModel }" />
+            </TabItem>
+        </TabControl>
+        <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+              Background="#2b2d30" />
+        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="40"
+              Background="#3c3f41" />
+        <tools:HistogramTool Name="Histogram" Background="#2b2d30" Grid.Column="0" Grid.Row="2"
+                             DataContext="{Binding HistogramToolViewModel }" />
+    </Grid>
+</UserControl>

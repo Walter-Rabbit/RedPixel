@@ -1,0 +1,66 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolsViewModels="clr-namespace:RedPixel.Ui.ViewModels.ToolsMenuViewModels.ToolsViewModels"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+             x:Class="RedPixel.Ui.Views.ToolsMenu.Tools.FilteringTool">
+
+    <Design.DataContext>
+        <toolsViewModels:FilteringToolViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="25,40,60,40,4">
+        <TextBlock Grid.Row="0" Text="Filtering algorithm:"
+                   HorizontalAlignment="Left"
+                   Margin="10, 10, 0, 0" />
+        <ComboBox Grid.Row="1" HorizontalAlignment="Center"
+                  Height="30"
+                  Width="170"
+                  SelectedItem="{Binding SelectedFilteringAlgorithm}"
+                  Items="{Binding AllFilteringAlgorithms}" SelectedIndex="0"
+                  VerticalAlignment="Center">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid Grid.Row="2"
+              IsVisible="{Binding IsParameterVisible}"
+              RowDefinitions="40"
+              HorizontalAlignment="Center">
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <TextBlock
+                    Text="{Binding ParameterName}"
+                    Margin="10, 10, 20, 0" />
+                <NumericUpDown
+                    Height="30"
+                    Width="65"
+                    HorizontalAlignment="Right"
+                    Maximum="{Binding MaxParameter}"
+                    Minimum="0"
+                    Value="0"
+                    ShowButtonSpinner="False"
+                    AllowSpin="False"
+                    ClipValueToMinMax="True"
+                    CultureInfo="{Binding CultureInfo}"
+                    Text="{Binding Parameter}" />
+            </StackPanel>
+        </Grid>
+        <Button Grid.Row="3"
+                Height="30"
+                Width="170"
+                Content="Apply Filtering"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ApplyFiltering}" />
+
+        <Rectangle Grid.Row="4"
+                   Height="1"
+                   Fill="#3c3f41" />
+    </Grid>
+</UserControl>

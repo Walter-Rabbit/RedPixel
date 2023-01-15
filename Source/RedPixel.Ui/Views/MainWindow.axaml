@@ -13,7 +13,7 @@
         ExtendClientAreaToDecorationsHint="{Binding ExtendClientAreaToDecorationsHint}"
         ExtendClientAreaTitleBarHeightHint="40"
         Background="#3c3f41"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="RedPixel.Ui"
         KeyDown="InputElement_OnKeyDown">
 

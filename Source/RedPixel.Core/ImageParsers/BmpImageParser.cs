@@ -9,16 +9,9 @@ namespace RedPixel.Core.ImageParsers;
 /// <summary>
 ///     Только для последующей конвертации в avalonia bitmap. Не использовать для сохранения файла.
 /// </summary>
-public class BmpImageParser : IImageParser
+public static class BmpImageParser
 {
-    public ImageFormat[] ImageFormats => new[] { ImageFormat.Bmp };
-
-    public Bitmap Parse(Stream content, ColorSpaces colorSpaces)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SerializeToStream(Bitmap image, Stream stream, ColorSpaces colorSpace, ColorComponents components)
+    public static void SerializeToStream(Bitmap image, Stream stream, ColorSpaces colorSpace, ColorComponents components)
     {
         stream.Write(Encoding.ASCII.GetBytes("BM"));
 

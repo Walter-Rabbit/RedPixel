@@ -6,13 +6,18 @@ namespace RedPixel.Core.Tools.Scaler;
 public class ImageScaler
 {
     public static ImageScaler Neighbour = new ImageScaler("Nearest Neighbour",
-        (bitmap, w, h, param) =>  new NearestNeighbourScaler().Scale(bitmap, w, h));
-    public static ImageScaler Bilinear = new ImageScaler("Bilinear", (bitmap, w, h, param) =>  new BilinearScaler().Scale(bitmap, w, h));
-    public static ImageScaler Lanczos = new ImageScaler("Lanczos", (bitmap, w, h, param) =>  new LanczosScaler().Scale(bitmap, w, h));
-    public static ImageScaler BCSpline = new ImageScaler("BC Splines", (bitmap, w, h, param) =>
+        (bitmap, w, h, param) => new NearestNeighbourScaler().Scale(bitmap, w, h));
+
+    public static ImageScaler Bilinear =
+        new ImageScaler("Bilinear", (bitmap, w, h, param) => new BilinearScaler().Scale(bitmap, w, h));
+
+    public static ImageScaler Lanczos =
+        new ImageScaler("Lanczos", (bitmap, w, h, param) => new LanczosScaler().Scale(bitmap, w, h));
+
+    public static ImageScaler BcSpline = new ImageScaler("BC Splines", (bitmap, w, h, param) =>
     {
         var parameters = (param as float[]);
-        return new BCSplineScaler(parameters[0], parameters[1]).Scale(bitmap, w, h);
+        return new BcSplineScaler(parameters[0], parameters[1]).Scale(bitmap, w, h);
     });
 
     public string Name { get; }

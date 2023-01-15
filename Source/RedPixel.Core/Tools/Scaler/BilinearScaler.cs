@@ -1,6 +1,3 @@
-using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
-
 namespace RedPixel.Core.Tools.Scaler;
 
 public class BilinearScaler : FilterScaler

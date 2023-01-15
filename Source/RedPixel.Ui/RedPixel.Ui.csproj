@@ -40,33 +40,52 @@
       <ProjectReference Include="..\RedPixel.Core\RedPixel.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="Views\Tools\ColorSpaceTool.axaml.cs">
-            <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Update="Views\ToolsMenu\Tools\ColorSpaceTool.axaml.cs">
+          <DependentUpon>ColorSpaceTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Tools\GammaCorrectionTool.axaml.cs">
-            <DependentUpon>GammaConvertionTool.axaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Update="Views\ToolsMenu\Tools\DitheringTool.axaml.cs">
+          <DependentUpon>DitheringTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Tools\DitheringTool.axaml.cs">
-            <DependentUpon>DitheringTool.axaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Update="Views\ToolsMenu\Tools\GammaCorrectionTool.axaml.cs">
+          <DependentUpon>GammaCorrectionTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Tools\UtilitiesTool.axaml.cs">
-            <DependentUpon>Utilities.axaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Update="Views\ToolsMenu\Tools\LineDrawingTool.axaml.cs">
+          <DependentUpon>LineDrawingTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Tools\FilteringTool.axaml.cs">
-            <DependentUpon>FilteringTool.axaml</DependentUpon>
-            <SubType>Code</SubType>
+        <Compile Update="Views\ToolsMenu\Tools\UtilitiesTool.axaml.cs">
+          <DependentUpon>UtilitiesTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Tools\ScalingTool.axaml.cs">
+        <Compile Update="Views\ToolsMenu\Tools\FilteringTool.axaml.cs">
+          <DependentUpon>FilteringTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ToolsMenu\Tools\HistogramTool.axaml.cs">
+          <DependentUpon>HistogramTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ToolsMenu\Tools\ScalingTool.axaml.cs">
           <DependentUpon>ScalingTool.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Egorozh.ColorPicker.Avalonia.Dialog">
         <HintPath>..\..\..\..\..\.nuget\packages\egorozh.colorpicker.avalonia.dialog\0.10.17\lib\netstandard2.0\Egorozh.ColorPicker.Avalonia.Dialog.dll</HintPath>
       </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\ColorSpaceTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\DitheringTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\FilteringTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\GammaCorrectionTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\HistogramTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\LineDrawingTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\ScalingTool.axaml" />
+      <AdditionalFiles Include="Views\ToolsMenu\Tools\UtilitiesTool.axaml" />
     </ItemGroup>
 </Project>

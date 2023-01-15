@@ -10,11 +10,6 @@ public class ImageFormat
         HeaderMatchFuncFactory.Create(new byte[] { 80, 53 }, new byte[] { 80, 54 }),
         "pgm", "ppm");
 
-    public static readonly ImageFormat Bmp = new(
-        "bmp",
-        HeaderMatchFuncFactory.Create(new byte[] { 66, 77 }),
-        "dib", "rle");
-
     public static readonly ImageFormat Png = new(
         "png",
         HeaderMatchFuncFactory.Create(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }));

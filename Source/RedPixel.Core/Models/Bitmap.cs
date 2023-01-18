@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using RedPixel.Core.Colors;
+﻿using RedPixel.Core.Colors;
 using RedPixel.Core.Colors.ValueObjects;
 using RedPixel.Core.Tools;
 

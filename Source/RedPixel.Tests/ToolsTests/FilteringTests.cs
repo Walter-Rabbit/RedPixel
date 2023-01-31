@@ -1,29 +1,34 @@
-﻿using RedPixel.Core.Colors;
-using RedPixel.Core.Colors.ValueObjects;
-using RedPixel.Core.Models;
+﻿using System.Drawing;
+using RedPixel.Core;
+using RedPixel.Core.Colors;
+using RedPixel.Core.ImageParsers;
+using RedPixel.Core.Tools.Filtering;
 
 namespace RedPixel.Tests.ToolsTests;
 
 public class FilteringTests
 {
-    private Bitmap _testBitmap;
-
-    [SetUp]
-    public void Setup()
-    {
-        var matrix = new Color[,]
-        {
-            { new(0, 0, 0), new(100, 100, 100) },
-            { new(150, 150, 150), new(255, 255, 255) }
-        };
-        _testBitmap = new Bitmap(4, 4, 1, ColorSpaces.Rgb)
-        {
-            Matrix = matrix
-        };
-    }
-
     [Theory]
-    public void Test1()
+    [TestCase("Images\\random-4x4.png", "Images\\FilteringResults\\sobel-random-4x4.png")]
+    [TestCase("Images\\random-10x10.png", "Images\\FilteringResults\\sobel-random-10x10.png")]
+    [TestCase("Images\\random-15x15.png", "Images\\FilteringResults\\sobel-random-15x15.png")]
+    [TestCase("Images\\kittie.png", "Images\\FilteringResults\\sobel-kittie.png")]
+    public async Task Sobel(string inputImageName, string outputImageName)
     {
+        await using var inputImageStream = File.OpenRead(inputImageName);
+        var inputImageFormat = ImageFormat.Parse(inputImageStream);
+        var inputImage = ImageParserFactory.CreateParser(inputImageFormat).Parse(inputImageStream, ColorSpaces.Rgb);
+
+        var bitmap = FilteringAlgorithms.Sobel.ApplyFiltering(
+            inputImage,
+            0,
+            new Point(0, 0),
+            new Point(inputImage.Width - 1, inputImage.Height - 1));
+
+        await using var outputImageStream = File.OpenRead(outputImageName);
+        var outputImageFormat = ImageFormat.Parse(outputImageStream);
+        var outputImage = ImageParserFactory.CreateParser(outputImageFormat).Parse(outputImageStream, ColorSpaces.Rgb);
+
+        Assert.That(bitmap, Is.EqualTo(outputImage));
     }
 }

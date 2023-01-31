@@ -5,14 +5,14 @@ namespace RedPixel.Core;
 
 public class ImageFormat
 {
+    public static readonly ImageFormat Png = new(
+        "png",
+        HeaderMatchFuncFactory.Create(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }));
+    
     public static readonly ImageFormat Pnm = new(
         "pnm",
         HeaderMatchFuncFactory.Create(new byte[] { 80, 53 }, new byte[] { 80, 54 }),
         "pgm", "ppm");
-
-    public static readonly ImageFormat Png = new(
-        "png",
-        HeaderMatchFuncFactory.Create(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }));
 
     private readonly Func<Stream, bool> _matchFunc;
 

@@ -60,7 +60,7 @@ public class Bitmap
 
         for (int i = 0; i < 3; i++)
         {
-            histogramValues[i] = new double[BytesForColor*256];
+            histogramValues[i] = new double[BytesForColor * 256];
             histogramValues[i].AsSpan().Fill(0);
         }
 
@@ -124,5 +124,29 @@ public class Bitmap
                 Matrix[y, x] = new Color(fc, sc, tc);
             }
         }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is not Bitmap bitmap)
+        {
+            return false;
+        }
+
+        const double eps = 1;
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                if (Math.Abs(Matrix[y, x].FirstComponent - bitmap.Matrix[y, x].FirstComponent) > eps ||
+                    Math.Abs(Matrix[y, x].SecondComponent - bitmap.Matrix[y, x].SecondComponent) > eps ||
+                    Math.Abs(Matrix[y, x].ThirdComponent - bitmap.Matrix[y, x].ThirdComponent) > eps)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

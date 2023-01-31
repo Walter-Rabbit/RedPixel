@@ -21,4 +21,35 @@
       <ProjectReference Include="..\RedPixel.Core\RedPixel.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Images\FilteringResults" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Images\kittie.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\random-4x4.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\random-10x10.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\random-15x15.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\FilteringResults\sobel-kittie.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\FilteringResults\sobel-random-4x4.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\FilteringResults\sobel-random-10x10.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\FilteringResults\sobel-random-15x15.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

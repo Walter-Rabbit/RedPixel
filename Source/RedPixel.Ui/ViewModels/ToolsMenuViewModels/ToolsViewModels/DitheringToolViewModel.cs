@@ -52,6 +52,8 @@ public class DitheringToolViewModel : BaseViewModel
 
     public Unit ApplyDithering()
     {
+        _parentViewModel.ParentViewModel.SaveImageToHistory();
+        
         var depth = new ColorDepth(int.Parse(RString), int.Parse(GString), int.Parse(BString));
 
         SelectedDitheringAlgorithm.ApplyDithering(_imageViewModel.Image, depth);

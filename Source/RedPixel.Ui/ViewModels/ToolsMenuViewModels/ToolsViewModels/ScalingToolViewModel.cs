@@ -45,6 +45,8 @@ public class ScalingToolViewModel : BaseViewModel
     {
         try
         {
+            _parentViewModel.ParentViewModel.SaveImageToHistory();
+
             var sw = new Stopwatch();
             sw.Start();
             Width = Convert.ToInt32(WidthString);

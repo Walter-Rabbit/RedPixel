@@ -28,6 +28,8 @@ public class UtilitiesToolViewModel : BaseViewModel
 
     public Unit GenerateGradient()
     {
+        _parentViewModel.ParentViewModel.SaveImageToHistory();
+
         var bytesForColor = _imageViewModel.Image?.BytesForColor ?? 1;
         var colorSpace = _imageViewModel.Image?.ColorSpace ?? ColorSpaces.Rgb;
 
@@ -46,6 +48,8 @@ public class UtilitiesToolViewModel : BaseViewModel
 
     public Unit ConvertToBlackWhite()
     {
+        _parentViewModel.ParentViewModel.SaveImageToHistory();
+
         BwConverter.ConvertToBlackAndWhite(_imageViewModel.Image);
         _imageViewModel.Bitmap = _imageViewModel.Image.ConvertToAvaloniaBitmap(
             _parentViewModel.ColorSpaceToolViewModel.ColorComponents);

@@ -61,6 +61,11 @@ namespace RedPixel.Ui.Views
                 (DataContext as MainWindowViewModel)?.ToolsMenuViewModel.LineDrawingToolViewModel.DrawingCanceled();
                 (DataContext as MainWindowViewModel)?.SelectionViewModel.ImageSelectionCanceled();
             }
+
+            if (e.Key == Key.Z && e.KeyModifiers == KeyModifiers.Control)
+            {
+                (DataContext as MainWindowViewModel)?.RollBack();
+            }
         }
     }
 }

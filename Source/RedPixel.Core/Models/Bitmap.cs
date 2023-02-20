@@ -4,7 +4,7 @@ using RedPixel.Core.Tools;
 
 namespace RedPixel.Core.Models;
 
-public class Bitmap
+public class Bitmap : ICloneable
 {
     public Bitmap(int width, int height, int bytesForColor, ColorSpaces colorSpace)
     {
@@ -69,9 +69,9 @@ public class Bitmap
         {
             for (int x = fromX; x < toX; x++)
             {
-                histogramValues[0][(int)Matrix[y, x].FirstComponent]++;
-                histogramValues[1][(int)Matrix[y, x].SecondComponent]++;
-                histogramValues[2][(int)Matrix[y, x].ThirdComponent]++;
+                histogramValues[0][(int) Matrix[y, x].FirstComponent]++;
+                histogramValues[1][(int) Matrix[y, x].SecondComponent]++;
+                histogramValues[2][(int) Matrix[y, x].ThirdComponent]++;
             }
         }
 
@@ -82,7 +82,7 @@ public class Bitmap
     {
         var histogramValues = GetHistogram(0, Width, 0, Height);
 
-        int ignorePixelsCount = (int)(Width * Height * ignorePart);
+        int ignorePixelsCount = (int) (Width * Height * ignorePart);
         int[] ignoredPixels = new int[3];
 
         int minColor = 0;
@@ -90,7 +90,7 @@ public class Bitmap
         {
             for (int i = 0; i < 3; i++)
             {
-                ignoredPixels[i] += (int)histogramValues[i][c];
+                ignoredPixels[i] += (int) histogramValues[i][c];
             }
 
             if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
@@ -104,7 +104,7 @@ public class Bitmap
         {
             for (int i = 0; i < 3; i++)
             {
-                ignoredPixels[i] += (int)histogramValues[i][c];
+                ignoredPixels[i] += (int) histogramValues[i][c];
             }
 
             if (!ignoredPixels.Any(x => x > ignorePixelsCount)) continue;
@@ -118,9 +118,9 @@ public class Bitmap
         {
             for (int x = 0; x < Width; x++)
             {
-                var fc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].FirstComponent - minColor) * multCoefficient));
-                var sc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].SecondComponent - minColor) * multCoefficient));
-                var tc = Math.Min(255, Math.Max(0, ((int)Matrix[y, x].ThirdComponent - minColor) * multCoefficient));
+                var fc = Math.Min(255, Math.Max(0, ((int) Matrix[y, x].FirstComponent - minColor) * multCoefficient));
+                var sc = Math.Min(255, Math.Max(0, ((int) Matrix[y, x].SecondComponent - minColor) * multCoefficient));
+                var tc = Math.Min(255, Math.Max(0, ((int) Matrix[y, x].ThirdComponent - minColor) * multCoefficient));
                 Matrix[y, x] = new Color(fc, sc, tc);
             }
         }
@@ -148,5 +148,24 @@ public class Bitmap
         }
 
         return true;
+    }
+
+    public object Clone()
+    {
+        var clone = new Bitmap(Width, Height, BytesForColor, ColorSpace);
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                var color = new Color(
+                    Matrix[y, x].FirstComponent,
+                    Matrix[y, x].SecondComponent,
+                    Matrix[y, x].ThirdComponent);
+
+                clone.Matrix[y, x] = color;
+            }
+        }
+
+        return clone;
     }
 }

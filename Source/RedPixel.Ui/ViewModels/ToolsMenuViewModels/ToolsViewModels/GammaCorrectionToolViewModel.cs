@@ -35,6 +35,8 @@ public class GammaCorrectionToolViewModel : BaseViewModel
     {
         try
         {
+            _parentViewModel.ParentViewModel.SaveImageToHistory();
+
             var sw = new Stopwatch();
             sw.Start();
             GammaValue = Convert.ToSingle(GammaValueString, CultureInfo.InvariantCulture);

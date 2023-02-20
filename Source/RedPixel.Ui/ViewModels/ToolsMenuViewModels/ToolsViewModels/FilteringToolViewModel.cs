@@ -63,6 +63,8 @@ public class FilteringToolViewModel : BaseViewModel
 
     public Unit ApplyFiltering()
     {
+        _parentViewModel.ParentViewModel.SaveImageToHistory();
+
         var parameter = Convert.ToSingle(Parameter, CultureInfo.InvariantCulture);
 
         if (_imageViewModel.SelectionViewModel.IsSelected)

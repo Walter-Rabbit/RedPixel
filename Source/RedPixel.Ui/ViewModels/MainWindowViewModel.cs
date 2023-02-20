@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Avalonia.Controls;
+using CircularBuffer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using RedPixel.Core.Models;
@@ -53,12 +55,16 @@ namespace RedPixel.Ui.ViewModels
                         Image.GetHistogram(0, Image.Width, 0, Image.Height);
                 });
 
+            ImagesHistory = new CircularBuffer<Bitmap>(10);
+
             ExtendClientAreaToDecorationsHint = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         [Reactive] public Bitmap Image { get; set; }
         [Reactive] public Avalonia.Media.Imaging.Bitmap Bitmap { get; set; }
         [Reactive] public bool ExtendClientAreaToDecorationsHint { get; set; }
+
+        public CircularBuffer<Bitmap> ImagesHistory { get; set; }
 
         public double Height => _view.Height;
         public double Width => _view.Width;
@@ -67,6 +73,24 @@ namespace RedPixel.Ui.ViewModels
         public SelectionViewModel SelectionViewModel { get; set; }
         public StatusBarViewModel StatusBarViewModel { get; set; }
         public TopMenuViewModel TopMenuViewModel { get; set; }
+
+        public void SaveImageToHistory()
+        {
+            ImagesHistory.PushFront((Bitmap) Image.Clone());
+        }
+
+        public void RollBack()
+        {
+            if (ImagesHistory.IsEmpty)
+            {
+                return;
+            }
+
+            Image = ImagesHistory.Front();
+            Bitmap = Image?.ConvertToAvaloniaBitmap(ToolsMenuViewModel.ColorSpaceToolViewModel.ColorComponents);
+
+            ImagesHistory.PopFront();
+        }
 
         public T GetFromView<T>(string name) where T : class
         {

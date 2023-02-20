@@ -51,6 +51,8 @@ public class LineDrawingToolViewModel : BaseViewModel
     {
         if (DrawingInProgress)
         {
+            _parentViewModel.ParentViewModel.SaveImageToHistory();
+
             var color = SelectedColor;
             var colorInCurrentColorSpace =
                 _parentViewModel.ColorSpaceToolViewModel.SelectedColorSpace.ColorFromRgb(

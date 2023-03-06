@@ -37,12 +37,12 @@ public class SobelFiltering : IFiltering
                     Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
 
                 var sc = (float) Math.Sqrt(
-                    Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
-                    Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
+                    Math.Pow(horizontalBitmap.GetPixel(x, y).SecondComponent, 2) +
+                    Math.Pow(verticalBitmap.GetPixel(x, y).SecondComponent, 2));
 
                 var tc = (float) Math.Sqrt(
-                    Math.Pow(horizontalBitmap.GetPixel(x, y).FirstComponent, 2) +
-                    Math.Pow(verticalBitmap.GetPixel(x, y).FirstComponent, 2));
+                    Math.Pow(horizontalBitmap.GetPixel(x, y).ThirdComponent, 2) +
+                    Math.Pow(verticalBitmap.GetPixel(x, y).ThirdComponent, 2));
 
                 var pixel = new Color(
                     Math.Max(0, Math.Min(255f, fc)),
